@@ -1,0 +1,12 @@
+{
+  "name": "ming",
+  "version": "1.0.0",
+  "description": "Platform for unused computer devices as cloud environments through distributed system powered by web3. 🕸️",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": ""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
