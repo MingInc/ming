@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="fixed top-0 left-0 w-full">
+        <div className="fixed top-0 left-0 w-full z-30">
           <NavigationBar />
         </div>
         <div className="mt-20">{children}</div>
