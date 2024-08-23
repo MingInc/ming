@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import 'remixicon/fonts/remixicon.css'
 import "./globals.css";
 import NavigationBar from "@/components/NavigationBar";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
           <NavigationBar />
         </div>
         <div className="mt-20">{children}</div>
+        <Footer/>
       </body>
     </html>
   );

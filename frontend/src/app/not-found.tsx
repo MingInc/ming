@@ -27,22 +27,6 @@ export default function NotFound() {
           <p>*</p>
           <Link href="/company">About Us</Link>
         </div>
-
-        <div className="flex gap-3 items-center justify-center text-2xl mt-8">
-          <Link href="">
-            <i className="ri-github-fill"></i>
-          </Link>
-          <Link href="">
-            <i className="ri-discord-fill"></i>
-          </Link>
-          <Link href="">
-            <i className="ri-twitter-x-line"></i>
-          </Link>
-        </div>
-        <p className="text-center mt-3 font-medium text-gray-500 text-sm">
-          Ming, MIT License.
-          <br /> Distributed System for Open Source Cloud.
-        </p>
       </div>
     </div>
   );
