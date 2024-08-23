@@ -14,7 +14,7 @@ const features = [
 export default function Landing() {
   return (
     <div className="bg-white">
-      <div className="mx-auto max-w-2xl gap-x-8 gap-y-16 px-4 py-24 sm:px-6 sm:py-8 lg:max-w-7xl flex items-center flex-wrap">
+      <div className="mx-auto max-w-2xl gap-x-8 gap-y-8 px-4 py-2 sm:px-6 sm:py-8 lg:max-w-7xl flex flex-col xl:flex-row items-center">
         <div className="flex-1">
           <div>
             <Image
@@ -49,7 +49,7 @@ export default function Landing() {
           <img
             alt="Walnut card tray filled with cards and card angled in dedicated groove."
             src="https://images.unsplash.com/photo-1454789548928-9efd52dc4031?q=80&w=2680&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            className="w-[100%] h-[35em] object-cover"
+            className="w-[100%] h-[35em] object-cover md:w-[100vw]"
           />
         </div>
       </div>
