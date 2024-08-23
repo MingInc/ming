@@ -107,7 +107,10 @@ export default function NavigationBar() {
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
-              <div className="mt-10 text-center bg-black" onClick={() => setMobileMenuOpen(false)}>
+              <div
+                className="mt-10 text-center bg-black"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 <Link
                   href="/login"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-50"
@@ -117,11 +120,20 @@ export default function NavigationBar() {
               </div>
 
               <div className="flex gap-3 items-center justify-center text-2xl mt-8">
-        <Link href=""><i className="ri-github-fill"></i></Link>
-        <Link href=""><i className="ri-discord-fill"></i></Link>
-        <Link href=""><i className="ri-twitter-x-line"></i></Link>
-      </div>
-      <p className="text-center mt-3 font-medium text-gray-500 text-sm">Ming, MIT License.<br/> Distributed System for Open Source Cloud.</p>
+                <Link href="">
+                  <i className="ri-github-fill"></i>
+                </Link>
+                <Link href="">
+                  <i className="ri-discord-fill"></i>
+                </Link>
+                <Link href="">
+                  <i className="ri-twitter-x-line"></i>
+                </Link>
+              </div>
+              <p className="text-center mt-3 font-medium text-gray-500 text-sm">
+                Ming, MIT License.
+                <br /> Distributed System for Open Source Cloud.
+              </p>
             </div>
           </div>
         </DialogPanel>
