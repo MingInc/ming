@@ -1,6 +1,4 @@
-import Footer from "@/components/Footer";
 import Landing from "@/components/Landing";
-import Link from "next/link";
 
 export const metadata = {
   title: 'Ming | Building distributed system for Open Source Cloud.',

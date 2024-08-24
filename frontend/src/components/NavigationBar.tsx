@@ -88,16 +88,28 @@ export default function NavigationBar() {
                   <AccordionTrigger>For Developers</AccordionTrigger>
                   <AccordionContent>
                     <div className="flex flex-col gap-2">
-                      <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
+                      <Link
+                        href="https://ming-2.gitbook.io/ming/getting-started/installation"
+                        target="_blank"
+                        className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2"
+                      >
                         <i className="ri-cpu-line"></i>Installation
-                      </button>
-                      <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
+                      </Link>
+                      <Link
+                        href="https://ming-2.gitbook.io/ming/distributed-server/host-a-node"
+                        target="_blank"
+                        className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2"
+                      >
                         <i className="ri-terminal-box-line"></i> Host a Node
-                      </button>
-                      <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
+                      </Link>
+                      <Link
+                        href="https://ming-2.gitbook.io/ming/resources/community-contribution"
+                        target="_blank"
+                        className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2"
+                      >
                         <i className="ri-git-repository-line"></i>Community
                         Contribution
-                      </button>
+                      </Link>
                     </div>
                   </AccordionContent>
                 </AccordionItem>
@@ -108,7 +120,7 @@ export default function NavigationBar() {
                   <AccordionContent>
                     <div className="flex flex-col gap-2">
                       <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
-                        <i className="ri-window-line"></i>locahost to https
+                        <i className="ri-lock-2-line"></i> locahost to https
                       </button>
                       <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
                         <i className="ri-community-line"></i> Discussion
