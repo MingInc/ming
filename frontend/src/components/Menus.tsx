@@ -37,8 +37,7 @@ const components: { title: string; href: string; description: string }[] = [
   {
     title: "Governance & Voting",
     href: "/docs/primitives/tooltip",
-    description:
-      "We let community decide on behalf of major decisions on DAO.",
+    description: "We let community decide on behalf of major decisions on DAO.",
   },
 ];
 
@@ -54,7 +53,8 @@ export function NavigationMenuDemo() {
                 <NavigationMenuLink asChild>
                   <a
                     className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                    href="/"
+                    href="https://ming-2.gitbook.io/ming/getting-started"
+                    target="_blank"
                   >
                     <Image
                       src="https://ik.imagekit.io/lexy/Ming/3.png?updatedAt=1724359838994"
@@ -72,13 +72,25 @@ export function NavigationMenuDemo() {
                   </a>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="/docs/installation" title="Installation">
+              <ListItem
+                href="https://ming-2.gitbook.io/ming/getting-started/installation"
+                target="_blank"
+                title="Installation"
+              >
                 We offer SDK for developer to host their projects on Cloud.
               </ListItem>
-              <ListItem href="/docs/primitives/typography" title="Host a Node">
+              <ListItem
+                href="https://ming-2.gitbook.io/ming/distributed-server/host-a-node"
+                target="_blank"
+                title="Host a Node"
+              >
                 Be the backbone of Ming Community by hosting a node.
               </ListItem>
-              <ListItem href="/docs" title="Community Contribution">
+              <ListItem
+                href="https://ming-2.gitbook.io/ming/resources/community-contribution"
+                target="_blank"
+                title="Community Contribution"
+              >
                 Our codebase is Open Source and we love pull requests.
               </ListItem>
             </ul>
@@ -89,13 +101,16 @@ export function NavigationMenuDemo() {
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
               {components.map((component) => (
-                <ListItem
-                  key={component.title}
-                  title={component.title}
-                  href={component.href}
-                >
-                  {component.description}
-                </ListItem>
+                <div>
+                  <i className={component.icon` `}></i>
+                  <ListItem
+                    key={component.title}
+                    title={component.title}
+                    href={component.href}
+                  >
+                    {component.description}
+                  </ListItem>
+                </div>
               ))}
             </ul>
           </NavigationMenuContent>
