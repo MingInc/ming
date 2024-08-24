@@ -3,12 +3,27 @@ import { Compare } from "@/components/ui/compare";
 import React from "react";
 import { Cover } from "@/components/ui/cover";
 
+const data = [
+  {
+    title: "🚀 Mission",
+    description:
+      "We aim to provide a safe sandbox for developers to host any kind of projects, applications, or production grade distributed services. Our mission is to utilize the existing devices as distributed node servers leveraging their computing power over complex data-centers.",
+  },
+  {
+    title: "👀 Vision",
+    description:
+      "We aim to provide a safe sandbox for developers to host any kind of projects, applications, or production grade distributed services. Our mission is to utilize the existing devices as distributed node servers leveraging their computing power over complex data-centers.",
+  },
+];
+
 export default function Page() {
   return (
-    <div className="mx-auto max-w-7xl p-6 lg:px-8">
+    <div className="mx-auto max-w-7xl p-6 pt-0 sm:pt-2 lg:px-8">
       <div className="mt-0">
-        <p className="text-lg font-semibold text-gray-400 text-center">🛠️ By Developer for Developers.</p>
-        <h1 className="text-4xl md:text-4xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center relative z-20 py-2 bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
+        <p className="text-lg font-semibold text-gray-400 text-center">
+          🛠️ By Developer for Developers.
+        </p>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center relative z-20 py-2 bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
           Building distributed system <br /> for <Cover>Open Cloud.</Cover>
         </h1>
       </div>
@@ -21,6 +36,15 @@ export default function Page() {
         className="h-[200px] w-[100%] md:h-[300px] mt-6"
         slideMode="hover"
       />
+
+      {data.map((d: any, index) => {
+        return (
+          <div key={index} className="text-justify mx-auto mt-5 max-w-[90vw] lg:max-w-[30vw] sm:max-w-[60vw]">
+            <h1 className="font-semibold text-md">{d.title}</h1>
+            <p className="border-t-[1px] mt-1 pt-1">{d.description}</p>
+          </div>
+        );
+      })}
     </div>
   );
 }

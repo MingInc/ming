@@ -58,7 +58,7 @@ export default function NavigationBar() {
         className="lg:hidden"
       >
         <div className="fixed inset-0 z-10" />
-        <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+        <DialogPanel className="fixed inset-y-0 right-0 z-40 w-full overflow-y-auto bg-white px-6 py-3 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
               <img
@@ -80,14 +80,25 @@ export default function NavigationBar() {
           </div>
           <div className="mt-8 flow-root">
             <div className="-my-6">
-              <p className="text-lg mt-4 mb-5 font-semibold">
-                Building distributed system for Open Source Cloud.
+              <p className="text-2xl mt-4 mb-5 font-semibold">
+                Building distributed system for an Open Cloud for developers.
               </p>
               <Accordion type="single" collapsible>
                 <AccordionItem value="item-1">
                   <AccordionTrigger>For Developers</AccordionTrigger>
                   <AccordionContent>
-                    Yes. It adheres to the WAI-ARIA design pattern.
+                    <div className="flex flex-col gap-2">
+                      <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
+                        <i className="ri-cpu-line"></i>Installation
+                      </button>
+                      <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
+                        <i className="ri-terminal-box-line"></i> Host a Node
+                      </button>
+                      <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
+                        <i className="ri-git-repository-line"></i>Community
+                        Contribution
+                      </button>
+                    </div>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -95,7 +106,20 @@ export default function NavigationBar() {
                 <AccordionItem value="item-1">
                   <AccordionTrigger>Platform</AccordionTrigger>
                   <AccordionContent>
-                    Yes. It adheres to the WAI-ARIA design pattern.
+                    <div className="flex flex-col gap-2">
+                      <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
+                        <i className="ri-window-line"></i>locahost to https
+                      </button>
+                      <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
+                        <i className="ri-community-line"></i> Discussion
+                      </button>
+                      <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
+                        <i className="ri-node-tree"></i>Node Discovery
+                      </button>
+                      <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
+                        <i className="ri-chat-poll-line"></i>Governance & Voting
+                      </button>
+                    </div>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -103,7 +127,11 @@ export default function NavigationBar() {
                 <AccordionItem value="item-1">
                   <AccordionTrigger>Company</AccordionTrigger>
                   <AccordionContent>
-                    Yes. It adheres to the WAI-ARIA design pattern.
+                    <div className="flex flex-col gap-2">
+                      <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
+                        <i className="ri-ancient-gate-line"></i>About us
+                      </button>
+                    </div>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>

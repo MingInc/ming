@@ -13,42 +13,32 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import Image from "next/image";
 
 const components: { title: string; href: string; description: string }[] = [
   {
-    title: "Alert Dialog",
+    title: "localhost to https",
     href: "/docs/primitives/alert-dialog",
     description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
+      "Developer projects are important and in-demand, try us to host your apps, functions, etc.",
   },
   {
-    title: "Hover Card",
+    title: "Discussions",
     href: "/docs/primitives/hover-card",
     description:
-      "For sighted users to preview content available behind a link.",
+      "Our amazing minds discuss here on new ideas, issues, milestones, etc.",
   },
   {
-    title: "Progress",
-    href: "/docs/primitives/progress",
-    description:
-      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
-  },
-  {
-    title: "Scroll-area",
-    href: "/docs/primitives/scroll-area",
-    description: "Visually or semantically separates content.",
-  },
-  {
-    title: "Tabs",
+    title: "Node Discovery",
     href: "/docs/primitives/tabs",
     description:
-      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+      "We have a dictionary of nodes interconnected and transparent.",
   },
   {
-    title: "Tooltip",
+    title: "Governance & Voting",
     href: "/docs/primitives/tooltip",
     description:
-      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+      "We let community decide on behalf of major decisions on DAO.",
   },
 ];
 
@@ -66,25 +56,30 @@ export function NavigationMenuDemo() {
                     className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                     href="/"
                   >
-                    <div className="mb-2 mt-4 text-lg font-medium">
-                      shadcn/ui
+                    <Image
+                      src="https://ik.imagekit.io/lexy/Ming/3.png?updatedAt=1724359838994"
+                      width={50}
+                      height={50}
+                      alt="Ming."
+                    />
+                    <div className="mb-2 mt-4 text-md font-medium">
+                      Getting Started
                     </div>
                     <p className="text-sm leading-tight text-muted-foreground">
-                      Beautifully designed components that you can copy and
-                      paste into your apps. Accessible. Customizable. Open
-                      Source.
+                      Learn to use our platform and help us build a community
+                      for an Open Cloud for developers.
                     </p>
                   </a>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="/docs" title="Introduction">
-                Re-usable components built using Radix UI and Tailwind CSS.
-              </ListItem>
               <ListItem href="/docs/installation" title="Installation">
-                How to install dependencies and structure your app.
+                We offer SDK for developer to host their projects on Cloud.
               </ListItem>
-              <ListItem href="/docs/primitives/typography" title="Typography">
-                Styles for headings, paragraphs, lists...etc
+              <ListItem href="/docs/primitives/typography" title="Host a Node">
+                Be the backbone of Ming Community by hosting a node.
+              </ListItem>
+              <ListItem href="/docs" title="Community Contribution">
+                Our codebase is Open Source and we love pull requests.
               </ListItem>
             </ul>
           </NavigationMenuContent>
