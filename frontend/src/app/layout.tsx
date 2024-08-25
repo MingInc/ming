@@ -4,6 +4,7 @@ import 'remixicon/fonts/remixicon.css'
 import "./globals.css";
 import NavigationBar from "@/components/NavigationBar";
 import Footer from "@/components/Footer";
+import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,6 +18,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -25,6 +27,7 @@ export default function RootLayout({
         </div>
         <div className="mt-20">{children}</div>
         <Footer/>
+        <Toaster />
       </body>
     </html>
   );

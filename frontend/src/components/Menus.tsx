@@ -104,8 +104,8 @@ export function NavigationMenuDemo() {
           <NavigationMenuTrigger>Platform</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-              {components.map((component) => (
-                <div className="flex items-start">
+              {components.map((component, index) => (
+                <div className="flex items-start" key={index}>
                   <i className={`mt-2 ${component.icon}`}></i>
                   <ListItem
                     key={component.title}

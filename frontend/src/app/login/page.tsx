@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -10,16 +12,71 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useEffect, useState } from "react";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "@/firebase.config";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { toast } from "sonner";
 
-export const metadata = {
-  title: 'Login | Ming | Building distributed system for Open Source Cloud.',
-  description: "We are trying to provide a platform that empowers incentivizing unused computer devices as secure and efficient cloud environments through distributed system powered by web3.",
-  icons: {
-    icon: 'https://ik.imagekit.io/lexy/Ming/3.png'
-  }
-}
+const provider = new GoogleAuthProvider();
 
 export default function LoginForm() {
+  const [auth, setAuth] = useState<any>();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  useEffect(() => {
+    const app = initializeApp(firebaseConfig);
+    const authInstance = getAuth(app);
+    setAuth(authInstance);
+  }, []);
+
+  const handleLoginWithEmailPassword = () => {
+    // @dev Ensure auth is initialized
+    if (!auth) return;
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+
+        toast("You signed in successfully!", {
+          description: `Welcome to Ming, ${user.email?.split("@")[0]}.`,
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  };
+
+  const handleGoogleSignin = () => {
+    if (!auth) return;
+
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        if (user.email)
+          toast("You signed up successfully!", {
+            description: `Welcome to Ming, ${user.email?.split("@")[0]}.`,
+          });
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+      });
+  };
+
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
@@ -37,6 +94,8 @@ export default function LoginForm() {
               type="email"
               placeholder="awesome@domain.dev"
               required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="grid gap-2">
@@ -50,13 +109,19 @@ export default function LoginForm() {
               id="password"
               placeholder="********"
               type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-          <Button type="submit" className="w-full">
+          <Button
+            type="submit"
+            className="w-full"
+            onClick={() => handleLoginWithEmailPassword()}
+          >
             Login
           </Button>
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full" onClick={() => handleGoogleSignin()}>
             Login with Google
           </Button>
         </div>
