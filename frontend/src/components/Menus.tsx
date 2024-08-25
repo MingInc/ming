@@ -15,29 +15,33 @@ import {
 } from "@/components/ui/navigation-menu";
 import Image from "next/image";
 
-const components: { title: string; href: string; description: string }[] = [
+const components: { title: string; href: string; description: string, icon: string }[] = [
   {
     title: "localhost to https",
     href: "/docs/primitives/alert-dialog",
     description:
       "Developer projects are important and in-demand, try us to host your apps, functions, etc.",
+      icon: "ri-globe-line",
   },
   {
     title: "Discussions",
     href: "/docs/primitives/hover-card",
     description:
       "Our amazing minds discuss here on new ideas, issues, milestones, etc.",
+      icon: "ri-chat-3-line"
   },
   {
     title: "Node Discovery",
     href: "/docs/primitives/tabs",
     description:
       "We have a dictionary of nodes interconnected and transparent.",
+      icon: "ri-instance-line"
   },
   {
     title: "Governance & Voting",
     href: "/docs/primitives/tooltip",
     description: "We let community decide on behalf of major decisions on DAO.",
+    icon: "ri-government-line"
   },
 ];
 
@@ -101,8 +105,8 @@ export function NavigationMenuDemo() {
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
               {components.map((component) => (
-                <div>
-                  <i className={component.icon` `}></i>
+                <div className="flex items-start">
+                  <i className={`mt-2 ${component.icon}`}></i>
                   <ListItem
                     key={component.title}
                     title={component.title}

@@ -16,6 +16,14 @@ const data = [
   },
 ];
 
+export const metadata = {
+  title: 'Company | Ming | Building distributed system for Open Source Cloud.',
+  description: "We are trying to provide a platform that empowers incentivizing unused computer devices as secure and efficient cloud environments through distributed system powered by web3.",
+  icons: {
+    icon: 'https://ik.imagekit.io/lexy/Ming/3.png'
+  }
+}
+
 export default function Page() {
   return (
     <div className="mx-auto max-w-7xl p-6 pt-0 sm:pt-2 lg:px-8">

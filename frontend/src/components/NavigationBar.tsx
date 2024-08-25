@@ -120,16 +120,16 @@ export default function NavigationBar() {
                   <AccordionContent>
                     <div className="flex flex-col gap-2">
                       <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
-                        <i className="ri-lock-2-line"></i> locahost to https
+                        <i className="ri-globe-line"></i> locahost to https
                       </button>
                       <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
-                        <i className="ri-community-line"></i> Discussion
+                        <i className="ri-chat-3-line"></i> Discussion
                       </button>
                       <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
-                        <i className="ri-node-tree"></i>Node Discovery
+                        <i className="ri-instance-line"></i>Node Discovery
                       </button>
                       <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
-                        <i className="ri-chat-poll-line"></i>Governance & Voting
+                        <i className="ri-government-line"></i> Governance & Voting
                       </button>
                     </div>
                   </AccordionContent>
@@ -140,9 +140,12 @@ export default function NavigationBar() {
                   <AccordionTrigger>Company</AccordionTrigger>
                   <AccordionContent>
                     <div className="flex flex-col gap-2">
-                      <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
-                        <i className="ri-ancient-gate-line"></i>About us
-                      </button>
+                      <Link href="/company" onClick={() => setMobileMenuOpen(false)} className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
+                        <i className="ri-home-line"></i>About us
+                      </Link>
+                      <Link href="mailto:ming.env@gmail.com" target="_blank" className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
+                        <i className="ri-mail-line"></i>ming.env@gmail.com
+                      </Link>
                     </div>
                   </AccordionContent>
                 </AccordionItem>
