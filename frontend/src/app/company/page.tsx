@@ -12,7 +12,7 @@ const data = [
   {
     title: "👀 Vision",
     description:
-      "We aim to provide a safe sandbox for developers to host any kind of projects, applications, or production grade distributed services. Our mission is to utilize the existing devices as distributed node servers leveraging their computing power over complex data-centers.",
+      "We vision to connect developers, engineers, and business all together utilizing electronic waste to build an Open Cloud and Community.",
   },
 ];
 
@@ -26,8 +26,8 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <div className="mx-auto max-w-7xl p-6 pt-0 sm:pt-2 lg:px-8">
-      <div className="mt-0">
+    <div className="mx-auto max-w-7xl p-6 sm:pt-2 lg:px-8 pt-10">
+      <div className="mt-4">
         <p className="text-lg font-semibold text-gray-400 text-center">
           🛠️ By Developer for Developers.
         </p>
@@ -41,7 +41,7 @@ export default function Page() {
         secondImage="https://ik.imagekit.io/lexy/Ming/Screenshot%202024-08-22%20235919.png?updatedAt=1724385570143"
         firstImageClassName="object-cover object-left-top"
         secondImageClassname="object-cover object-left-top"
-        className="h-[200px] w-[100%] md:h-[300px] mt-6"
+        className="h-[200px] w-[100%] md:h-[300px] mt-6 mb-6"
         slideMode="hover"
       />
 

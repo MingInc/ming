@@ -25,7 +25,7 @@ export default function RootLayout({
         <div className="fixed top-0 left-0 w-full z-30">
           <NavigationBar />
         </div>
-        <div className="mt-20">{children}</div>
+        <div className="mt-14">{children}</div>
         <Footer/>
         <Toaster />
       </body>
