@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -11,9 +11,59 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { firebaseConfig } from "@/firebase.config";
+import {
+  Cloud,
+  CreditCard,
+  Github,
+  Keyboard,
+  LifeBuoy,
+  LogOut,
+  Mail,
+  MessageSquare,
+  Plus,
+  PlusCircle,
+  Settings,
+  User,
+  UserPlus,
+  Users,
+} from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function NavigationBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<any>();
+  const [isUserSignedIn, setIsUserSignedIn] = useState<boolean>(true);
+
+  useEffect(() => {
+    const app = initializeApp(firebaseConfig);
+    const authInstance = getAuth(app);
+
+    const _user = authInstance.currentUser;
+
+    if (_user) {
+      setUser(user);
+      setIsUserSignedIn(true);
+    }
+  }, []);
 
   return (
     <header className="bg-white border-b-[1px]">
@@ -44,12 +94,98 @@ export default function NavigationBar() {
           <NavigationMenuDemo />
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link
-            href="/login"
-            className="text-sm font-semibold leading-6 text-gray-900"
-          >
-            Log in <span aria-hidden="true">&rarr;</span>
-          </Link>
+          {isUserSignedIn ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Avatar className="cursor-pointer">
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                    {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
+                  </DropdownMenuItem>
+                  {/* <DropdownMenuItem>
+                    <CreditCard className="mr-2 h-4 w-4" />
+                    <span>Billing</span>
+                    <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+                  </DropdownMenuItem> */}
+                  <DropdownMenuItem>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Settings</span>
+                    {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                {/* <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <Users className="mr-2 h-4 w-4" />
+                    <span>Team</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger>
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      <span>Invite users</span>
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent>
+                        <DropdownMenuItem>
+                          <Mail className="mr-2 h-4 w-4" />
+                          <span>Email</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <MessageSquare className="mr-2 h-4 w-4" />
+                          <span>Message</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                          <PlusCircle className="mr-2 h-4 w-4" />
+                          <span>More...</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
+                  <DropdownMenuItem>
+                    <Plus className="mr-2 h-4 w-4" />
+                    <span>New Team</span>
+                    <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup> */}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <Github className="mr-2 h-4 w-4" />
+                  <span>GitHub</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <LifeBuoy className="mr-2 h-4 w-4" />
+                  <span>Support</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem disabled>
+                  <Cloud className="mr-2 h-4 w-4" />
+                  <span>API</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                  <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link
+              href="/login"
+              className="text-sm font-semibold leading-6 text-gray-900"
+            >
+              Log in <span aria-hidden="true">&rarr;</span>
+            </Link>
+          )}
         </div>
       </nav>
       <Dialog
@@ -129,7 +265,8 @@ export default function NavigationBar() {
                         <i className="ri-instance-line"></i>Node Discovery
                       </button>
                       <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
-                        <i className="ri-government-line"></i> Governance & Voting
+                        <i className="ri-government-line"></i> Governance &
+                        Voting
                       </button>
                     </div>
                   </AccordionContent>
@@ -140,27 +277,69 @@ export default function NavigationBar() {
                   <AccordionTrigger>Company</AccordionTrigger>
                   <AccordionContent>
                     <div className="flex flex-col gap-2">
-                      <Link href="/company" onClick={() => setMobileMenuOpen(false)} className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
+                      <Link
+                        href="/company"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2"
+                      >
                         <i className="ri-home-line"></i>About us
                       </Link>
-                      <Link href="mailto:ming.env@gmail.com" target="_blank" className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
+                      <Link
+                        href="mailto:ming.env@gmail.com"
+                        target="_blank"
+                        className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2"
+                      >
                         <i className="ri-mail-line"></i>ming.env@gmail.com
                       </Link>
                     </div>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
-              <div
-                className="mt-10 text-center bg-black"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <Link
-                  href="/login"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-50"
+              {isUserSignedIn ? (
+                <div className="flex flex-col gap-2 mt-4">
+                  <div className="flex items-center text-sm gap-2 mb-2">
+                    <Avatar className="cursor-pointer">
+                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-semibold">Hello, not.so.lexy</p>
+                      <p className="text-gray-500">not.so.lexy@gmail.com</p>
+                    </div>
+                  </div>
+                  <button className="w-full items-center text-left text-sm font-medium text-gray-500 flex gap-1 ml-2">
+                    <User className="mr-2 h-4 w-4" /> Profile
+                  </button>
+                  <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-1 ml-2 items-center">
+                    <Settings className="mr-2 h-4 w-4" /> Settings
+                  </button>
+                  <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-1 ml-2 items-center">
+                    <Github className="mr-2 h-4 w-4" />
+                    GitHub
+                  </button>
+                  <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-1 ml-2 items-center">
+                    <LifeBuoy className="mr-2 h-4 w-4" /> Support
+                  </button>
+                  <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-1 ml-2 items-center">
+                    <Cloud className="mr-2 h-4 w-4" /> API
+                  </button>
+                  <button className="w-full items-center text-left text-sm font-medium text-gray-500 flex gap-1 ml-2">
+                    <LogOut className="mr-2 h-4 w-4" /> Log out
+                  </button>
+                </div>
+              ) : (
+                <div
+                  className="mt-10 text-center bg-black"
+                  onClick={() => setMobileMenuOpen(false)}
                 >
-                  Log in
-                </Link>
-              </div>
+                  <Link
+                    href="/login"
+                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-50"
+                  >
+                    Log in
+                  </Link>
+                </div>
+              )}
 
               <div className="flex gap-3 items-center justify-center text-2xl mt-8">
                 <Link href="">
