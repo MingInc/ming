@@ -120,7 +120,7 @@ export default function NavigationBar() {
                   <AccordionContent>
                     <div className="flex flex-col gap-2">
                       <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
-                        <i className="ri-globe-line"></i> locahost to https
+                        <i className="ri-globe-line"></i> localhost to https
                       </button>
                       <button className="w-full text-left text-sm font-medium text-gray-500 flex gap-2 ml-2">
                         <i className="ri-chat-3-line"></i> Discussion

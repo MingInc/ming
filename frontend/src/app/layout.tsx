@@ -4,6 +4,7 @@ import 'remixicon/fonts/remixicon.css'
 import "./globals.css";
 import NavigationBar from "@/components/NavigationBar";
 import Footer from "@/components/Footer";
+import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
         </div>
         <div className="mt-20">{children}</div>
         <Footer/>
+        <Toaster />
       </body>
     </html>
   );
