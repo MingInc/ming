@@ -12,7 +12,7 @@ const data = [
   {
     title: "👀 Vision",
     description:
-      "We aim to provide a safe sandbox for developers to host any kind of projects, applications, or production grade distributed services. Our mission is to utilize the existing devices as distributed node servers leveraging their computing power over complex data-centers.",
+      "We vision to connect developers, engineers, and business all together utilizing electronic waste to build an Open Cloud and Community.",
   },
 ];
 
