@@ -106,11 +106,13 @@ export default function NavigationBar() {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
-                    {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
-                  </DropdownMenuItem>
+                  <Link href="/profile" className="flex w-full">
+                    <DropdownMenuItem className="w-full">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Profile</span>
+                      {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
+                    </DropdownMenuItem>
+                  </Link>
                   {/* <DropdownMenuItem>
                     <CreditCard className="mr-2 h-4 w-4" />
                     <span>Billing</span>
@@ -122,7 +124,7 @@ export default function NavigationBar() {
                     {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
-                <DropdownMenuSeparator />
+                {/* <DropdownMenuSeparator /> */}
                 {/* <DropdownMenuGroup>
                   <DropdownMenuItem>
                     <Users className="mr-2 h-4 w-4" />
