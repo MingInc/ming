@@ -1,7 +1,6 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,7 +36,10 @@ export default function Navbar() {
   const navigate = useNavigate();
   const { authState } = useAuth();
 
-  console.log(authState);
+  const handleLogout = () => {
+    localStorage.removeItem('ming_authenticated_user')
+    navigate("/")
+  }
 
   return (
     <nav className="flex items-center justify-between flex-wrap mx-auto max-w-7xl py-3">
@@ -139,7 +141,7 @@ export default function Navbar() {
               <span>API</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleLogout()}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
               <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>

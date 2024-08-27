@@ -31,7 +31,8 @@ export default function Login() {
           //     description: `Welcome to Ming, ${user.email?.split("@")[0]}.`,
           //   });
           login(user);
-          navigate("/")
+          localStorage.setItem("ming_authenticated_user", JSON.stringify(user));
+          navigate("/dashboard");
         }
       })
       .catch((error) => {

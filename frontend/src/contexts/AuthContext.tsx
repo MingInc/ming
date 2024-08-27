@@ -1,4 +1,10 @@
-import React, { createContext, useReducer, useContext, ReactNode } from "react";
+import React, {
+  createContext,
+  useReducer,
+  useContext,
+  ReactNode,
+  useEffect,
+} from "react";
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -55,6 +61,18 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     dispatch({ type: "LOGOUT" });
   };
+
+  useEffect(() => {
+    const _user: any = JSON.parse(
+      localStorage.getItem("ming_authenticated_user") || "{}"
+    );
+
+    console.log(_user);
+
+    if (_user.email) {
+      dispatch({ type: "LOGIN", payload: _user });
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ authState, login, logout }}>
