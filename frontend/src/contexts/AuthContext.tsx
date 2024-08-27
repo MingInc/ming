@@ -6,34 +6,14 @@ import React, {
   useEffect,
 } from "react";
 
-interface User {
-  accessToken: string;
-  auth: any;
-  displayName: string;
-  email: string;
-  emailVerified: boolean;
-  isAnonymous: boolean;
-  metadata: any;
-  phoneNumber: string | null;
-  photoURL: string;
-  proactiveRefresh: any;
-  providerData: any[];
-  providerId: string;
-  reloadListener: any; // Define a more specific type if possible
-  reloadUserInfo: any;
-  stsTokenManager: any;
-  tenantId: string | null;
-  uid: string;
-}
-
 interface AuthState {
   isAuthenticated: boolean;
-  user: User | null;
+  user: any | null;
 }
 
 interface AuthContextType {
   authState: AuthState;
-  login: (user: User) => void;
+  login: (user: any) => void;
   logout: () => void;
 }
 
@@ -86,8 +66,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const _user: any = JSON.parse(
       localStorage.getItem("ming_authenticated_user") || "{}"
     );
-
-    console.log(_user);
 
     if (_user.email) {
       dispatch({ type: "LOGIN", payload: _user });
