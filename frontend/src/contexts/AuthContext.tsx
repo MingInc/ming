@@ -6,14 +6,34 @@ import React, {
   useEffect,
 } from "react";
 
+interface User {
+  accessToken: string;
+  auth: any;
+  displayName: string;
+  email: string;
+  emailVerified: boolean;
+  isAnonymous: boolean;
+  metadata: any;
+  phoneNumber: string | null;
+  photoURL: string;
+  proactiveRefresh: any;
+  providerData: any[];
+  providerId: string;
+  reloadListener: any; // Define a more specific type if possible
+  reloadUserInfo: any;
+  stsTokenManager: any;
+  tenantId: string | null;
+  uid: string;
+}
+
 interface AuthState {
   isAuthenticated: boolean;
-  user: null;
+  user: User | null;
 }
 
 interface AuthContextType {
   authState: AuthState;
-  login: (user: any) => void;
+  login: (user: User) => void;
   logout: () => void;
 }
 
