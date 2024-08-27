@@ -13,6 +13,12 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const _user = JSON.parse(
+      localStorage.getItem("ming_authenticated_user") || "{}"
+    );
+
+    if (_user.email) return navigate("/dashboard");
+    
     const app = initializeApp(firebaseConfig);
     const authInstance = getAuth(app);
     setAuth(authInstance);
@@ -20,6 +26,7 @@ export default function Login() {
 
   const handleGoogleSignin = () => {
     if (!auth) return;
+
 
     signInWithPopup(auth, provider)
       .then((result) => {
