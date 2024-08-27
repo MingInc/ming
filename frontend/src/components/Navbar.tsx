@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-use-before-define
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -65,7 +66,7 @@ export default function Navbar() {
                     <AvatarImage src="https://images.unsplash.com/photo-1644912325393-cb31907c98f0?q=80&w=1530&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
                   </AvatarFallback>
                 </Avatar>
-                <p className="text-sm">{authState.user.email.split("@")[0]}</p>
+                <p className="text-sm">{authState && authState?.user?.email.split("@")[0]}</p>
               </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
