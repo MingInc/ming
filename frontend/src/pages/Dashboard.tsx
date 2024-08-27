@@ -23,7 +23,7 @@ export default function Dashboard() {
 
   return (
     <div className="flex min-h-screen w-full flex-col">
-      <header className="sticky top-0 flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6 mx-[2em]">
+      <header className="sticky top-0 flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6 mx-[4vw]">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <a
             href="#"
@@ -124,10 +124,10 @@ export default function Dashboard() {
               />
             </div>
           </form>
-          <button className="text-sm bg-black px-3 text-white h-10 rounded-sm"><i className="ri-add-line"></i> Add New</button>
+          <button className="text-sm bg-black px-3 text-white h-10 rounded-sm cursor-pointer" onClick={() => navigate("/create-new")}><i className="ri-add-line"></i> Add New</button>
         </div>
       </header>
-      <main className="mx-auto max-w-7xl">
+      <main className="mx-[5vw] py-3">
         <p>Projects</p>
       </main>
     </div>

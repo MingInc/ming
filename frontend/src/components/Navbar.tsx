@@ -34,15 +34,16 @@ import {
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const { authState } = useAuth();
+  const { authState, logout } = useAuth();
 
   const handleLogout = () => {
     localStorage.removeItem('ming_authenticated_user')
     navigate("/")
+    logout()
   }
 
   return (
-    <nav className="flex items-center justify-between flex-wrap mx-auto max-w-7xl py-3">
+    <nav className="flex items-center justify-between flex-wrap mx-auto py-3 container">
       <div
         onClick={() => navigate("/")}
         className="flex items-center gap-1 cursor-pointer"

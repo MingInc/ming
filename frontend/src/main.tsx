@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import { AuthProvider } from "./contexts/AuthContext";
 import Dashboard from "./pages/Dashboard";
+import Projects from "./pages/Projects";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,14 @@ const router = createBrowserRouter([
     element: (
       <Layout>
         <Dashboard />
+      </Layout>
+    ),
+  },
+  {
+    path: "/create-new",
+    element: (
+      <Layout>
+        <Projects />
       </Layout>
     ),
   },
