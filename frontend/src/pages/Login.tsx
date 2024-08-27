@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-use-before-define
 import { useAuth } from "@/contexts/AuthContext";
 import { firebaseConfig } from "@/firebase.config";
 import { initializeApp } from "firebase/app";
@@ -44,10 +45,11 @@ export default function Login() {
       })
       .catch((error) => {
         // Handle Errors here.
-        const errorCode = error.code;
+        // const errorCode = error.code;
         const errorMessage = error.message;
+        console.log(errorMessage)
         // The email of the user's account used.
-        const email = error.customData.email;
+        // const email = error.customData.email;
         // The AuthCredential type that was used.
       });
   };
