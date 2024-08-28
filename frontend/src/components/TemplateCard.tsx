@@ -72,10 +72,10 @@ export default function TemplateCard() {
               <motion.div layoutId={`image-${active.title}-${id}`}>
                 <img
                   width={200}
-                  height={100}
+                  height={50}
                   src={active.src}
                   alt={active.title}
-                  className="w-full h-80 lg:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top"
+                  className="w-full h-50 lg:h-40 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-center"
                 />
               </motion.div>
 
@@ -86,7 +86,7 @@ export default function TemplateCard() {
                       layoutId={`title-${active.title}-${id}`}
                       className="font-medium text-neutral-700 dark:text-neutral-200 text-base"
                     >
-                      {active.title}
+                      <i className="ri-git-pull-request-line"></i> {active.title}
                     </motion.h3>
                     <motion.p
                       layoutId={`description-${active.description}-${id}`}
@@ -103,12 +103,12 @@ export default function TemplateCard() {
                     exit={{ opacity: 0 }}
                     href={active.ctaLink}
                     target="_blank"
-                    className="px-2 py-2 text-sm rounded-sm font-bold bg-black text-white flex items-center gap-2"
+                    className="px-2 py-1 text-sm rounded-sm font-bold bg-black text-white flex items-center gap-1"
                   >
                     <i className="ri-cloud-line"></i> {active.ctaText}
                   </motion.a>
                 </div>
-                <p className="px-4 text-sm">Description</p>
+                <p className="px-4 text-sm font-medium text-neutral-700"><i className="ri-information-2-line"></i> Description</p>
 
                 <div className="mt-2 relative px-4 h-44 overflow-y-scroll">
                   <motion.div
@@ -116,13 +116,22 @@ export default function TemplateCard() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="text-neutral-600 text-sm h-30 md:h-40 pb-10 flex flex-col items-start gap-4 dark:text-neutral-400 overflow-y-scroll"
+                    className="text-neutral-600 text-sm h-30 md:h-40 pb-10 flex flex-col items-start gap-4 dark:text-neutral-400 overflow-y-scroll border p-1 px-2"
                   >
                     {typeof active.content === "function"
                       ? active.content()
                       : active.content}
                   </motion.div>
                 </div>
+
+                <motion.div
+                    layout
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }} className="mx-4 flex items-center gap-2 text-sm mb-4">
+                        <p className="p-1 px-2 bg-black text-white flex items-center gap-1"><i className="ri-github-fill"></i>Github</p>
+                        <p className="border p-1 px-2"><i className="ri-global-line"></i> View Demo</p>
+                    </motion.div>
               </div>
             </motion.div>
           </div>
