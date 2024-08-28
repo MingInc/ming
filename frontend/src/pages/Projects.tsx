@@ -24,7 +24,7 @@ export default function Projects() {
         </p>
       </div>
 
-      <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-2 auto-cols-auto">
+      <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">
         <div className="border p-3 px-4 rounded-md">
           <p className="text-md font-medium border-b-2 pb-2 mb-2">
             <i className="ri-settings-line"></i> Configure Project
