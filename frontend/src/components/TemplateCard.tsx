@@ -91,7 +91,7 @@ export default function TemplateCard() {
                     <motion.p
                       layoutId={`description-${active.description}-${id}`}
                       className="text-neutral-600 dark:text-neutral-400 text-sm"
-                      >
+                    >
                       {active.description}
                     </motion.p>
                   </div>
@@ -116,7 +116,7 @@ export default function TemplateCard() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="text-neutral-600 text-sm h-30 md:h-50 pb-10 flex flex-col items-start gap-4 dark:text-neutral-400 overflow-y-scroll"
+                    className="text-neutral-600 text-sm h-30 md:h-40 pb-10 flex flex-col items-start gap-4 dark:text-neutral-400 overflow-y-scroll"
                   >
                     {typeof active.content === "function"
                       ? active.content()
@@ -155,10 +155,27 @@ export default function TemplateCard() {
                 </motion.h3>
                 <motion.p
                   layoutId={`description-${card.description}-${id}`}
-                  className="text-neutral-600 dark:text-neutral-400 md:text-left text-sm"
+                  className="text-neutral-600 dark:text-neutral-400 md:text-left text-sm mb-2"
                 >
                   {card.description}
                 </motion.p>
+
+                <div className="flex items-center gap-2">
+                  <motion.a
+                    href="https://github.com/13x54n/ming-dev/tree/main"
+                    target="_blank"
+                    className="text-sm"
+                  >
+                    <i className="ri-github-fill"></i> GitHub
+                  </motion.a>
+                  <motion.a
+                    href="https://github.com/13x54n/ming-dev/tree/main"
+                    target="_blank"
+                    className="text-sm"
+                  >
+                    <i className="ri-global-line"></i> View Demo
+                  </motion.a>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -203,7 +220,8 @@ export const CloseIcon = () => {
 
 const cards = [
   {
-    description: "dApp powered by Next.js and ArgentX as wallet provider and authentication.",
+    description:
+      "dApp powered by Next.js and ArgentX as wallet provider and authentication.",
     title: "Starknet dApp Boilerplate",
     src: "https://imgs.search.brave.com/C5-CJjr5DxuqdNaww1lg89FFzLtjRAONjqRNmhyMMrI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/dGJzdGF0LmNvbS93/cC91cGxvYWRzLzIw/MjQvMDIvc3Rhcmtu/ZXQtZXRoZXJldW0t/MTIwMHg2NzUuanBl/Zz9pc1NhZmFyaT1m/YWxzZSZpc01vYmls/ZT1mYWxzZQ",
     ctaText: "Deploy",
@@ -220,35 +238,32 @@ const cards = [
           With a career that has seen numerous critically acclaimed albums, Lana
           Del Rey has established herself as a unique and influential figure in
           the music industry, earning a dedicated fan base and numerous
-          accolades.
-
-          Lana Del Rey, an iconic American singer-songwriter, is celebrated for
-          her melancholic and cinematic music style. Born Elizabeth Woolridge
-          Grant in New York City, she has captivated audiences worldwide with
-          her haunting voice and introspective lyrics. <br /> <br /> Her songs
-          often explore themes of tragic romance, glamour, and melancholia,
-          drawing inspiration from both contemporary and vintage pop culture.
-          With a career that has seen numerous critically acclaimed albums, Lana
-          Del Rey has established herself as a unique and influential figure in
-          the music industry, earning a dedicated fan base and numerous
-          accolades.
-
-          Lana Del Rey, an iconic American singer-songwriter, is celebrated for
-          her melancholic and cinematic music style. Born Elizabeth Woolridge
-          Grant in New York City, she has captivated audiences worldwide with
-          her haunting voice and introspective lyrics. <br /> <br /> Her songs
-          often explore themes of tragic romance, glamour, and melancholia,
-          drawing inspiration from both contemporary and vintage pop culture.
-          With a career that has seen numerous critically acclaimed albums, Lana
-          Del Rey has established herself as a unique and influential figure in
-          the music industry, earning a dedicated fan base and numerous
-          accolades.
+          accolades. Lana Del Rey, an iconic American singer-songwriter, is
+          celebrated for her melancholic and cinematic music style. Born
+          Elizabeth Woolridge Grant in New York City, she has captivated
+          audiences worldwide with her haunting voice and introspective lyrics.{" "}
+          <br /> <br /> Her songs often explore themes of tragic romance,
+          glamour, and melancholia, drawing inspiration from both contemporary
+          and vintage pop culture. With a career that has seen numerous
+          critically acclaimed albums, Lana Del Rey has established herself as a
+          unique and influential figure in the music industry, earning a
+          dedicated fan base and numerous accolades. Lana Del Rey, an iconic
+          American singer-songwriter, is celebrated for her melancholic and
+          cinematic music style. Born Elizabeth Woolridge Grant in New York
+          City, she has captivated audiences worldwide with her haunting voice
+          and introspective lyrics. <br /> <br /> Her songs often explore themes
+          of tragic romance, glamour, and melancholia, drawing inspiration from
+          both contemporary and vintage pop culture. With a career that has seen
+          numerous critically acclaimed albums, Lana Del Rey has established
+          herself as a unique and influential figure in the music industry,
+          earning a dedicated fan base and numerous accolades.
         </p>
       );
     },
   },
   {
-    description: "Flash loan dApp with premium UX powered by Shadcn & Acernity.",
+    description:
+      "Flash loan dApp with premium UX powered by Shadcn & Acernity.",
     title: "Flash Loan",
     src: "https://imgs.search.brave.com/VMf709cBvBavWmkjmI3SKp8Yv9hg805SLL8EXEkIdAM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA5LzA0LzM2LzA3/LzM2MF9GXzkwNDM2/MDc0N19BcllMcUUz/bjZIeWk0SkZleEF2/WUtEZTlNajZKQmEx/cS5qcGc",
     ctaText: "Deploy",
@@ -293,7 +308,8 @@ const cards = [
     },
   },
   {
-    description: "Powered by ArgentX & Alchemy for account abstraction and meta-transactions.",
+    description:
+      "Powered by ArgentX & Alchemy for account abstraction and meta-transactions.",
     title: "Abstract Wallet for ArgentX",
     src: "https://imgs.search.brave.com/9H_FVKou5oNX7uH9ZliZZPkcZe07fLVeAn_bnuL1PpA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuY3RmYXNzZXRz/Lm5ldC9xNXVsazRi/cDY1cjcvMmlHZnJt/c0JQc015RlNMenFu/dGtZUy84ZTAxZDZj/Y2VmY2RmOGM0ZTdi/NDE2NDAwMzNkMTFh/ZC9Db2luYmFzZV93/YWxsZXRfX0RlRmlf/dHV0b3JpYWwucG5n/P3c9NzY4JmZtPXBu/Zw",
     ctaText: "Deploy",
