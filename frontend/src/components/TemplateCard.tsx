@@ -80,8 +80,8 @@ export default function TemplateCard() {
               </motion.div>
 
               <div>
-                <div className="flex justify-between items-start p-4">
-                  <div className="">
+                <div className="flex justify-between items-start p-4 gap-2">
+                  <div>
                     <motion.h3
                       layoutId={`title-${active.title}-${id}`}
                       className="font-medium text-neutral-700 dark:text-neutral-200 text-base"
@@ -90,8 +90,8 @@ export default function TemplateCard() {
                     </motion.h3>
                     <motion.p
                       layoutId={`description-${active.description}-${id}`}
-                      className="text-neutral-600 dark:text-neutral-400 text-base"
-                    >
+                      className="text-neutral-600 dark:text-neutral-400 text-sm"
+                      >
                       {active.description}
                     </motion.p>
                   </div>
@@ -103,18 +103,20 @@ export default function TemplateCard() {
                     exit={{ opacity: 0 }}
                     href={active.ctaLink}
                     target="_blank"
-                    className="px-4 py-2 text-sm rounded-sm font-bold bg-black text-white"
+                    className="px-2 py-2 text-sm rounded-sm font-bold bg-black text-white flex items-center gap-2"
                   >
-                    {active.ctaText}
+                    <i className="ri-cloud-line"></i> {active.ctaText}
                   </motion.a>
                 </div>
-                <div className="pt-4 relative px-4 h-40 overflow-y-scroll mb-4">
+                <p className="px-4 text-sm">Description</p>
+
+                <div className="mt-2 relative px-4 h-44 overflow-y-scroll">
                   <motion.div
                     layout
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="text-neutral-600 text-xs md:text-sm lg:text-base h-30 md:h-fit pb-10 flex flex-col items-start gap-4 dark:text-neutral-400 overflow-y-scroll"
+                    className="text-neutral-600 text-sm h-30 md:h-50 pb-10 flex flex-col items-start gap-4 dark:text-neutral-400 overflow-y-scroll"
                   >
                     {typeof active.content === "function"
                       ? active.content()
@@ -126,34 +128,34 @@ export default function TemplateCard() {
           </div>
         ) : null}
       </AnimatePresence>
-      <ul className="max-w-2xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 items-start">
+      <ul className="max-w-2xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 items-start gap-3 mt-4 mb-3">
         {cards.map((card, index) => (
           <motion.div
             layoutId={`card-${card.title}-${id}`}
             key={index}
             onClick={() => setActive(card)}
-            className="p-4 flex flex-col  hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-xl cursor-pointer"
+            className="flex flex-col hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-xl cursor-pointer border"
           >
-            <div className="flex gap-4 flex-col  w-full">
+            <div className="flex gap-1 flex-col w-full">
               <motion.div layoutId={`image-${card.title}-${id}`}>
                 <img
                   width={100}
-                  height={100}
+                  height={20}
                   src={card.src}
                   alt={card.title}
-                  className="h-60 w-full  rounded-lg object-cover object-top"
+                  className="h-20 w-full rounded-lg object-cover object-center rounded-br-none rounded-bl-none"
                 />
               </motion.div>
-              <div className="flex justify-center items-center flex-col">
+              <div className="flex text-left items-start flex-col pb-2 pl-2">
                 <motion.h3
                   layoutId={`title-${card.title}-${id}`}
-                  className="font-medium text-neutral-800 dark:text-neutral-200 text-center md:text-left text-base"
+                  className="font-medium text-neutral-800 dark:text-neutral-200 md:text-left text-sm"
                 >
                   {card.title}
                 </motion.h3>
                 <motion.p
                   layoutId={`description-${card.description}-${id}`}
-                  className="text-neutral-600 dark:text-neutral-400 text-center md:text-left text-base"
+                  className="text-neutral-600 dark:text-neutral-400 md:text-left text-sm"
                 >
                   {card.description}
                 </motion.p>
@@ -201,8 +203,8 @@ export const CloseIcon = () => {
 
 const cards = [
   {
-    description: "Starknet dApp Boilerplate",
-    title: "Ming",
+    description: "dApp powered by Next.js and ArgentX as wallet provider and authentication.",
+    title: "Starknet dApp Boilerplate",
     src: "https://imgs.search.brave.com/C5-CJjr5DxuqdNaww1lg89FFzLtjRAONjqRNmhyMMrI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/dGJzdGF0LmNvbS93/cC91cGxvYWRzLzIw/MjQvMDIvc3Rhcmtu/ZXQtZXRoZXJldW0t/MTIwMHg2NzUuanBl/Zz9pc1NhZmFyaT1m/YWxzZSZpc01vYmls/ZT1mYWxzZQ",
     ctaText: "Deploy",
     ctaLink: "https://ui.aceternity.com/templates",
@@ -246,9 +248,9 @@ const cards = [
     },
   },
   {
-    description: "Ming",
+    description: "Flash loan dApp with premium UX powered by Shadcn & Acernity.",
     title: "Flash Loan",
-    src: "https://imgs.search.brave.com/iWG5MZFUXLUd655O_VgC5twG8RmFVlOwEb0AfEyhzv0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9iZWlu/Y3J5cHRvLmNvbS93/cC1jb250ZW50L3Vw/bG9hZHMvMjAyMy8w/MS9iaWNfRGVGaV9u/ZXV0cmFsXzQtMzYw/eDIwMy5wbmc",
+    src: "https://imgs.search.brave.com/VMf709cBvBavWmkjmI3SKp8Yv9hg805SLL8EXEkIdAM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA5LzA0LzM2LzA3/LzM2MF9GXzkwNDM2/MDc0N19BcllMcUUz/bjZIeWk0SkZleEF2/WUtEZTlNajZKQmEx/cS5qcGc",
     ctaText: "Deploy",
     ctaLink: "https://ui.aceternity.com/templates",
     content: () => {
@@ -269,10 +271,10 @@ const cards = [
   },
 
   {
-    description: "Metallica",
-    title: "For Whom The Bell Tolls",
-    src: "https://assets.aceternity.com/demos/metallica.jpeg",
-    ctaText: "Visit",
+    description: "NFT Marketplace built on top of Solana & Ethereum.",
+    title: "NFT Marketplace",
+    src: "https://imgs.search.brave.com/EKCGSgGaGW4mo0QxL9h4GW5744lyTx2QRYogjKQJvXk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pYS5h/Y3Mub3JnLmF1L2Nv/bnRlbnQvZGFtL2lh/L2FydGljbGUvaW1h/Z2VzLzIwMjEvY3J5/cHRvcHVua3MuSlBH",
+    ctaText: "Deploy",
     ctaLink: "https://ui.aceternity.com/templates",
     content: () => {
       return (
@@ -291,10 +293,10 @@ const cards = [
     },
   },
   {
-    description: "Lord Himesh",
-    title: "Aap Ka Suroor",
-    src: "https://assets.aceternity.com/demos/aap-ka-suroor.jpeg",
-    ctaText: "Visit",
+    description: "Powered by ArgentX & Alchemy for account abstraction and meta-transactions.",
+    title: "Abstract Wallet for ArgentX",
+    src: "https://imgs.search.brave.com/9H_FVKou5oNX7uH9ZliZZPkcZe07fLVeAn_bnuL1PpA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuY3RmYXNzZXRz/Lm5ldC9xNXVsazRi/cDY1cjcvMmlHZnJt/c0JQc015RlNMenFu/dGtZUy84ZTAxZDZj/Y2VmY2RmOGM0ZTdi/NDE2NDAwMzNkMTFh/ZC9Db2luYmFzZV93/YWxsZXRfX0RlRmlf/dHV0b3JpYWwucG5n/P3c9NzY4JmZtPXBu/Zw",
+    ctaText: "Deploy",
     ctaLink: "https://ui.aceternity.com/templates",
     content: () => {
       return (

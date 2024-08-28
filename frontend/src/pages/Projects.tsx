@@ -11,7 +11,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import ProjectCard from "@/components/ProjectCard";
 import TemplateCard from "@/components/TemplateCard";
 
 export default function Projects() {
@@ -25,7 +24,7 @@ export default function Projects() {
         </p>
       </div>
 
-      <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">
+      <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-2 auto-cols-auto">
         <div className="border p-3 px-4 rounded-md">
           <p className="text-md font-medium border-b-2 pb-2 mb-2">
             <i className="ri-settings-line"></i> Configure Project
@@ -104,8 +103,13 @@ export default function Projects() {
           </button>
         </div>
         <div className="border p-3 px-4 rounded-md">
-          <div className="items-center flex justify-between">
-            <p className="text-sm font-medium">Clone Template</p>
+          <div className="items-center flex justify-between border-b-2 pb-2 flex-col lg:flex-row">
+            <div>
+              <p className="text-md font-medium">
+                <i className="ri-file-copy-line"></i> Clone Template
+              </p>
+              <p className="text-sm">Jumpstart your app development process with our pre-built Ming templates, starters, and themes.</p>
+            </div>
             <Select>
               <SelectTrigger className="w-[120px] text-sm">
                 <SelectValue placeholder="Framework" />
@@ -119,6 +123,8 @@ export default function Projects() {
           </div>
 
           <TemplateCard />
+
+          <a className="mt-3 text-sm">Browse All Templates <i className="ri-arrow-right-line"></i></a>
         </div>
       </div>
     </div>
