@@ -108,13 +108,13 @@ export default function TemplateCard() {
                     {active.ctaText}
                   </motion.a>
                 </div>
-                <div className="pt-4 relative px-4 overflow-y-scroll">
+                <div className="pt-4 relative px-4 h-40 overflow-y-scroll mb-4">
                   <motion.div
                     layout
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="text-neutral-600 text-xs md:text-sm lg:text-base h-40 md:h-fit pb-10 flex flex-col items-start gap-4 overflow-auto dark:text-neutral-400 [mask:linear-gradient(to_bottom,white,white,transparent)] [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch] overflow-y-scroll"
+                    className="text-neutral-600 text-xs md:text-sm lg:text-base h-30 md:h-fit pb-10 flex flex-col items-start gap-4 dark:text-neutral-400 overflow-y-scroll"
                   >
                     {typeof active.content === "function"
                       ? active.content()
@@ -219,15 +219,37 @@ const cards = [
           Del Rey has established herself as a unique and influential figure in
           the music industry, earning a dedicated fan base and numerous
           accolades.
+
+          Lana Del Rey, an iconic American singer-songwriter, is celebrated for
+          her melancholic and cinematic music style. Born Elizabeth Woolridge
+          Grant in New York City, she has captivated audiences worldwide with
+          her haunting voice and introspective lyrics. <br /> <br /> Her songs
+          often explore themes of tragic romance, glamour, and melancholia,
+          drawing inspiration from both contemporary and vintage pop culture.
+          With a career that has seen numerous critically acclaimed albums, Lana
+          Del Rey has established herself as a unique and influential figure in
+          the music industry, earning a dedicated fan base and numerous
+          accolades.
+
+          Lana Del Rey, an iconic American singer-songwriter, is celebrated for
+          her melancholic and cinematic music style. Born Elizabeth Woolridge
+          Grant in New York City, she has captivated audiences worldwide with
+          her haunting voice and introspective lyrics. <br /> <br /> Her songs
+          often explore themes of tragic romance, glamour, and melancholia,
+          drawing inspiration from both contemporary and vintage pop culture.
+          With a career that has seen numerous critically acclaimed albums, Lana
+          Del Rey has established herself as a unique and influential figure in
+          the music industry, earning a dedicated fan base and numerous
+          accolades.
         </p>
       );
     },
   },
   {
-    description: "Babbu Maan",
-    title: "Mitran Di Chhatri",
-    src: "https://assets.aceternity.com/demos/babbu-maan.jpeg",
-    ctaText: "Visit",
+    description: "Ming",
+    title: "Flash Loan",
+    src: "https://imgs.search.brave.com/iWG5MZFUXLUd655O_VgC5twG8RmFVlOwEb0AfEyhzv0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9iZWlu/Y3J5cHRvLmNvbS93/cC1jb250ZW50L3Vw/bG9hZHMvMjAyMy8w/MS9iaWNfRGVGaV9u/ZXV0cmFsXzQtMzYw/eDIwMy5wbmc",
+    ctaText: "Deploy",
     ctaLink: "https://ui.aceternity.com/templates",
     content: () => {
       return (
