@@ -1,20 +1,6 @@
-import { $ } from "bun";
-
+import { deployProject } from "./controllers/DeployProject.ts";
+import { addCorsHeaders } from "./helpers/CorsHeader.ts";
 type Method = "GET" | "PUT" | "POST" | "OPTIONS";
-
-function addCorsHeaders(response: Response): Response {
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  };
-
-  for (const [key, value] of Object.entries(corsHeaders)) {
-    response.headers.set(key, value);
-  }
-
-  return response;
-}
 
 const server = Bun.serve({
   port: 3000,
@@ -29,45 +15,14 @@ const server = Bun.serve({
       }
 
       const apiEndpoint = `${method} ${url.pathname}`;
+      console.log(Date.now(), apiEndpoint); // works as morgan for Bun
 
       switch (apiEndpoint) {
-        case "POST /test":
-          const data = await req.json();
-
-          try {
-            /**
-             * @dev .nothrow() keeps the error message and does not redirect to catch method.
-             */
-            const consoleResponse = await $`./scripts/DeployProject.sh`.nothrow();
-            // const consoleResponse = await $`pwd`.text();
-
-            return addCorsHeaders(
-              new Response(JSON.stringify({ message: consoleResponse }), {
-                headers: { "Content-Type": "application/json" },
-                status: 200,
-              })
-            );
-          } catch (err:any) {
-            console.log(err)
-            console.log(`Failed with code ${err.exitCode}`);
-            console.log(err.stdout.toString());
-            console.log(err.stderr.toString());
-            return addCorsHeaders(
-              new Response(
-                JSON.stringify({
-                  message: "Script execution failed",
-                  error: err.stderr.toString(),
-                }),
-                {
-                  headers: { "Content-Type": "application/json" },
-                  status: 500,
-                }
-              )
-            );
-          }
-        case "GET /test":
+        case "POST /api/v1/deploy-project":
+          return deployProject(req);
+        case "GET /api/v1/status":
           return addCorsHeaders(
-            new Response(JSON.stringify({ message: `You called GET /test` }), {
+            new Response(JSON.stringify({ message: `I am alive! Thanks for asking. 🥲` }), {
               headers: { "Content-Type": "application/json" },
               status: 200,
             })
