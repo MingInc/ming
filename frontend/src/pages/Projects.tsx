@@ -12,8 +12,53 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import TemplateCard from "@/components/TemplateCard";
+import { useState } from "react";
+import { toast } from "@/components/ui/use-toast";
 
 export default function Projects() {
+  const [projectName, setProjectName] = useState<string>("");
+  const [githubUrl, setGitHubUrl] = useState<string>("");
+  const [projectFramework, setProjectFramework] = useState<string>("");
+  const [rootDirectory, setRootDirectory] = useState<string>("");
+  const [buildCommand, setBuildCommand] = useState<string>("");
+  const [outputDirectory, setOutputDirectory] = useState<string>("");
+  const [installCommand, setInstallCommand] = useState<string>("");
+  const [envVariables, setEnvVariables] = useState<string>("");
+
+  const handleDeploy = async () => {
+    const data = {
+      projectName,
+      githubUrl,
+      projectFramework,
+      rootDirectory,
+      buildCommand,
+      outputDirectory,
+      installCommand,
+      envVariables,
+    };
+
+    if(projectName == "" || githubUrl == "" || projectFramework == ""){
+      return toast({
+        title: "⚠️ Something's Missing!",
+        description: "Project Name, GitHub URL, and framework are always required!",
+      })
+    }
+
+    // const response = await fetch("http://localhost:3000/test"); // Get Request
+    const response = await fetch(`${import.meta.env.VITE_SERVER_URI}/api/v1/deploy-project`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const result: any = await response.json();
+    console.log(result)
+  };
+
   return (
     <div className="mx-auto max-w-7xl container">
       <div className="my-8">
@@ -25,7 +70,7 @@ export default function Projects() {
       </div>
 
       <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">
-        <div className="border p-3 px-4 rounded-md">
+        <div className="border p-3 px-4 rounded-md h-auto">
           <p className="text-md font-medium border-b-2 pb-2 mb-2">
             <i className="ri-settings-line"></i> Configure Project
           </p>
@@ -34,22 +79,29 @@ export default function Projects() {
             type="text"
             placeholder="Your Amazing Project"
             className="text-sm w-full border p-1 px-2"
+            value={projectName}
+            onChange={(e) => setProjectName(e.target.value)}
           />
           <p className="text-sm font-medium my-1">GitHub URL</p>
           <input
             type="text"
             placeholder="https://github.com/MingInc/ming.git"
             className="w-full border p-1 px-2 text-sm"
+            value={githubUrl}
+            onChange={(e) => setGitHubUrl(e.target.value)}
           />
           <p className="text-sm font-medium my-1">Framework</p>
-          <Select>
+          <Select
+            value={projectFramework}
+            onValueChange={(e) => setProjectFramework(e)}
+          >
             <SelectTrigger className="w-full text-sm">
               <SelectValue placeholder="Choose framework..." />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="light">Vite</SelectItem>
-              <SelectItem value="dark">React.js</SelectItem>
-              <SelectItem value="system">Next.js</SelectItem>
+              <SelectItem value="Vite">Vite</SelectItem>
+              <SelectItem value="React.js">React.js</SelectItem>
+              <SelectItem value="Next.js">Next.js</SelectItem>
             </SelectContent>
           </Select>
 
@@ -58,6 +110,8 @@ export default function Projects() {
             type="text"
             placeholder="./"
             className="w-full border p-1 px-2 text-sm"
+            value={rootDirectory}
+            onChange={(e) => setRootDirectory(e.target.value)}
           />
 
           <Accordion type="single" collapsible>
@@ -71,18 +125,24 @@ export default function Projects() {
                   type="text"
                   placeholder="npm run build"
                   className="w-full border p-1 px-2 text-sm"
+                  value={buildCommand}
+                  onChange={(e) => setBuildCommand(e.target.value)}
                 />
                 <p className="text-sm font-medium my-1">Output Directory</p>
                 <input
                   type="text"
                   placeholder="dist"
                   className="w-full border p-1 px-2 text-sm"
+                  value={outputDirectory}
+                  onChange={(e) => setOutputDirectory(e.target.value)}
                 />
                 <p className="text-sm font-medium my-1">Install Command</p>
                 <input
                   type="text"
                   placeholder="npm install"
                   className="w-full border p-1 px-2 text-sm"
+                  value={installCommand}
+                  onChange={(e) => setInstallCommand(e.target.value)}
                 />
               </AccordionContent>
             </AccordionItem>
@@ -93,12 +153,20 @@ export default function Projects() {
                 Environment Variables
               </AccordionTrigger>
               <AccordionContent>
-                <textarea rows={4} className="border w-full"></textarea>
+                <textarea
+                  rows={4}
+                  className="border w-full"
+                  value={envVariables}
+                  onChange={(e) => setEnvVariables(e.target.value)}
+                />
                 <p>TIP: Paste a .env above to populate the form</p>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-          <button className="text-sm text-white bg-black w-full py-2 mt-4 rounded-sm">
+          <button
+            onClick={() => handleDeploy()}
+            className="text-sm text-white bg-black w-full py-2 mt-4 rounded-sm"
+          >
             Deploy
           </button>
         </div>
@@ -108,10 +176,13 @@ export default function Projects() {
               <p className="text-md font-medium">
                 <i className="ri-file-copy-line"></i> Clone Template
               </p>
-              <p className="text-sm">Jumpstart your app development process with our pre-built Ming templates, starters, and themes.</p>
+              <p className="text-sm mt-1 mb-2">
+                Jumpstart your app development process with our pre-built Ming
+                templates, starters, and themes.
+              </p>
             </div>
             <Select>
-              <SelectTrigger className="w-[120px] text-sm">
+              <SelectTrigger className="lg:w-[120px] w-full mt-3 lg:mt-0 text-sm">
                 <SelectValue placeholder="Framework" />
               </SelectTrigger>
               <SelectContent>
@@ -124,7 +195,9 @@ export default function Projects() {
 
           <TemplateCard />
 
-          <a className="mt-3 text-sm">Browse All Templates <i className="ri-arrow-right-line"></i></a>
+          <a className="mt-3 text-sm">
+            Browse All Templates <i className="ri-arrow-right-line"></i>
+          </a>
         </div>
       </div>
     </div>

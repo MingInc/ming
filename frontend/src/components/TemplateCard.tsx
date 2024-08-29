@@ -137,7 +137,7 @@ export default function TemplateCard() {
           </div>
         ) : null}
       </AnimatePresence>
-      <ul className="max-w-2xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 items-start gap-3 mt-4 mb-3">
+      <ul className="max-w-2xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 items-start gap-6 md:gap-3 mt-4 mb-3">
         {cards.map((card, index) => (
           <motion.div
             layoutId={`card-${card.title}-${id}`}
