@@ -24,7 +24,7 @@ export default function Projects() {
   const [installCommand, setInstallCommand] = useState<string>("");
   const [envVariables, setEnvVariables] = useState<string>("");
 
-  const handleDeploy = () => {
+  const handleDeploy = async () => {
     const data = {
       projectName,
       githubUrl,
@@ -33,11 +33,23 @@ export default function Projects() {
       buildCommand,
       outputDirectory,
       installCommand,
-      envVariables
-    }
+      envVariables,
+    };
 
-    console.log(data)
-  }
+    // const response = await fetch("http://localhost:3000/test"); // Get Request
+    const response = await fetch('http://localhost:3000/test', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const result: any = await response.json();
+    console.log(result)
+  };
 
   return (
     <div className="mx-auto max-w-7xl container">
@@ -143,7 +155,10 @@ export default function Projects() {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-          <button onClick={() => handleDeploy()} className="text-sm text-white bg-black w-full py-2 mt-4 rounded-sm">
+          <button
+            onClick={() => handleDeploy()}
+            className="text-sm text-white bg-black w-full py-2 mt-4 rounded-sm"
+          >
             Deploy
           </button>
         </div>
