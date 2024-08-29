@@ -58,7 +58,7 @@ export default function Login() {
     <div className="mx-auto text-center">
       <h1 className="text-xl font-medium mt-4">Login to Ming.</h1>
       <button
-        className="my-4 rounded-sm bg-black text-white text-sm py-2 px-4 w-[30vw]"
+        className="my-4 rounded-sm bg-black text-white text-sm py-2 px-4 w-[80vw] md:w-[30vw]"
         onClick={() => handleGoogleSignin()}
       >
         Continue with Google
