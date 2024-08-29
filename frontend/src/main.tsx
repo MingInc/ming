@@ -1,7 +1,6 @@
 // import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Analytics } from "@vercel/analytics/react";
 import "./index.css";
 import "remixicon/fonts/remixicon.css";
 
@@ -13,6 +12,8 @@ import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 
 import { Toaster } from "@/components/ui/toaster";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const router = createBrowserRouter([
   {
@@ -61,5 +62,6 @@ createRoot(document.getElementById("root")!).render(
     <RouterProvider router={router} />
     <Toaster />
     <Analytics />
+    <SpeedInsights />
   </AuthProvider>
 );
