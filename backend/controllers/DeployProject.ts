@@ -1,5 +1,7 @@
 import { $ } from "bun";
 import { addCorsHeaders } from "../helpers/CorsHeader";
+import { generateUID } from "../helpers/RandomGenerator";
+import { processProjectName } from "../helpers/StringManipulations";
 
 export async function deployProject(req: any) {
   const data = await req.json();
@@ -9,34 +11,44 @@ export async function deployProject(req: any) {
      * @dev .nothrow() keeps the error message and does not redirect to catch method.
      * @dev .quiet() runs scripts quietly and stores response to console response.
      */
-    console.log(data);
+    const {
+      projectName,
+      githubUrl,
+      projectFramework,
+      rootDirectory,
+      buildCommand,
+      outputDirectory,
+      installCommand,
+      envVariables,
+    } = data;
+    const uid = processProjectName(projectName) + "-" + generateUID();
+    // console.log(uid)
     
-    return addCorsHeaders(
-      new Response(
-        JSON.stringify({
-          message: `You called me, which I don't know how to handle!`,
-        }),
-        { headers: { "Content-Type": "application/json" }, status: 404 }
-      )
-    );
-    // const consoleResponse = await $`./scripts/DeployProject.sh`
-    //   .nothrow()
-    //   .quiet();
-
     // return addCorsHeaders(
     //   new Response(
     //     JSON.stringify({
-    //       message: {
-    //         stdout: consoleResponse.stdout.toString(),
-    //         stderr: consoleResponse.stderr.toString(),
-    //       },
+    //       message: `This is static response!`,
     //     }),
-    //     {
-    //       headers: { "Content-Type": "application/json" },
-    //       status: 200,
-    //     }
+    //     { headers: { "Content-Type": "application/json" }, status: 200 }
     //   )
     // );
+    const consoleResponse = await $`./scripts/DeployProject.sh ${uid} ${githubUrl}`
+      .nothrow();
+
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          message: {
+            stdout: consoleResponse.stdout.toString(),
+            stderr: consoleResponse.stderr.toString(),
+          },
+        }),
+        {
+          headers: { "Content-Type": "application/json" },
+          status: 200,
+        }
+      )
+    );
   } catch (err: any) {
     console.log(err);
     console.log(`Failed with code ${err.exitCode}`);
