@@ -22,7 +22,7 @@ export async function deployProject(req: any) {
       envVariables,
     } = data;
     const uid = processProjectName(projectName) + "-" + generateUID();
-    console.log(uid)
+    // console.log(uid)
     
     // return addCorsHeaders(
     //   new Response(
@@ -32,9 +32,8 @@ export async function deployProject(req: any) {
     //     { headers: { "Content-Type": "application/json" }, status: 200 }
     //   )
     // );
-    const consoleResponse = await $`PROJECT_UID=${uid} ./scripts/DeployProject.sh`
-      .nothrow()
-      .quiet();
+    const consoleResponse = await $`./scripts/DeployProject.sh ${uid} ${githubUrl}`
+      .nothrow();
 
     return addCorsHeaders(
       new Response(
