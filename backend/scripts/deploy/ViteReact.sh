@@ -5,6 +5,9 @@ CONTAINER_NAME=$1
 IMAGE_NAME=$1
 GIT_URL=$2
 PROJECT_FOLDER_NAME=$3
+NGROK_API_KEY=$4
+NGROK_AUTH_TOKEN=$5
+NGROK_DOMAIN=$6
 
 # Function to clean up Docker container and image
 cleanup() {
@@ -42,7 +45,7 @@ fi
 
 # Navigate to the project directory and build the project
 echo "Building the project..."
-if ! docker exec $CONTAINER_NAME /bin/bash -c "cd $PROJECT_FOLDER_NAME && npm install && npm run build"; then
+if ! docker exec $CONTAINER_NAME /bin/bash -c "cd $PROJECT_FOLDER_NAME && npm install && npm run build && ngrok config add-authtoken $NGROK_AUTH_TOKEN"; then
     echo "Error: Project build failed."
     cleanup
     exit 1
@@ -56,27 +59,22 @@ if ! docker exec $CONTAINER_NAME /bin/bash -c "cd $PROJECT_FOLDER_NAME && pm2 se
     exit 1
 fi
 
+docker exec -it $CONTAINER_NAME /bin/bash -c "ngrok config add-api-key $NGROK_API_KEY"
+
 echo "Starting ngrok..."
-if ! docker exec -it $CONTAINER_NAME /bin/bash -c "ngrok config add-authtoken 2ffTL5Tsu3qPBG0c00lu3D1au0J_58juSShkWxss3hTUMDGCL && nohup ngrok http 8080 > ngrok.log 2>&1 &"; then
+if ! docker exec -it $CONTAINER_NAME /bin/bash -c "tmux new-session -d -s ngrokSession 'ngrok http --domain $NGROK_DOMAIN 8080'"; then # PORT Should be dynamic
     echo "Error: Failed to start ngrok."
     cleanup
     exit 1
 fi
 
-# Wait for a while to let ngrok start and generate some logs
-sleep 10
+docker exec -it $CONTAINER_NAME /bin/bash -c "tmux detach -s ngrokSession" # this should be dynamic
 
-# Print the current directory
-echo "Current directory:"
-docker exec -it $CONTAINER_NAME /bin/bash -c "pwd"
+sleep 10
 
 # Print the content of the log file
 echo "Printing ngrok log..."
-if ! docker exec -it $CONTAINER_NAME /bin/bash -c "cat ngrok.log"; then
-    echo "Error: Failed to print ngrok log."
-    cleanup
-    exit 1
-fi
+docker exec -it $CONTAINER_NAME /bin/bash -c "ngrok api endpoints list"
 
 # Record the end time and calculate the total build time
 end_time=$(date +%s)

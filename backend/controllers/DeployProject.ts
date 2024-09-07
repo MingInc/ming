@@ -28,7 +28,7 @@ export async function deployProject(req: any) {
       ? githubUrl
       : githubUrl + ".git";
     const consoleResponse =
-      await $`./scripts/deploy/ViteReact.sh ${uid} ${_githubUrl} ${projectFolderName}`.nothrow();
+      await $`./scripts/deploy/ViteReact.sh ${uid} ${_githubUrl} ${projectFolderName} ${Bun.env.NGROK_API_KEY} ${Bun.env.NGROK_AUTH_TOKEN} ${Bun.env.NGROK_DOMAIN}`.nothrow();
 
     return addCorsHeaders(
       new Response(
