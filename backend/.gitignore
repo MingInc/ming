@@ -173,3 +173,8 @@ dist
 
 # Finder (MacOS) folder config
 .DS_Store
+
+.env
+node_modules
+*.lockb
+*-lock.json

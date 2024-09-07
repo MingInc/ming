@@ -2,6 +2,7 @@ import { $ } from "bun";
 import { addCorsHeaders } from "../helpers/CorsHeader";
 import { generateUID } from "../helpers/RandomGenerator";
 import { processProjectName } from "../helpers/StringManipulations";
+import { extractFolderName } from "../helpers/GithubNameExtractor";
 
 export async function deployProject(req: any) {
   const data = await req.json();
@@ -22,18 +23,12 @@ export async function deployProject(req: any) {
       envVariables,
     } = data;
     const uid = processProjectName(projectName) + "-" + generateUID();
-    // console.log(uid)
-    
-    // return addCorsHeaders(
-    //   new Response(
-    //     JSON.stringify({
-    //       message: `This is static response!`,
-    //     }),
-    //     { headers: { "Content-Type": "application/json" }, status: 200 }
-    //   )
-    // );
-    const consoleResponse = await $`./scripts/DeployProject.sh ${uid} ${githubUrl}`
-      .nothrow();
+    const projectFolderName = extractFolderName(githubUrl);
+    const _githubUrl = githubUrl.endsWith(".git")
+      ? githubUrl
+      : githubUrl + ".git";
+    const consoleResponse =
+      await $`./scripts/deploy/ViteReact.sh ${uid} ${_githubUrl} ${projectFolderName} ${Bun.env.NGROK_API_KEY} ${Bun.env.NGROK_AUTH_TOKEN} ${Bun.env.NGROK_DOMAIN}`.nothrow();
 
     return addCorsHeaders(
       new Response(
