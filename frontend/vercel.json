@@ -13,6 +13,10 @@
         "destination": "/login"
       },
       {
+        "source": "/build",
+        "destination": "/build"
+      },
+      {
         "source": "/dashboard",
         "destination": "/dashboard"
       },
