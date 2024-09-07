@@ -1,4 +1,4 @@
-import { $ } from "bun";
+
 import { addCorsHeaders } from "../helpers/CorsHeader";
 import { generateUID } from "../helpers/RandomGenerator";
 import { processProjectName } from "../helpers/StringManipulations";
@@ -27,23 +27,44 @@ export async function deployProject(req: any) {
     const _githubUrl = githubUrl.endsWith(".git")
       ? githubUrl
       : githubUrl + ".git";
-    const consoleResponse =
-      await $`./scripts/deploy/ViteReact.sh ${uid} ${_githubUrl} ${projectFolderName} ${Bun.env.NGROK_API_KEY} ${Bun.env.NGROK_AUTH_TOKEN} ${Bun.env.NGROK_DOMAIN}`.nothrow();
 
-    return addCorsHeaders(
-      new Response(
-        JSON.stringify({
-          message: {
-            stdout: consoleResponse.stdout.toString(),
-            stderr: consoleResponse.stderr.toString(),
-          },
-        }),
-        {
-          headers: { "Content-Type": "application/json" },
-          status: 200,
-        }
-      )
+    const proc: any = Bun.spawn(
+      [
+        "./scripts/deploy/ViteReact.sh",
+        uid,
+        _githubUrl,
+        projectFolderName,
+        Bun.env.NGROK_API_KEY,
+        Bun.env.NGROK_AUTH_TOKEN,
+        Bun.env.NGROK_DOMAIN,
+      ],
+      {
+        stderr: "pipe",
+      }
     );
+
+    const combinedStream = new ReadableStream({
+      async start(controller) {
+        proc.stdout.pipeTo(
+          new WritableStream({
+            write(chunk) {
+              controller.enqueue(chunk);
+            },
+          })
+        );
+        proc.stderr.pipeTo(
+          new WritableStream({
+            write(chunk) {
+              controller.enqueue(chunk);
+            },
+          })
+        );
+      },
+    });
+
+    return addCorsHeaders(new Response(combinedStream, {
+      headers: { "Content-Type": "text/plain" },
+    }))
   } catch (err: any) {
     console.log(err);
     console.log(`Failed with code ${err.exitCode}`);
