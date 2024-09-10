@@ -10,5 +10,8 @@
   },
   "scripts": {
     "start": "bun --hot run index.ts"
+  },
+  "dependencies": {
+    "mongoose": "^8.6.1"
   }
 }

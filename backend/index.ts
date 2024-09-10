@@ -1,6 +1,18 @@
+import { createProject } from "./controllers/CreateProjectRecord.ts";
 import { deployProject } from "./controllers/DeployProject.ts";
 import { addCorsHeaders } from "./helpers/CorsHeader.ts";
+import * as mongoose from "mongoose";
+
 type Method = "GET" | "PUT" | "POST" | "OPTIONS";
+
+mongoose
+  .connect("mongodb://127.0.0.1:27017/ming")
+  .then(() => {
+    console.log("Connected to MongoDB!");
+  })
+  .catch((err) => {
+    return console.log(err);
+  });
 
 const server = Bun.serve({
   port: 3000,
@@ -20,12 +32,17 @@ const server = Bun.serve({
       switch (apiEndpoint) {
         case "POST /api/v1/deploy-project":
           return deployProject(req);
+        case "POST /api/v1/create-project":
+          return createProject(req);
         case "GET /api/v1/status":
           return addCorsHeaders(
-            new Response(JSON.stringify({ message: `I am alive! Thanks for asking. 🥲` }), {
-              headers: { "Content-Type": "application/json" },
-              status: 200,
-            })
+            new Response(
+              JSON.stringify({ message: `I am alive! Thanks for asking. 🥲` }),
+              {
+                headers: { "Content-Type": "application/json" },
+                status: 200,
+              }
+            )
           );
         default:
           return addCorsHeaders(
