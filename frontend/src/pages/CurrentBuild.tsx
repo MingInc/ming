@@ -7,11 +7,16 @@ import {
 import { useEffect, useRef, useState } from "react";
 
 export default function CurrentBuild() {
-  const [projectDeploymentPayload, setProjectDeploymentPayload] = useState({});
+  const [projectDeploymentPayload, setProjectDeploymentPayload] = useState({
+    githubUrl: "", // Initialize with a default value
+    projectName: "",
+  });
   const [projectDeploymentLog, setProjectDeploymentLog] = useState<string[]>(
     []
   );
   const [buildStatus, setBuildStatus] = useState<string>("building");
+  const [buildUrl, setBuildUrl] = useState<string>("");
+  const [buildTime, setBuildTime] = useState<string>("");
   const logContainerRef = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
@@ -59,6 +64,45 @@ export default function CurrentBuild() {
             ...prevLogData,
             newLogEntry,
           ]);
+
+          if (decodedValue.includes("build time:")) {
+            let match = decoder
+              .decode(value)
+              .match(/build time: (\d+) seconds./);
+
+            if (match) {
+              let buildTimeInSeconds = match[1];
+              setBuildTime(buildTimeInSeconds);
+            }
+            break;
+          }
+
+          function extractPublicUrl(jsonString: string): string | undefined {
+            try {
+              const jsonData: {
+                endpoints: { public_url: string; url: string }[];
+              } = JSON.parse(jsonString);
+              const publicUrl = jsonData.endpoints[0].public_url;
+              const url = jsonData.endpoints[0].url;
+              return publicUrl || url;
+            } catch (error) {
+              // Handle the error
+              console.error("Error parsing JSON:", error);
+              return undefined; // Or set a flag indicating URL wasn't found
+            }
+          }
+
+          var extractedUrl: string | undefined = extractPublicUrl(
+            decoder.decode(value)
+          );
+          if (extractedUrl && extractedUrl.includes("http")) {
+            console.log("Extracted URL:", extractedUrl);
+            setBuildUrl(extractedUrl);
+            setBuildStatus("completed");
+            localStorage.removeItem("MING_PROJECT_DEPLOYMENT_PAYLOAD");
+
+            // add to user profile on deployed projects from here
+          }
         }
 
         if (!response.ok) {
@@ -86,7 +130,9 @@ export default function CurrentBuild() {
           alt=""
         />
         <div className="w-[100%] lg:w-[25vw]">
-          <h1 className="font-semibold text-lg">Ming</h1>
+          <h1 className="font-semibold text-lg">
+            {projectDeploymentPayload?.projectName}
+          </h1>
           <div className="flex gap-6">
             <div>
               <p>Status</p>
@@ -94,19 +140,26 @@ export default function CurrentBuild() {
             </div>
             <div>
               <p>Duration</p>
-              <p>25s (8d ago)</p>
+              <p>
+                {buildTime !== "" ? `${buildTime} Seconds` : <>{buildStatus}</>}
+              </p>
             </div>
           </div>
 
           <p className="mt-3 font-semibold">Domains</p>
           <ul>
             <li>
-              <a className="flex items-center gap-1" href="">
+              <a
+                className="flex items-center gap-1"
+                href={buildUrl ? buildUrl : "#"}
+              >
+                {" "}
+                {/* Set href to "#" if buildUrl is empty */}
                 <i className="ri-global-line"></i>{" "}
-                {buildStatus === "building" || "failed" ? (
+                {buildStatus !== "completed" ? (
                   <div className="max-w-sm animate-pulse h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48"></div>
                 ) : (
-                  "ming.ngrok.dev"
+                  buildUrl
                 )}
               </a>
             </li>
@@ -120,16 +173,17 @@ export default function CurrentBuild() {
           </p>
           <p>
             <i className="ri-github-fill"></i>{" "}
-            https://github.com/13x54n/app.ming
+            {projectDeploymentPayload && projectDeploymentPayload?.githubUrl}
           </p>
-          <button
+          <a
+          href={buildUrl}
+          target="_blank"
             className={`${
               buildStatus === "building" ? "bg-gray-300" : "bg-black"
             } w-[100%] text-white py-1 my-3`}
-            disabled={buildStatus === "building" || ("failed" && true)}
           >
-            Live Preview
-          </button>
+            {buildStatus !== "completed" ? "Building..." : "Live Preview"}
+          </a>
         </div>
       </div>
       <hr className="my-6" />
@@ -169,7 +223,7 @@ export default function CurrentBuild() {
                   Deployment Failed
                 </div>
               ) : (
-                <></>
+                <div>Build Completed</div>
               )}
             </div>
           </AccordionTrigger>
@@ -223,13 +277,15 @@ export default function CurrentBuild() {
                   Deployment Failed
                 </div>
               ) : (
-                <></>
+                <a href={buildUrl} target="_blank">
+                  {buildUrl}
+                </a>
               )}
             </div>
           </AccordionTrigger>
           <AccordionContent>
-            <a href="https://ming.ngrok.dev" className="underline">
-              https://ming.ngrok.dev
+            <a href={buildUrl} target="_blank" className="underline">
+              {buildUrl}
             </a>
           </AccordionContent>
         </AccordionItem>
