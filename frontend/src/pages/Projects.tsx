@@ -14,6 +14,7 @@ import {
 import TemplateCard from "@/components/TemplateCard";
 import { useState } from "react";
 import { toast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function Projects() {
   const [projectName, setProjectName] = useState<string>("");
@@ -24,6 +25,7 @@ export default function Projects() {
   const [outputDirectory, setOutputDirectory] = useState<string>("");
   const [installCommand, setInstallCommand] = useState<string>("");
   const [envVariables, setEnvVariables] = useState<string>("");
+  const navigate = useNavigate();
 
   const handleDeploy = async () => {
     const data = {
@@ -45,29 +47,12 @@ export default function Projects() {
       });
     }
 
-    // const response = await fetch("http://localhost:3000/test"); // Get Request
-    const response: any = await fetch(
-      `${import.meta.env.VITE_SERVER_URI}/api/v1/deploy-project`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      }
+    localStorage.setItem(
+      "MING_PROJECT_DEPLOYMENT_PAYLOAD",
+      JSON.stringify(data)
     );
-
-    const reader = response?.body.getReader();
-    const decoder = new TextDecoder();
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      console.log(decoder.decode(value));
-    }
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
+    
+    navigate("/build");
   };
 
   return (

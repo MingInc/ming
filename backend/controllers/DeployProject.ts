@@ -1,4 +1,3 @@
-
 import { addCorsHeaders } from "../helpers/CorsHeader";
 import { generateUID } from "../helpers/RandomGenerator";
 import { processProjectName } from "../helpers/StringManipulations";
