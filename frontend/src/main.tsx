@@ -14,6 +14,7 @@ import Projects from "./pages/Projects";
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react"
+import CurrentBuild from "./pages/CurrentBuild";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,14 @@ const router = createBrowserRouter([
     element: (
       <Layout>
         <Projects />
+      </Layout>
+    ),
+  },
+  {
+    path: "/build",
+    element: (
+      <Layout>
+        <CurrentBuild />
       </Layout>
     ),
   },

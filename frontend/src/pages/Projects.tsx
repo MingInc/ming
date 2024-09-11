@@ -14,6 +14,7 @@ import {
 import TemplateCard from "@/components/TemplateCard";
 import { useState } from "react";
 import { toast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function Projects() {
   const [projectName, setProjectName] = useState<string>("");
@@ -24,6 +25,7 @@ export default function Projects() {
   const [outputDirectory, setOutputDirectory] = useState<string>("");
   const [installCommand, setInstallCommand] = useState<string>("");
   const [envVariables, setEnvVariables] = useState<string>("");
+  const navigate = useNavigate();
 
   const handleDeploy = async () => {
     const data = {
@@ -37,26 +39,20 @@ export default function Projects() {
       envVariables,
     };
 
-    if(projectName == "" || githubUrl == "" || projectFramework == ""){
+    if (projectName == "" || githubUrl == "" || projectFramework == "") {
       return toast({
         title: "⚠️ Something's Missing!",
-        description: "Project Name, GitHub URL, and framework are always required!",
-      })
+        description:
+          "Project Name, GitHub URL, and framework are always required!",
+      });
     }
 
-    // const response = await fetch("http://localhost:3000/test"); // Get Request
-    const response = await fetch(`${import.meta.env.VITE_SERVER_URI}/api/v1/deploy-project`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const result: any = await response.json();
-    console.log(result)
+    localStorage.setItem(
+      "MING_PROJECT_DEPLOYMENT_PAYLOAD",
+      JSON.stringify(data)
+    );
+    
+    navigate("/build");
   };
 
   return (

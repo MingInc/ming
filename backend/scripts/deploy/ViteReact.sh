@@ -59,22 +59,16 @@ if ! docker exec $CONTAINER_NAME /bin/bash -c "cd $PROJECT_FOLDER_NAME && pm2 se
     exit 1
 fi
 
-docker exec -it $CONTAINER_NAME /bin/bash -c "ngrok config add-api-key $NGROK_API_KEY"
+docker exec $CONTAINER_NAME /bin/bash -c "ngrok config add-api-key $NGROK_API_KEY"
 
 echo "Starting ngrok..."
-if ! docker exec -it $CONTAINER_NAME /bin/bash -c "tmux new-session -d -s ngrokSession 'ngrok http --domain $NGROK_DOMAIN 8080'"; then # PORT Should be dynamic
-    echo "Error: Failed to start ngrok."
-    cleanup
-    exit 1
-fi
-
-docker exec -it $CONTAINER_NAME /bin/bash -c "tmux detach -s ngrokSession" # this should be dynamic
+docker exec $CONTAINER_NAME /bin/bash -c "ngrok http --domain $NGROK_DOMAIN 8080 > /dev/null 2>&1 &" # PORT Should be dynamic
 
 sleep 10
 
 # Print the content of the log file
 echo "Printing ngrok log..."
-docker exec -it $CONTAINER_NAME /bin/bash -c "ngrok api endpoints list"
+docker exec $CONTAINER_NAME /bin/bash -c "ngrok api endpoints list"
 
 # Record the end time and calculate the total build time
 end_time=$(date +%s)
