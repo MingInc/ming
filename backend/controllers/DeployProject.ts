@@ -5,6 +5,23 @@ import { extractFolderName } from "../helpers/GithubNameExtractor";
 import { Project } from "../models/Project.Schema";
 import mongoose from "mongoose";
 
+// Function to extract public URL from a JSON string
+function extractPublicUrl(jsonString: string): string | undefined {
+  try {
+    const jsonData: {
+      endpoints: { public_url: string; url: string }[];
+    } = JSON.parse(jsonString);
+
+    const publicUrl = jsonData.endpoints[0]?.public_url;
+    const url = jsonData.endpoints[0]?.url;
+
+    return publicUrl || url;
+  } catch (error) {
+    console.error("Error parsing JSON for public URL:", error);
+    return undefined;
+  }
+}
+
 export async function deployProject(req: any) {
   const data = await req.json();
 
@@ -13,13 +30,18 @@ export async function deployProject(req: any) {
       projectName,
       githubUrl,
       _id, // Ensure _id is correctly passed
-      // other fields
     } = data;
+
     const uid = processProjectName(projectName) + "-" + generateUID();
     const projectFolderName = extractFolderName(githubUrl);
-    const _githubUrl = githubUrl.endsWith(".git") ? githubUrl : githubUrl + ".git";
+    const _githubUrl = githubUrl.endsWith(".git")
+      ? githubUrl
+      : githubUrl + ".git";
 
     let logArray: string[] = [];
+    let extractedUrl: string | undefined;
+    let buildTimeInSeconds: string | undefined;
+
     const sink = new Bun.ArrayBufferSink();
     sink.start({ asUint8Array: true });
 
@@ -47,6 +69,21 @@ export async function deployProject(req: any) {
                 const decodedChunk = decoder.decode(chunk, { stream: true });
                 sink.write(chunk);
                 logArray.push(decodedChunk);
+
+                // Check for the public URL in each log entry
+                const tempUrl = extractPublicUrl(decodedChunk);
+                if (tempUrl && tempUrl.includes("http")) {
+                  extractedUrl = tempUrl; // Store the extracted URL
+                }
+
+                // Check for build time in each log entry
+                if (decodedChunk.includes("build time:")) {
+                  const match = decodedChunk.match(/build time: (\d+) seconds./);
+                  if (match) {
+                    buildTimeInSeconds = match[1];
+                  }
+                }
+
                 controller.enqueue(decodedChunk);
               },
             })
@@ -63,33 +100,31 @@ export async function deployProject(req: any) {
           ),
         ]);
 
-        // Wait for the streams to complete before updating the database
         try {
-          const objectId = mongoose.Types.ObjectId.isValid(_id)
-            ? new mongoose.Types.ObjectId(_id)
-            : null;
-
-          if (!objectId) {
-            console.error("Invalid ObjectId:", _id);
-            return new Response("Invalid ObjectId", { status: 400 });
-          }
-
-          const project = await Project.findByIdAndUpdate(
-            objectId,
-            {
-              $set: {
-                projectDeploymentData: { projectDeploymentLog: logArray },
+          // If we have a valid URL and build time, update the project
+          if (extractedUrl && buildTimeInSeconds) {
+            const project = await Project.findOneAndUpdate(
+              { projectUid: _id },
+              {
+                $set: {
+                  projectDeploymentData: {
+                    projectDeploymentLog: logArray,
+                    buildTime: buildTimeInSeconds,
+                    buildStatus: "completed",
+                    buildUrl: extractedUrl,
+                  },
+                },
               },
-            },
-            { new: true }
-          );
+              { new: true }
+            );
 
-          if (!project) {
-            console.error("Project not found with _id:", _id);
-            return new Response("Project not found", { status: 404 });
+            if (!project) {
+              console.error("Project not found with _id:", _id);
+              return new Response("Project not found", { status: 404 });
+            }
+
+            console.log("Project updated successfully:", project);
           }
-
-          console.log("Project updated successfully:", project);
         } catch (error) {
           console.error("Error during project update:", error);
         }

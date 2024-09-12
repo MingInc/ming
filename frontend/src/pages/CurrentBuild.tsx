@@ -97,6 +97,7 @@ export default function CurrentBuild() {
             decoder.decode(value)
           );
           if (extractedUrl && extractedUrl.includes("http")) {
+            console.log(extractedUrl)
             console.log("Extracted URL:", extractedUrl);
             setBuildUrl(extractedUrl);
             setBuildStatus("completed");
