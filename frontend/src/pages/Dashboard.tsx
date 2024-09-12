@@ -2,24 +2,34 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import {
-  Menu,
-  Package2,
-  Search,
-} from "lucide-react"
+import { Menu, Package2, Search } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
-import { Input } from "@/components/ui/input"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { fetchProjects } from "@/contexts/ProjectContext/ProjectActions";
+import { useProjectContext } from "@/contexts/ProjectContext/ProjectContext";
+import ProjectCard from "@/components/ProjectCard";
 
 export default function Dashboard() {
   const { authState } = useAuth();
   const navigate = useNavigate();
+  const { projectState, projectDispatch } = useProjectContext();
 
   useEffect(() => {
-    if (!authState.isAuthenticated) return navigate("/login");
+    if (authState.user) {
+      fetchProjects(projectDispatch, authState.user.uid);
+    }
   }, []);
+
+  if (projectState.loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (projectState.error) {
+    return <div>Error: {projectState.error}</div>;
+  }
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -124,12 +134,17 @@ export default function Dashboard() {
               />
             </div>
           </form>
-          <button className="text-sm bg-black px-3 text-white h-10 rounded-sm cursor-pointer" onClick={() => navigate("/create-new")}><i className="ri-add-line"></i> Add New</button>
+          <button
+            className="text-sm bg-black px-3 text-white h-10 rounded-sm cursor-pointer"
+            onClick={() => navigate("/create-new")}
+          >
+            <i className="ri-add-line"></i> Add New
+          </button>
         </div>
       </header>
       <main className="mx-[5vw] py-3">
-        <p>Projects</p>
+        <ProjectCard/>
       </main>
     </div>
-  )
+  );
 }
