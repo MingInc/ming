@@ -8,12 +8,10 @@ export async function createProject(req: any) {
 
   const uid = processProjectName(data.projectName) + "-" + generateUID();
 
-  console.log(data)
-
   try {
     const newProject = new Project({
-        projectUid: uid,
-        ...data
+      projectUid: uid,
+      ...data,
     });
     const savedProject = await newProject.save();
 
@@ -27,6 +25,40 @@ export async function createProject(req: any) {
     );
   } catch (error: any) {
     console.error("Error creating project:", error);
+
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          message: error.message,
+        }),
+        {
+          headers: { "Content-Type": "application/json" },
+          status: 500,
+        }
+      )
+    );
+  }
+}
+
+export async function updateProject(req: any) {
+  const data = req.json();
+
+  const { _id } = data;
+
+  try {
+    const project = await Project.findByIdAndUpdate(_id, data, { new: true });
+    if (!project) return new Response("Not found", { status: 404 });
+
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          message: "Project updated successfully!",
+          project,
+        })
+      )
+    );
+  } catch (error: any) {
+    console.error("Error updating project:", error);
 
     return addCorsHeaders(
       new Response(
