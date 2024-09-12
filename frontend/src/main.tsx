@@ -16,6 +16,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import CurrentBuild from "./pages/CurrentBuild";
 import { ProjectProvider } from "./contexts/ProjectContext/ProjectContext";
+import ProjectPreview from "./pages/ProjectPreview";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +63,14 @@ const router = createBrowserRouter([
     element: (
       <Layout>
         <CurrentBuild />
+      </Layout>
+    ),
+  },
+  {
+    path: "/preview",
+    element: (
+      <Layout>
+        <ProjectPreview />
       </Layout>
     ),
   },
