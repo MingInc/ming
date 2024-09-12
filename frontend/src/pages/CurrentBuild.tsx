@@ -4,7 +4,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useRef, useState } from "react";
 
 export default function CurrentBuild() {
@@ -19,7 +18,6 @@ export default function CurrentBuild() {
   const [buildUrl, setBuildUrl] = useState<string>("");
   const [buildTime, setBuildTime] = useState<string>("");
   const logContainerRef = useRef<HTMLUListElement | null>(null);
-  const { authState } = useAuth();
 
   useEffect(() => {
     const _payload: any = localStorage.getItem(
@@ -30,9 +28,10 @@ export default function CurrentBuild() {
         )
       : null;
 
-      setProjectDeploymentPayload(_payload);
+    setProjectDeploymentPayload(_payload);
 
     (async () => {
+      const _id = localStorage.getItem('MING_PROJECT_DEPLOYMENT_ID')
       try {
         const response: any = await fetch(
           `${import.meta.env.VITE_SERVER_URI}/api/v1/deploy-project`,
@@ -41,7 +40,7 @@ export default function CurrentBuild() {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(_payload),
+            body: JSON.stringify({..._payload, _id}),
           }
         );
 
@@ -101,8 +100,9 @@ export default function CurrentBuild() {
             console.log("Extracted URL:", extractedUrl);
             setBuildUrl(extractedUrl);
             setBuildStatus("completed");
-            
-            // add to user profile on deployed projects from here
+
+            localStorage.removeItem("MING_PROJECT_DEPLOYMENT_PAYLOAD");
+            localStorage.removeItem("MING_PROJECT_DEPLOYMENT_ID");
           }
         }
 
@@ -114,54 +114,13 @@ export default function CurrentBuild() {
       }
     })();
   }, []);
-  
+
   // Auto-scroll to the bottom when the logs update
   useEffect(() => {
     if (logContainerRef.current) {
       logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
     }
   }, [projectDeploymentLog]);
-  
-  useEffect(() => {
-    if (buildStatus === "completed") {
-      const _payload: any = localStorage.getItem(
-        "MING_PROJECT_DEPLOYMENT_PAYLOAD"
-      )
-        ? JSON.parse(
-            localStorage.getItem("MING_PROJECT_DEPLOYMENT_PAYLOAD") as string
-          )
-        : null;
-
-      const payload = {
-        userUid: authState.user.uid,
-        ..._payload,
-        projectDeploymentData: {
-          projectDeploymentLog,
-          buildStatus,
-          buildUrl,
-          buildTime,
-        },
-      };
-      
-      console.log(payload)
-      
-      fetch(`${import.meta.env.VITE_SERVER_URI}/api/v1/create-project`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Project deployed successfully:", data);
-        localStorage.removeItem("MING_PROJECT_DEPLOYMENT_PAYLOAD");
-        })
-        .catch((error) => {
-          console.error("Error deploying project:", error);
-        });
-    }
-  }, [buildStatus]);
 
   return (
     <div className="mx-auto max-w-7xl container my-5">

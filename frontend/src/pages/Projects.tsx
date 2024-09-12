@@ -15,6 +15,7 @@ import TemplateCard from "@/components/TemplateCard";
 import { useState } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Projects() {
   const [projectName, setProjectName] = useState<string>("");
@@ -26,6 +27,7 @@ export default function Projects() {
   const [installCommand, setInstallCommand] = useState<string>("");
   const [envVariables, setEnvVariables] = useState<string>("");
   const navigate = useNavigate();
+  const { authState } = useAuth();
 
   const handleDeploy = async () => {
     const data = {
@@ -51,8 +53,30 @@ export default function Projects() {
       "MING_PROJECT_DEPLOYMENT_PAYLOAD",
       JSON.stringify(data)
     );
-    
-    navigate("/build");
+
+    const payload = {
+      userUid: authState.user.uid,
+      ...data,
+    };
+
+    fetch(`${import.meta.env.VITE_SERVER_URI}/api/v1/create-project`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        localStorage.setItem(
+          "MING_PROJECT_DEPLOYMENT_ID",
+          data.project.projectUid
+        );
+        navigate("/build");
+      })
+      .catch((error) => {
+        console.error("Error deploying project:", error);
+      });
   };
 
   return (
