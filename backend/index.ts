@@ -1,4 +1,4 @@
-import { createProject } from "./controllers/CreateProjectRecord.ts";
+import { createProject, getProjectsByUser } from "./controllers/ProjectRecord.ts";
 import { deployProject } from "./controllers/DeployProject.ts";
 import { addCorsHeaders } from "./helpers/CorsHeader.ts";
 import * as mongoose from "mongoose";
@@ -34,6 +34,8 @@ const server = Bun.serve({
           return deployProject(req);
         case "POST /api/v1/create-project":
           return createProject(req);
+        case "GET /api/v1/get-projects":
+          return getProjectsByUser(req)
         case "GET /api/v1/status":
           return addCorsHeaders(
             new Response(

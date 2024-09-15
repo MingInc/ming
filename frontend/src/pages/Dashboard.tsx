@@ -28,7 +28,7 @@ export default function Dashboard() {
   }
 
   if (projectState.error) {
-    return <div>Error: {projectState.error}</div>;
+    console.log(projectState.error)
   }
 
   return (

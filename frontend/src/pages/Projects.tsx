@@ -146,7 +146,6 @@ export default function EnhancedProjects() {
                 <SelectContent>
                   <SelectItem value="Vite">Vite</SelectItem>
                   <SelectItem value="React.js">React.js</SelectItem>
-                  <SelectItem value="Next.js">Next.js</SelectItem>
                 </SelectContent>
               </Select>
             </div>

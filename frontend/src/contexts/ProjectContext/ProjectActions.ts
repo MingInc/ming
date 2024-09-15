@@ -14,6 +14,8 @@ export const fetchProjects = async (dispatch: any, userUid: string) => {
       }
     );
 
+
+    console.log(response)
     if (!response.ok) {
       throw new Error("Failed to fetch projects");
     }
