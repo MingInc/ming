@@ -4,6 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+
 import { useEffect, useRef, useState } from "react";
 
 export default function CurrentBuild() {
@@ -177,12 +178,13 @@ export default function CurrentBuild() {
             <i className="ri-github-fill"></i>{" "}
             {projectDeploymentPayload && projectDeploymentPayload?.githubUrl}
           </p>
+          <div className="mt-2"></div>
           <a
             href={buildUrl}
             target="_blank"
             className={`${
               buildStatus === "building" ? "bg-gray-300" : "bg-black"
-            } w-[100%] text-white py-1 my-3`}
+            } text-white py-1 my-3 px-5`}
           >
             {buildStatus !== "completed" ? "Building..." : "Live Preview"}
           </a>

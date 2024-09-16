@@ -17,6 +17,10 @@
         "destination": "/build"
       },
       {
+        "source": "/preview",
+        "destination": "/build"
+      },
+      {
         "source": "/dashboard",
         "destination": "/dashboard"
       },

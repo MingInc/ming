@@ -13,8 +13,10 @@ import Projects from "./pages/Projects";
 
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/react"
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import CurrentBuild from "./pages/CurrentBuild";
+import { ProjectProvider } from "./contexts/ProjectContext/ProjectContext";
+import ProjectPreview from "./pages/ProjectPreview";
 
 const router = createBrowserRouter([
   {
@@ -64,13 +66,23 @@ const router = createBrowserRouter([
       </Layout>
     ),
   },
+  {
+    path: "/preview",
+    element: (
+      <Layout>
+        <ProjectPreview />
+      </Layout>
+    ),
+  },
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <AuthProvider>
-    <RouterProvider router={router} />
-    <Toaster />
-    <Analytics />
-    <SpeedInsights />
+    <ProjectProvider>
+      <RouterProvider router={router} />
+      <Toaster />
+      <Analytics />
+      <SpeedInsights />
+    </ProjectProvider>
   </AuthProvider>
 );

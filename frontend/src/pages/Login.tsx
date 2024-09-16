@@ -19,6 +19,7 @@ export default function Login() {
     );
 
     if (_user.email) return navigate("/dashboard");
+
     
     const app = initializeApp(firebaseConfig);
     const authInstance = getAuth(app);

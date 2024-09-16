@@ -73,3 +73,55 @@ export async function updateProject(req: any) {
     );
   }
 }
+
+export async function getProjectsByUser(req: any) {
+  const url = new URL(req.url);
+  const userUid = url.searchParams.get("userUid"); // Get userUid from query params
+
+  if (!userUid) {
+    return new Response("userUid is required", { status: 400 });
+  }
+
+  try {
+    const projects = await Project.find({ userUid }); // Find all projects with matching userUid
+
+    if (!projects || projects.length === 0) {
+      return addCorsHeaders(
+        new Response(
+          JSON.stringify({
+            message: "Projects not found!",
+            projects: [],
+          }),
+          { status: 200, headers: { "Content-Type": "application/json" } }
+        )
+      );
+    }
+
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          message: "Projects retrieved successfully!",
+          projects,
+        }),
+        {
+          headers: { "Content-Type": "application/json" },
+          status: 200,
+        }
+      )
+    );
+  } catch (error: any) {
+    console.error("Error retrieving projects:", error);
+
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          message: error.message,
+        }),
+        {
+          headers: { "Content-Type": "application/json" },
+          status: 500,
+        }
+      )
+    );
+  }
+}
