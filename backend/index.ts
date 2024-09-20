@@ -6,7 +6,7 @@ import * as mongoose from "mongoose";
 type Method = "GET" | "PUT" | "POST" | "OPTIONS";
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/ming")
+  .connect(`mongodb+srv://Cluster53271:${process.env.MONGODB_PASSWORD}@cluster53271.l3uzg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster53271`)
   .then(() => {
     console.log("Connected to MongoDB!");
   })
@@ -77,4 +77,4 @@ const server = Bun.serve({
   },
 });
 
-console.log(`Server running at ${server.url}`);
+console.log(`Server running at http://localhost:3000/`);

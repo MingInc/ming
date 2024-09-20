@@ -17,7 +17,7 @@ function extractPublicUrl(jsonString: string): string | undefined {
 
     return publicUrl || url;
   } catch (error) {
-    console.error("Error parsing JSON for public URL:", error);
+    // console.error("Error parsing JSON for public URL:", error);
     return undefined;
   }
 }
@@ -119,11 +119,11 @@ export async function deployProject(req: any) {
             );
 
             if (!project) {
-              console.error("Project not found with _id:", _id);
-              return new Response("Project not found", { status: 404 });
+              // console.error("Project not found with _id:", _id);
+              return addCorsHeaders(new Response(JSON.stringify({project: []}), { status: 200 }))
             }
 
-            console.log("Project updated successfully:", project);
+            // console.log("Project updated successfully:", project);
           }
         } catch (error) {
           console.error("Error during project update:", error);
