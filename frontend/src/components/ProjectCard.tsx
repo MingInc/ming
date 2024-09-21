@@ -5,44 +5,44 @@ import { useProjectContext } from "@/contexts/ProjectContext/ProjectContext"
 import { GitBranchIcon, GitCommitIcon, MoreVerticalIcon, ExternalLinkIcon } from 'lucide-react'
 
 // This would typically come from your API or state management
-const projects = [
-  {
-    projectName: "My Awesome Project",
-    projectFramework: "Next.js",
-    githubUrl: "https://github.com/user/my-awesome-project",
-    projectDeploymentData: {
-      buildStatus: "SUCCESS",
-      buildUrl: "https://my-awesome-project.vercel.app",
-      buildTime: "2m 35s",
-    },
-    created_at: new Date("2023-06-15T10:00:00Z"),
-  },
-  {
-    projectName: "Cool App",
-    projectFramework: "React",
-    githubUrl: "https://github.com/user/cool-app",
-    projectDeploymentData: {
-      buildStatus: "FAILED",
-      buildUrl: "",
-      buildTime: "1m 50s",
-    },
-    created_at: new Date("2023-06-14T15:30:00Z"),
-  },
-  {
-    projectName: "API Service",
-    projectFramework: "Express.js",
-    githubUrl: "https://github.com/user/api-service",
-    projectDeploymentData: {
-      buildStatus: "BUILDING",
-      buildUrl: "",
-      buildTime: "1m 10s",
-    },
-    created_at: new Date("2023-06-13T09:45:00Z"),
-  },
-]
+// const projects = [
+//   {
+//     projectName: "My Awesome Project",
+//     projectFramework: "Next.js",
+//     githubUrl: "https://github.com/user/my-awesome-project",
+//     projectDeploymentData: {
+//       buildStatus: "SUCCESS",
+//       buildUrl: "https://my-awesome-project.vercel.app",
+//       buildTime: "2m 35s",
+//     },
+//     created_at: new Date("2023-06-15T10:00:00Z"),
+//   },
+//   {
+//     projectName: "Cool App",
+//     projectFramework: "React",
+//     githubUrl: "https://github.com/user/cool-app",
+//     projectDeploymentData: {
+//       buildStatus: "FAILED",
+//       buildUrl: "",
+//       buildTime: "1m 50s",
+//     },
+//     created_at: new Date("2023-06-14T15:30:00Z"),
+//   },
+//   {
+//     projectName: "API Service",
+//     projectFramework: "Express.js",
+//     githubUrl: "https://github.com/user/api-service",
+//     projectDeploymentData: {
+//       buildStatus: "BUILDING",
+//       buildUrl: "",
+//       buildTime: "1m 10s",
+//     },
+//     created_at: new Date("2023-06-13T09:45:00Z"),
+//   },
+// ]
 
 export default function DeployedProjects() {
-  const { projectState, projectDispatch } = useProjectContext();
+  const { projectState } = useProjectContext();
 
   return (
     <div className="container mx-auto px-1 py-5">
@@ -90,22 +90,4 @@ export default function DeployedProjects() {
       </div>
     </div>
   )
-}
-
-function formatDate(date: Date): string {
-  const now = new Date()
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
-  const diffInMinutes = Math.floor(diffInSeconds / 60)
-  const diffInHours = Math.floor(diffInMinutes / 60)
-  const diffInDays = Math.floor(diffInHours / 24)
-
-  if (diffInDays > 0) {
-    return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`
-  } else if (diffInHours > 0) {
-    return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`
-  } else if (diffInMinutes > 0) {
-    return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`
-  } else {
-    return 'Just now'
-  }
 }
