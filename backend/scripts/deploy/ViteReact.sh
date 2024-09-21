@@ -62,7 +62,9 @@ fi
 docker exec $CONTAINER_NAME /bin/bash -c "ngrok config add-api-key $NGROK_API_KEY"
 
 echo "Starting ngrok..."
-docker exec $CONTAINER_NAME /bin/bash -c "ngrok http --domain $NGROK_DOMAIN 8080 > /dev/null 2>&1 &" # PORT Should be dynamic
+docker exec $CONTAINER_NAME /bin/bash -c "ngrok http --domain $NGROK_DOMAIN 8080 > ngrok.log 2>&1 &"
+
+docker exec $CONTAINER_NAME /bin/bash -c "cat ngrok.log"
 
 sleep 10
 
