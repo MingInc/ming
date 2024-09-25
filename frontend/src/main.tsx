@@ -17,6 +17,7 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import CurrentBuild from "./pages/CurrentBuild";
 import { ProjectProvider } from "./contexts/ProjectContext/ProjectContext";
 import ProjectPreview from "./pages/ProjectPreview";
+import Pricing from "./pages/Pricing";
 
 const router = createBrowserRouter([
   {
@@ -63,6 +64,14 @@ const router = createBrowserRouter([
     element: (
       <Layout>
         <CurrentBuild />
+      </Layout>
+    ),
+  },
+  {
+    path: "/pricing",
+    element: (
+      <Layout>
+        <Pricing />
       </Layout>
     ),
   },

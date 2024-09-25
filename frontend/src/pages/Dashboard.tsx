@@ -28,7 +28,7 @@ export default function Dashboard() {
   }
 
   if (projectState.error) {
-    console.log(projectState.error)
+    console.log(projectState.error);
   }
 
   return (
@@ -36,42 +36,35 @@ export default function Dashboard() {
       <header className="sticky top-0 flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6 mx-[4vw]">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <a
-            href="#"
-            className="flex items-center gap-2 text-lg font-semibold md:text-base"
-          >
-            <Package2 className="h-6 w-6" />
-            <span className="sr-only">Ming</span>
-          </a>
-          <a
             href="/dashboard"
-            className="text-foreground transition-colors hover:text-foreground"
+            className="text-foreground transition-colors hover:text-foreground flex items-center gap-1"
           >
-            Overview
-          </a>
-          {/* <a
-            href="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Orders
+            <i className="ri-box-3-line"></i> Overview
           </a>
           <a
-            href="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
+            href="/usage"
+            className="text-foreground transition-colors hover:text-foreground flex items-center gap-1"
           >
-            Products
+            <i className="ri-line-chart-line"></i>Usage
           </a>
           <a
-            href="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
+            href="/usage"
+            className="flex items-center gap-1 text-foreground transition-colors hover:text-foreground"
           >
-            Customers
+            <i className="ri-hard-drive-3-line"></i> Storage
           </a>
           <a
-            href="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
+            href="/support"
+            className="flex items-center gap-1 text-foreground transition-colors hover:text-foreground"
           >
-            Analytics
-          </a> */}
+            <i className="ri-customer-service-line"></i> Support
+          </a>
+          <a
+            href="/settings"
+            className="flex items-center gap-1 text-foreground transition-colors hover:text-foreground"
+          >
+            <i className="ri-settings-4-line"></i> Settings
+          </a>
         </nav>
         <Sheet>
           <SheetTrigger asChild>
@@ -86,40 +79,33 @@ export default function Dashboard() {
           </SheetTrigger>
           <SheetContent side="left">
             <nav className="grid gap-6 text-lg font-medium">
-              <a
-                href="#"
-                className="flex items-center gap-2 text-lg font-semibold"
-              >
-                <Package2 className="h-6 w-6" />
-                <span className="sr-only">Ming</span>
-              </a>
               <a href="/dashboard" className="hover:text-foreground">
-                Overview
-              </a>
-              {/* <a
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Orders
+                <i className="ri-box-3-line"></i> Overview
               </a>
               <a
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
+                href="/usage"
+                className="text-foreground transition-colors hover:text-foreground flex items-center gap-1"
               >
-                Products
+                <i className="ri-line-chart-line"></i>Usage
               </a>
               <a
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
+                href="/usage"
+                className="flex items-center gap-1 text-foreground transition-colors hover:text-foreground"
               >
-                Customers
+                <i className="ri-hard-drive-3-line"></i> Storage
               </a>
               <a
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
+                href="/support"
+                className="flex items-center gap-1 text-foreground transition-colors hover:text-foreground"
               >
-                Analytics
-              </a> */}
+                <i className="ri-customer-service-line"></i> Support
+              </a>
+              <a
+                href="/settings"
+                className="flex items-center gap-1 text-foreground transition-colors hover:text-foreground"
+              >
+                <i className="ri-settings-4-line"></i> Settings
+              </a>
             </nav>
           </SheetContent>
         </Sheet>
@@ -129,7 +115,7 @@ export default function Dashboard() {
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Search products..."
+                placeholder="Search projects."
                 className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
               />
             </div>
@@ -143,7 +129,7 @@ export default function Dashboard() {
         </div>
       </header>
       <main className="mx-[5vw] py-3">
-        <ProjectCard/>
+        <ProjectCard />
       </main>
     </div>
   );

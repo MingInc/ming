@@ -21,7 +21,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <a href="https://discord.gg/YUcVRgwF" target="_blank">
               <i className="ri-discord-fill"></i>
             </a>
-            <a href="https://x.com/MingEnv_" target="_blank">
+            <a href="https://x.com/MingIncHQ" target="_blank">
               <i className="ri-twitter-x-line"></i>
             </a>
           </div>

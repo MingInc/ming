@@ -17,6 +17,10 @@
         "destination": "/build"
       },
       {
+        "source": "/pricing",
+        "destination": "/pricing"
+      },
+      {
         "source": "/preview",
         "destination": "/build"
       },

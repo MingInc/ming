@@ -7,7 +7,6 @@ GIT_URL=$2
 PROJECT_FOLDER_NAME=$3
 NGROK_API_KEY=$4
 NGROK_AUTH_TOKEN=$5
-NGROK_DOMAIN=$6
 
 # Function to clean up Docker container and image
 cleanup() {
@@ -59,11 +58,14 @@ if ! docker exec $CONTAINER_NAME /bin/bash -c "cd $PROJECT_FOLDER_NAME && pm2 se
     exit 1
 fi
 
+# Configure ngrok API key and start ngrok with the wildcard subdomain
 docker exec $CONTAINER_NAME /bin/bash -c "ngrok config add-api-key $NGROK_API_KEY"
 
-echo "Starting ngrok..."
-docker exec $CONTAINER_NAME /bin/bash -c "ngrok http --domain $NGROK_DOMAIN 8080 > ngrok.log 2>&1 &"
+# Start ngrok with a wildcard subdomain for the project
+echo "Starting ngrok with subdomain..."
+docker exec $CONTAINER_NAME /bin/bash -c "ngrok http 8080 > ngrok.log 2>&1 &"
 
+# Output ngrok logs
 docker exec $CONTAINER_NAME /bin/bash -c "cat ngrok.log"
 
 sleep 10
