@@ -6,7 +6,7 @@ import * as mongoose from "mongoose";
 type Method = "GET" | "PUT" | "POST" | "OPTIONS";
 
 mongoose
-  .connect(`mongodb+srv://Cluster53271:${process.env.MONGODB_PASSWORD}@cluster53271.l3uzg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster53271`)
+  .connect(`mongodb+srv://Cluster53271:${process.env.MONGODB_PASSWORD}@cluster53271.l3uzg.mongodb.net/ming?retryWrites=true&w=majority&appName=Cluster53271`)
   .then(() => {
     console.log("Connected to MongoDB!");
   })

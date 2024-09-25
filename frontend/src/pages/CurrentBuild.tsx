@@ -32,7 +32,7 @@ export default function CurrentBuild() {
     setProjectDeploymentPayload(_payload);
 
     (async () => {
-      const _id = localStorage.getItem('MING_PROJECT_DEPLOYMENT_ID')
+      const _id = localStorage.getItem("MING_PROJECT_DEPLOYMENT_ID");
       try {
         const response: any = await fetch(
           `${import.meta.env.VITE_SERVER_URI}/api/v1/deploy-project`,
@@ -41,7 +41,7 @@ export default function CurrentBuild() {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({..._payload, _id}),
+            body: JSON.stringify({ ..._payload, _id }),
           }
         );
 
@@ -98,7 +98,7 @@ export default function CurrentBuild() {
             decoder.decode(value)
           );
           if (extractedUrl && extractedUrl.includes("http")) {
-            console.log(extractedUrl)
+            console.log(extractedUrl);
             console.log("Extracted URL:", extractedUrl);
             setBuildUrl(extractedUrl);
             setBuildStatus("completed");
@@ -197,7 +197,19 @@ export default function CurrentBuild() {
         <AccordionItem value="item-1">
           <AccordionTrigger>
             <div className="flex items-center justify-between w-[96%]">
-              <p className="text-sm">Build Logs</p>
+              <div className="text-sm flex items-center gap-4">
+                <span>Build Logs</span>
+                <p>
+                  {projectDeploymentLog.length > 0
+                    ? projectDeploymentLog[projectDeploymentLog.length - 1]
+                        .length > 50
+                      ? projectDeploymentLog[
+                          projectDeploymentLog.length - 1
+                        ].substring(0, 50) + "..."
+                      : projectDeploymentLog[projectDeploymentLog.length - 1]
+                    : "No logs available"}
+                </p>
+              </div>
               {buildStatus === "building" ? (
                 <div className="flex items-center gap-3 text-sm">
                   <div role="status">
