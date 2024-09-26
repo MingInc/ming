@@ -63,7 +63,7 @@ docker exec $CONTAINER_NAME /bin/bash -c "ngrok config add-api-key $NGROK_API_KE
 
 # Start ngrok with a wildcard subdomain for the project
 echo "Starting ngrok with subdomain..."
-docker exec $CONTAINER_NAME /bin/bash -c "ngrok http 8080 > ngrok.log 2>&1 &"
+docker exec $CONTAINER_NAME /bin/bash -c "ngrok http --domain ming.ngrok.dev 8080 > /dev/null 2>&1 &" # PORT Should be dynamic
 
 # Output ngrok logs
 docker exec $CONTAINER_NAME /bin/bash -c "cat ngrok.log"
