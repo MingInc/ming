@@ -59,26 +59,26 @@ export default function DeployedProjects() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {projectState.projects.map((project, index) => (
           <Card key={index} className="flex flex-col">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1">
               <h2 className="text-lg font-semibold">{project.projectName}</h2>
-              <Badge variant={project.projectDeploymentData.buildStatus === 'SUCCESS' ? 'default' : 'destructive'}>
+              <Badge variant={project.projectDeploymentData.buildStatus === 'completed' ? 'default' : 'destructive'}>
                 {project.projectDeploymentData.buildStatus}
               </Badge>
             </CardHeader>
             <CardContent>
-              <div className="text-sm text-muted-foreground mb-2">
+              <div className="text-sm text-muted-foreground mb-1">
                 Framework: {project.projectFramework}
               </div>
               <div className="flex items-center text-sm text-muted-foreground">
                 <GitBranchIcon className="mr-2 h-4 w-4" />
                 <span className="truncate">{project.githubUrl.split('/').pop()}</span>
               </div>
-              <div className="flex items-center text-sm text-muted-foreground mt-2">
+              <div className="flex items-center text-sm text-muted-foreground mt-1">
                 <GitCommitIcon className="mr-2 h-4 w-4" />
                 <span>{project.projectDeploymentData.buildUrl}</span>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-between mt-auto">
+            <CardFooter className="flex justify-between">
               <div className="text-sm text-muted-foreground">
                 Build time: {project.projectDeploymentData.buildTime} seconds
               </div>

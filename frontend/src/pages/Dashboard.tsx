@@ -55,6 +55,7 @@ export default function Dashboard() {
             <h2 className="text-2xl font-bold mb-2">Support Center</h2>
             <p>Need help? Contact our support team or browse through FAQs.</p>
             {/* Add support-related components, contact forms, or FAQs here */}
+            
           </div>
         );
       case "/settings":

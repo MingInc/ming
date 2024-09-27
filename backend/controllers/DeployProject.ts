@@ -3,7 +3,6 @@ import { generateUID } from "../helpers/RandomGenerator";
 import { processProjectName } from "../helpers/StringManipulations";
 import { extractFolderName } from "../helpers/GithubNameExtractor";
 import { Project } from "../models/Project.Schema";
-import mongoose from "mongoose";
 
 // Function to extract public URL from a JSON string
 function extractPublicUrl(jsonString: string): string | undefined {

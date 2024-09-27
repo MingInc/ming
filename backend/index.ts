@@ -1,12 +1,24 @@
-import { createProject, getProjectsByUser } from "./controllers/ProjectRecord.ts";
+import {
+  createProject,
+  getProjectsByUser,
+} from "./controllers/ProjectRecord.ts";
 import { deployProject } from "./controllers/DeployProject.ts";
+import {
+  createBoilerplate,
+  getAllBoilerplates,
+  getBoilerplateById,
+  updateBoilerplate,
+  deleteBoilerplate,
+} from "./controllers/Boilerplate.ts";
 import { addCorsHeaders } from "./helpers/CorsHeader.ts";
 import * as mongoose from "mongoose";
 
-type Method = "GET" | "PUT" | "POST" | "OPTIONS";
+type Method = "GET" | "PUT" | "POST" | "DELETE" | "OPTIONS";
 
 mongoose
-  .connect(`mongodb+srv://Cluster53271:${process.env.MONGODB_PASSWORD}@cluster53271.l3uzg.mongodb.net/ming?retryWrites=true&w=majority&appName=Cluster53271`)
+  .connect(
+    `mongodb+srv://Cluster53271:${process.env.MONGODB_PASSWORD}@cluster53271.l3uzg.mongodb.net/ming?retryWrites=true&w=majority&appName=Cluster53271`
+  )
   .then(() => {
     console.log("Connected to MongoDB!");
   })
@@ -35,7 +47,20 @@ const server = Bun.serve({
         case "POST /api/v1/create-project":
           return createProject(req);
         case "GET /api/v1/get-projects":
-          return getProjectsByUser(req)
+          return getProjectsByUser(req);
+
+        // Boilerplate API endpoints
+        case "POST /api/v1/boilerplate":
+          return createBoilerplate(req); // Create a new boilerplate
+        case "GET /api/v1/boilerplates":
+          return getAllBoilerplates(req); // Get all boilerplates
+        case `GET /api/v1/boilerplate/${url.pathname.split("/")[4]}`:
+          return getBoilerplateById(req); // Get a boilerplate by ID
+        case `PUT /api/v1/boilerplate/${url.pathname.split("/")[4]}`:
+          return updateBoilerplate(req); // Update a boilerplate by ID
+        case `DELETE /api/v1/boilerplate/${url.pathname.split("/")[4]}`:
+          return deleteBoilerplate(req); // Delete a boilerplate by ID
+
         case "GET /api/v1/status":
           return addCorsHeaders(
             new Response(
