@@ -12,6 +12,10 @@ import { fetchProjects } from "@/contexts/ProjectContext/ProjectActions";
 import { useProjectContext } from "@/contexts/ProjectContext/ProjectContext";
 import ProjectCard from "@/components/ProjectCard";
 import TemplatesPage from "./Boilerplates";
+import AccountUsageDashboard from "./AccountUsageAndAnalytics";
+import SupportCenter from "./support-center";
+import SettingsPage from "./settings";
+import IPFSStorage from "./storage";
 
 export default function Dashboard() {
   const { authState } = useAuth();
@@ -28,42 +32,31 @@ export default function Dashboard() {
       case "/dashboard":
         return <ProjectCard />;
       case "/boilerplates":
-        return (
-          <TemplatesPage/>
-        );
+        return <TemplatesPage />;
       case "/usage":
         return (
           <div className="bg-white rounded-lg">
             <h2 className="text-2xl font-bold mb-2">Usage Statistics</h2>
             <p>Here you can view your usage statistics and analytics.</p>
-            {/* Add more usage-related components or data visualization here */}
+            <AccountUsageDashboard />
           </div>
         );
       case "/storage":
         return (
           <div className="bg-white rounded-lg">
-            <h2 className="text-2xl font-bold mb-2">Storage Management</h2>
-            <p>
-              Manage your storage and view storage-related information here.
-            </p>
-            {/* Add storage management components or information here */}
+            <IPFSStorage />
           </div>
         );
       case "/support":
         return (
           <div className="bg-white rounded-lg">
-            <h2 className="text-2xl font-bold mb-2">Support Center</h2>
-            <p>Need help? Contact our support team or browse through FAQs.</p>
-            {/* Add support-related components, contact forms, or FAQs here */}
-            
+            <SupportCenter />
           </div>
         );
       case "/settings":
         return (
           <div className="bg-white rounded-lg">
-            <h2 className="text-2xl font-bold mb-2">Account Settings</h2>
-            <p>Manage your account settings and preferences here.</p>
-            {/* Add settings forms or components here */}
+            <SettingsPage />
           </div>
         );
       default:
