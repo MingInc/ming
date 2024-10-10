@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { BarChart3, Globe, Layout, Smartphone } from "lucide-react"
+import { BarChart3, Globe, Layout } from "lucide-react"
 
 export default function UsageDashboard() {
   const [timePeriod, setTimePeriod] = useState('7d')
