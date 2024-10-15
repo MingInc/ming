@@ -171,15 +171,15 @@ export default function Dashboard() {
             <input
               type="search"
               placeholder="Search projects."
-              className="focus:outline-none sm:w-[300px] md:w-[200px] lg:w-[300px] text-sm"
+              className="focus:outline-none sm:w-[300px] md:w-[200px] lg:w-[300px] text-sm bg-transparent"
             />
           </form>
-          <button
+          <Button
             className="text-sm bg-gray-800 px-3 text-white h-8 rounded-lg cursor-pointer font-medium"
             onClick={() => navigate("/create-new")}
           >
             <i className="ri-add-line"></i> Add Project
-          </button>
+          </Button>
         </div>
       </header>
       <main className="mx-[5vw] py-3">
