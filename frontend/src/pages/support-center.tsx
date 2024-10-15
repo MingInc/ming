@@ -38,7 +38,7 @@ export default function SupportCenter() {
   }
 
   return (
-    <div className="min-h-screen container">
+    <div className="min-h-screen">
       <Card className="">
         <CardHeader>
           <CardTitle className="text-2xl">Support Center</CardTitle>

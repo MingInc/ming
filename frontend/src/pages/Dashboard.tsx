@@ -24,7 +24,7 @@ export default function Dashboard() {
 
   const handleActiveTab = (e: string) => {
     setActiveTab(e);
-    localStorage.setItem("ming_dashboard_active_tab", `/${e}`)
+    localStorage.setItem("ming_dashboard_active_tab", `/${e}`);
   };
 
   const RenderChild = () => {
@@ -64,8 +64,10 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    setActiveTab(localStorage.getItem("ming_dashboard_active_tab") || "/dashboard")
-  }, [])
+    setActiveTab(
+      localStorage.getItem("ming_dashboard_active_tab") || "/dashboard"
+    );
+  }, []);
   useEffect(() => {
     if (authState.user) {
       fetchProjects(projectDispatch, authState.user.uid);
@@ -119,14 +121,13 @@ export default function Dashboard() {
         </nav>
         <Sheet>
           <SheetTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="shrink-0 outline-none md:hidden"
+            <button
+
+              className="flex items-center gap-2 bg-gray-200 shrink-0 outline-none md:hidden text-sm px-3 text-black h-8 rounded-lg cursor-pointer font-medium"
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-5 w-5" /> Open Pages Tabs
               <span className="sr-only">Toggle navigation menu</span>
-            </Button>
+            </button>
           </SheetTrigger>
           <SheetContent side="bottom">
             <nav className="grid gap-6 text-lg font-medium">
@@ -182,7 +183,7 @@ export default function Dashboard() {
             className="text-sm px-3 bg-gray-700 text-white h-8 rounded-lg cursor-pointer font-medium"
             onClick={() => navigate("/create-new")}
           >
-            ⚡ Add New 
+            ⚡ Add New
           </button>
         </div>
       </header>

@@ -31,7 +31,7 @@ export default function AccountUsageDashboard() {
 
   return (
     <div className="min-h-screen mt-2 text-sm">
-      <div className="container space-y-4">
+      <div className="space-y-4">
         <div>
           <h2 className="text-2xl font-bold mb-1">Usage Statistics</h2>
           <p className="text-sm">

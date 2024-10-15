@@ -263,7 +263,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="container">
+    <div className="">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-3xl font-bold">Settings</h1>
