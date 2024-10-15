@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Search, Menu } from "lucide-react";
+import { Search } from "lucide-react";
 
 type Template = {
   id: string;
@@ -81,7 +81,8 @@ export default function TemplatesPage() {
           category: "Nuxt",
           githubUrl: "",
           framework: "",
-          image: "https://vercel.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F2nVaprBxxTaxjxRGce0aI7%2F18b8c412a5029d61a230edb799017666%2FScreen_Shot_2022-04-13_at_5.45.02_PM.png&w=384&q=75&dpl=dpl_BEuzy7pSxPAKh7mVBdP65mKfFSut",
+          image:
+            "https://vercel.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F2nVaprBxxTaxjxRGce0aI7%2F18b8c412a5029d61a230edb799017666%2FScreen_Shot_2022-04-13_at_5.45.02_PM.png&w=384&q=75&dpl=dpl_BEuzy7pSxPAKh7mVBdP65mKfFSut",
         },
         {
           id: "5",
@@ -90,7 +91,8 @@ export default function TemplatesPage() {
           category: "Static Sites",
           githubUrl: "",
           framework: "",
-          image: "https://vercel.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F21vzT1IKJubUkzDHh24icR%2F501689ec5bdb02a068d0f26418fcb52a%2FScreen_Shot_2022-04-13_at_5.28.45_PM.png&w=384&q=75&dpl=dpl_BEuzy7pSxPAKh7mVBdP65mKfFSut",
+          image:
+            "https://vercel.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F21vzT1IKJubUkzDHh24icR%2F501689ec5bdb02a068d0f26418fcb52a%2FScreen_Shot_2022-04-13_at_5.28.45_PM.png&w=384&q=75&dpl=dpl_BEuzy7pSxPAKh7mVBdP65mKfFSut",
         },
         {
           id: "6",
@@ -99,7 +101,8 @@ export default function TemplatesPage() {
           category: "API",
           githubUrl: "",
           framework: "",
-          image: "https://vercel.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F5JrY1bdf9CTvLo7WRj4cIC%2F5de59a7d27979a07e24a19e71129b008%2FCleanShot_2022-08-11_at_21.10.28.png&w=384&q=75&dpl=dpl_BEuzy7pSxPAKh7mVBdP65mKfFSut",
+          image:
+            "https://vercel.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F5JrY1bdf9CTvLo7WRj4cIC%2F5de59a7d27979a07e24a19e71129b008%2FCleanShot_2022-08-11_at_21.10.28.png&w=384&q=75&dpl=dpl_BEuzy7pSxPAKh7mVBdP65mKfFSut",
         },
       ]);
       setLoading(false);
@@ -134,8 +137,8 @@ export default function TemplatesPage() {
   );
 
   return (
-    <div className="container mx-auto px-4">
-      <div className="flex justify-between items-center mb-8">
+    <div className="">
+      <div className="flex justify-between items-center mb-4">
         <div>
           <h2 className="text-2xl font-bold mb-2">📦 Boilerplates</h2>
           <p className="text-sm">
@@ -143,19 +146,20 @@ export default function TemplatesPage() {
             Ming and our community.
           </p>
         </div>
-        <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+      </div>
+
+      <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="md:hidden">
-              <Menu className="h-4 w-4" />
+            <Button variant="outline" className="md:hidden w-full mb-2">
+              🗃️ Filter Categories
             </Button>
           </SheetTrigger>
-          <SheetContent side="left">
-            <div className="mt-6">
+          <SheetContent side="bottom">
+            <div className="mt-2">
               <CategoriesList />
             </div>
           </SheetContent>
         </Sheet>
-      </div>
 
       <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-1/5 hidden md:block">
@@ -214,16 +218,18 @@ export default function TemplatesPage() {
                       className="w-full h-[100px] object-cover rounded"
                     />
                     <div className="p-3 px-4">
-                      <p className="text-md font-semibold">
-                        {template.title}
-                      </p>
+                      <p className="text-md font-semibold">{template.title}</p>
                       <p className="text-sm text-muted-foreground">
                         {template.description}
                       </p>
                     </div>
                     <div className="flex items-center justify-between pb-2 px-4 text-sm">
-                      <div className="bg-black text-white px-1 rounded text-sm">{template.category}</div>
-                      <button className="px-2 py-1 rounded-md font-medium border-2">Use Template</button>
+                      <div className="bg-black text-white px-1 rounded text-sm">
+                        {template.category}
+                      </div>
+                      <button className="px-2 py-1 rounded-md font-medium border-2">
+                        Use Template
+                      </button>
                     </div>
                   </Card>
                 ))}
