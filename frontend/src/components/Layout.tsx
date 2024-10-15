@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react";
 import Navbar from "./Navbar";
-import { Link } from "react-router-dom";
 
 interface LayoutProps {
   children: ReactNode;
