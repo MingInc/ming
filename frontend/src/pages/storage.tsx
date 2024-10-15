@@ -77,19 +77,19 @@ export default function IPFSStorage() {
   };
 
   return (
-    <div className="container mx-auto p-4 space-y-6">
+    <div className="container space-y-4">
       <header className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Storage</h1>
-          <p>Manage your storage and view storage-related information here.</p>
+          <h1 className="text-2xl font-bold mb-1">Storage</h1>
+          <p className="text-sm">Manage your storage and view storage-related information here.</p>
         </div>
         <div className="flex items-center space-x-2">
           <Button>
-            <Upload className="mr-2 h-4 w-4" />
+            <Upload className="mr-2 h-3 w-4" />
             Upload
           </Button>
           <Button variant="outline">
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="mr-2 h-3 w-4" />
             Add by CID
           </Button>
         </div>

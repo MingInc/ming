@@ -20,17 +20,11 @@ import {
   Cloud,
   CreditCard,
   Github,
-  Keyboard,
-  LifeBuoy,
   LogOut,
   Mail,
-  MessageSquare,
-  Plus,
   PlusCircle,
-  Settings,
   User,
   UserPlus,
-  Users,
 } from "lucide-react";
 
 export default function Navbar() {
@@ -54,12 +48,12 @@ export default function Navbar() {
           src="https://ik.imagekit.io/lexy/Ming/3.png?updatedAt=1724359838994"
           alt="Ming Logo"
         />
-        <p className="text-sm">Ming</p>
+        <p className="text-sm font-semibold">Ming</p>
       </div>
       {authState.isAuthenticated ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-              <div className="flex items-center gap-1 cursor-pointer border-[2px] rounded-sm py-1 px-2">
+              <div className="flex items-center gap-1 cursor-pointer border-[2px] rounded-xl py-1 pl-1 pr-2">
                 <Avatar className="w-6 object-contain h-6">
                   <AvatarImage src={authState && authState?.user?.photoURL} />
                   <AvatarFallback>
@@ -83,23 +77,23 @@ export default function Navbar() {
                 <span>Billing</span>
                 <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              {/* <DropdownMenuItem>
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Settings</span>
                 <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
+              </DropdownMenuItem> */}
+              {/* <DropdownMenuItem>
                 <Keyboard className="mr-2 h-4 w-4" />
                 <span>Keyboard shortcuts</span>
                 <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              {/* <DropdownMenuItem>
                 <Users className="mr-2 h-4 w-4" />
                 <span>Team</span>
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
                   <UserPlus className="mr-2 h-4 w-4" />
@@ -111,33 +105,29 @@ export default function Navbar() {
                       <Mail className="mr-2 h-4 w-4" />
                       <span>Email</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <MessageSquare className="mr-2 h-4 w-4" />
-                      <span>Message</span>
-                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
                       <PlusCircle className="mr-2 h-4 w-4" />
-                      <span>More...</span>
+                      <span>Refer Friends</span>
                     </DropdownMenuItem>
                   </DropdownMenuSubContent>
                 </DropdownMenuPortal>
               </DropdownMenuSub>
-              <DropdownMenuItem>
+              {/* <DropdownMenuItem>
                 <Plus className="mr-2 h-4 w-4" />
                 <span>New Team</span>
                 <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Github className="mr-2 h-4 w-4" />
               <span>GitHub</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            {/* <DropdownMenuItem>
               <LifeBuoy className="mr-2 h-4 w-4" />
               <span>Support</span>
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             <DropdownMenuItem disabled>
               <Cloud className="mr-2 h-4 w-4" />
               <span>API</span>
@@ -153,7 +143,7 @@ export default function Navbar() {
       ) : (
         <button
           onClick={() => navigate("/login")}
-          className="bg-black text-sm text-white px-2 py-1 rounded-sm"
+          className="bg-black text-sm text-white px-2 py-1 rounded-sm font-semibold"
         >
           🔒 Login
         </button>

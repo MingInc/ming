@@ -25,7 +25,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <Navbar />
       </header>
       <main className="layout-main border-t-[0.5px]">{children}</main>
-      <footer className="layout-footer">
+      <footer className="layout-footer mb-3">
         <div>
           <div className="flex gap-3 items-center justify-center text-xl mt-6">
             <a href="https://github.com/MingInc" target="_blank">

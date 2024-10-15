@@ -5,22 +5,22 @@ const features = [
   {
     name: "☁️ Secure Cloud Environment",
     description:
-      "Environment powered by different droplets, docker container, or whichever mechanism is secured.",
+      "Leverage droplets, Docker containers, or other secure mechanisms for a robust and isolated cloud ecosystem.",
   },
   {
     name: "🌐 Immutable Data & Availability",
     description:
-      "Data related to Ming will be openly available & secured utilizing blockchain technology.",
+      "All data is securely stored on the blockchain, ensuring openness, immutability, and continuous availability.",
   },
   {
     name: "🤝 Open Community x DAO",
     description:
-      "We are trying build an open community powered by DAO and distributed architecture system.",
+      "An open-source community governed by a DAO, driving innovation and collaboration through decentralized systems.",
   },
   {
     name: "♻️ Carbon Reduction Program",
     description:
-      "We welcome every kind of idle personal computers, but mostly the one that contributes to Electronic Waste.",
+      "We reduce e-waste by utilizing idle computers, turning them into efficient cloud nodes to help combat electronic waste.",
   },
 ];
 
@@ -47,13 +47,12 @@ export default function Home() {
               src="https://ik.imagekit.io/lexy/Ming/Screenshot%202024-08-22%20174630.png?updatedAt=1724363207670"
             />
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Building distributed system for Open Source Cloud.
+              Distributed, Secure, & Open-Source Cloud
             </h2>
           </div>
           <p className="mt-4 text-gray-500">
-            We are trying to provide a platform that empowers incentivizing
-            unused computer devices as secure and efficient cloud environments
-            through distributed system powered by web3.
+            Empowering idle devices to create secure and efficient cloud
+            environments through Web3 and decentralized architecture.
           </p>
 
           <dl className="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 sm:gap-y-7 lg:gap-x-8">

@@ -95,19 +95,7 @@ export default function EnhancedProjects() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle className="text-3xl font-bold">
-            Let's build something new
-          </CardTitle>
-          <CardDescription>
-            To deploy a new Project, import an existing Git Repository or get
-            started with one of our Templates.
-          </CardDescription>
-        </CardHeader>
-      </Card>
-
+    <div className="container mx-auto px-4 py-4">
       <div className="grid gap-8 md:grid-cols-2">
         <Card className="md:row-span-2">
           <CardHeader>

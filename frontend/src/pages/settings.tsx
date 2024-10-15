@@ -263,11 +263,11 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-3xl font-bold">Settings</h1>
-          <p>Manage your account settings and preferences here.</p>
+          <p className="text-sm">Manage your account settings and preferences here.</p>
         </div>
         {isSmallScreen && (
           <Sheet>

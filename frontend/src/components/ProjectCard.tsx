@@ -1,10 +1,22 @@
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import { useProjectContext } from "@/contexts/ProjectContext/ProjectContext"
-import { GitBranchIcon, GitCommitIcon, MoreVerticalIcon, ExternalLinkIcon, RocketIcon } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useProjectContext } from "@/contexts/ProjectContext/ProjectContext";
+import {
+  GitBranchIcon,
+  GitCommitIcon,
+  MoreVerticalIcon,
+  ExternalLinkIcon,
+  RocketIcon,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { HoverBorderGradient } from "./ui/hover-border-gradient";
 
 export default function DeployedProjects() {
   const { projectState } = useProjectContext();
@@ -42,15 +54,26 @@ export default function DeployedProjects() {
 
   if (!projectState?.projects || projectState.projects.length === 0) {
     return (
-      <div className="container mx-auto px-1 flex flex-col items-center justify-center min-h-[50vh]">
-        <RocketIcon className="h-16 w-16 text-gray-400 mb-4" />
-        <h1 className="text-2xl font-bold mb-2">No projects are deployed yet</h1>
-        <p className="text-muted-foreground mb-4">Start by deploying your first project</p>
-        <Button onClick={() => navigate('/create-new')}>
-          Deploy Your First Project
-        </Button>
+      <div className="container mx-auto px-1 flex flex-col items-center justify-center min-h-[30vh]">
+        <RocketIcon className="h-14 w-14 text-gray-400 mb-4" />
+        <h1 className="text-xl font-bold mb-2">No projects are deployed yet</h1>
+        <p className="text-muted-foreground mb-4 text-sm">
+          Start by deploying your first project
+        </p>
+        <button
+          className="text-sm font-semibold"
+          >
+        </button>
+        <HoverBorderGradient
+          onClick={() => navigate("/create-new")}
+          containerClassName="rounded-lg"
+          as="button"
+          className="bg-black text-sm font-semibold text-white flex items-center space-x-2"
+          >
+          <span>Deploy Your First Project 🦄</span>
+        </HoverBorderGradient>
       </div>
-    )
+    );
   }
 
   return (
@@ -61,7 +84,13 @@ export default function DeployedProjects() {
           <Card key={index} className="flex flex-col">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1">
               <h2 className="text-lg font-semibold">{project.projectName}</h2>
-              <Badge variant={project.projectDeploymentData.buildStatus === 'completed' ? 'default' : 'destructive'}>
+              <Badge
+                variant={
+                  project.projectDeploymentData.buildStatus === "completed"
+                    ? "default"
+                    : "destructive"
+                }
+              >
                 {project.projectDeploymentData.buildStatus}
               </Badge>
             </CardHeader>
@@ -71,7 +100,9 @@ export default function DeployedProjects() {
               </div>
               <div className="flex items-center text-sm text-muted-foreground">
                 <GitBranchIcon className="mr-2 h-4 w-4" />
-                <span className="truncate">{project.githubUrl.split('/').pop()}</span>
+                <span className="truncate">
+                  {project.githubUrl.split("/").pop()}
+                </span>
               </div>
               <div className="flex items-center text-sm text-muted-foreground mt-1">
                 <GitCommitIcon className="mr-2 h-4 w-4" />
@@ -84,7 +115,17 @@ export default function DeployedProjects() {
               </div>
               <div className="flex space-x-2">
                 {project.projectDeploymentData.buildUrl && (
-                  <Button onClick={() => window.open(project.projectDeploymentData.buildUrl, '_blank', 'rel=noopener noreferrer')} size="sm" variant="outline">
+                  <Button
+                    onClick={() =>
+                      window.open(
+                        project.projectDeploymentData.buildUrl,
+                        "_blank",
+                        "rel=noopener noreferrer"
+                      )
+                    }
+                    size="sm"
+                    variant="outline"
+                  >
                     <ExternalLinkIcon className="h-4 w-4 mr-2" />
                     Visit
                   </Button>
@@ -98,5 +139,5 @@ export default function DeployedProjects() {
         ))}
       </div>
     </div>
-  )
+  );
 }

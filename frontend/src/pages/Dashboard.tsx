@@ -2,11 +2,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Menu, Search } from "lucide-react";
+import { Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { fetchProjects } from "@/contexts/ProjectContext/ProjectActions";
 import { useProjectContext } from "@/contexts/ProjectContext/ProjectContext";
@@ -33,11 +32,10 @@ export default function Dashboard() {
         return <ProjectCard />;
       case "/boilerplates":
         return <TemplatesPage />;
+
       case "/usage":
         return (
           <div className="bg-white rounded-lg">
-            <h2 className="text-2xl font-bold mb-2">Usage Statistics</h2>
-            <p>Here you can view your usage statistics and analytics.</p>
             <AccountUsageDashboard />
           </div>
         );
@@ -75,7 +73,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
+    <div className="flex w-full flex-col">
       <header className="sticky top-0 flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6 mx-[4vw]">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <p
@@ -168,21 +166,19 @@ export default function Dashboard() {
           </SheetContent>
         </Sheet>
         <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-          <form className="ml-auto flex-1 sm:flex-initial">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search projects."
-                className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-              />
-            </div>
+          <form className="ml-auto flex-1 sm:flex-initial flex items-center gap-2 border-b-1 flex-row border rounded-md px-2 py-[3px] ">
+            <i className="ri-search-line"></i>
+            <input
+              type="search"
+              placeholder="Search projects."
+              className="focus:outline-none sm:w-[300px] md:w-[200px] lg:w-[300px] text-sm"
+            />
           </form>
           <button
-            className="text-sm bg-black px-3 text-white h-10 rounded-sm cursor-pointer"
+            className="text-sm bg-gray-800 px-3 text-white h-8 rounded-lg cursor-pointer font-medium"
             onClick={() => navigate("/create-new")}
           >
-            <i className="ri-add-line"></i> Add New
+            <i className="ri-add-line"></i> Add Project
           </button>
         </div>
       </header>

@@ -138,7 +138,7 @@ export default function TemplatesPage() {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h2 className="text-2xl font-bold mb-2">📦 Boilerplates</h2>
-          <p className="text-">
+          <p className="text-sm">
             Jumpstart your app development process with pre-built solutions from
             Ming and our community.
           </p>
@@ -158,10 +158,10 @@ export default function TemplatesPage() {
       </div>
 
       <div className="flex flex-col md:flex-row gap-8">
-        <div className="w-full md:w-1/4 hidden md:block">
+        <div className="w-full md:w-1/5 hidden md:block">
           <div className="mb-6">
             <div className="relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground text-sm" />
               <Input
                 type="search"
                 placeholder="Search templates..."
