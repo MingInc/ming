@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import Navbar from "./Navbar";
+import { Link } from "react-router-dom";
 
 interface LayoutProps {
   children: ReactNode;
@@ -9,6 +10,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="layout-container">
       <header>
+        {/* this is topbar */}
+        <div className="bg-black text-white text-sm py-1 font-medium px-[3vw]">
+          <i className="ri-notification-2-line"></i> We received a Seed Grant
+          from{" "}
+          <a
+            href="https://x.com/starknetfndn"
+            className="font-semibold hover:underline"
+            target="_blank"
+          >
+            Starknet Foundation
+          </a>
+          .
+        </div>
         <Navbar />
       </header>
       <main className="layout-main border-t-[0.5px]">{children}</main>
