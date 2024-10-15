@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 import { Menu } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { fetchProjects } from "@/contexts/ProjectContext/ProjectActions";
 import { useProjectContext } from "@/contexts/ProjectContext/ProjectContext";
