@@ -231,7 +231,17 @@ export default function EnhancedProjects() {
             </Tabs>
           </CardContent>
           <CardFooter>
-            <Button variant="outline" className="w-full">
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => {
+                localStorage.setItem(
+                  "ming_dashboard_active_tab",
+                  "/boilerplates"
+                );
+                navigate("/");
+              }}
+            >
               Browse All Templates
             </Button>
           </CardFooter>

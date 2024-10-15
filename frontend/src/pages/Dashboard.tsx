@@ -24,6 +24,7 @@ export default function Dashboard() {
 
   const handleActiveTab = (e: string) => {
     setActiveTab(e);
+    localStorage.setItem("ming_dashboard_active_tab", `/${e}`)
   };
 
   const RenderChild = () => {
@@ -62,6 +63,9 @@ export default function Dashboard() {
     }
   };
 
+  useEffect(() => {
+    setActiveTab(localStorage.getItem("ming_dashboard_active_tab") || "/dashboard")
+  }, [])
   useEffect(() => {
     if (authState.user) {
       fetchProjects(projectDispatch, authState.user.uid);
@@ -174,12 +178,12 @@ export default function Dashboard() {
               className="focus:outline-none sm:w-[300px] md:w-[200px] lg:w-[300px] text-sm bg-transparent"
             />
           </form>
-          <Button
-            className="text-sm bg-gray-800 px-3 text-white h-8 rounded-lg cursor-pointer font-medium"
+          <button
+            className="text-sm px-3 bg-white text-gray-700 h-8 rounded-lg cursor-pointer font-medium"
             onClick={() => navigate("/create-new")}
           >
-            <i className="ri-add-line"></i> Add Project
-          </Button>
+            ⚡ Add New 
+          </button>
         </div>
       </header>
       <main className="mx-[5vw] py-3">
