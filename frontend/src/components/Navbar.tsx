@@ -32,15 +32,19 @@ export default function Navbar() {
   const { authState, logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem('ming_authenticated_user')
-    navigate("/")
-    logout()
-  }
+    localStorage.removeItem("ming_authenticated_user");
+    navigate("/");
+    logout();
+  };
 
   return (
     <nav className="flex items-center justify-between flex-wrap py-3 mx-[2vw]">
       <div
-        onClick={() => navigate("/")}
+        onClick={() => {
+          localStorage.setItem("ming_dashboard_active_tab", `/dashboard`);
+
+          navigate("/");
+        }}
         className="flex items-center gap-1 cursor-pointer"
       >
         <img
@@ -53,15 +57,17 @@ export default function Navbar() {
       {authState.isAuthenticated ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-              <div className="flex items-center gap-1 cursor-pointer border-[2px] rounded-xl py-1 pl-1 pr-2">
-                <Avatar className="w-6 object-contain h-6">
-                  <AvatarImage src={authState && authState?.user?.photoURL} />
-                  <AvatarFallback>
-                    <AvatarImage src="https://images.unsplash.com/photo-1644912325393-cb31907c98f0?q=80&w=1530&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
-                  </AvatarFallback>
-                </Avatar>
-                <p className="text-sm">{authState && authState?.user?.email.split("@")[0]}</p>
-              </div>
+            <div className="flex items-center gap-1 cursor-pointer border-[2px] rounded-xl py-1 pl-1 pr-2">
+              <Avatar className="w-6 object-contain h-6">
+                <AvatarImage src={authState && authState?.user?.photoURL} />
+                <AvatarFallback>
+                  <AvatarImage src="https://images.unsplash.com/photo-1644912325393-cb31907c98f0?q=80&w=1530&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+                </AvatarFallback>
+              </Avatar>
+              <p className="text-sm">
+                {authState && authState?.user?.email.split("@")[0]}
+              </p>
+            </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
