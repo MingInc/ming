@@ -38,7 +38,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="flex items-center justify-between flex-wrap mx-auto py-3 container">
+    <nav className="flex items-center justify-between flex-wrap py-3 mx-[2vw]">
       <div
         onClick={() => navigate("/")}
         className="flex items-center gap-1 cursor-pointer"

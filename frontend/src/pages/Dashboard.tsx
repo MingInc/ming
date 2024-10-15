@@ -78,7 +78,7 @@ export default function Dashboard() {
 
   return (
     <div className="flex w-full flex-col">
-      <header className="sticky top-0 flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6 mx-[4vw]">
+      <header className="sticky top-0 flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6 justify-between">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <p
             onClick={() => handleActiveTab("/dashboard")}
@@ -122,13 +122,13 @@ export default function Dashboard() {
             <Button
               variant="outline"
               size="icon"
-              className="shrink-0 md:hidden"
+              className="shrink-0 outline-none md:hidden"
             >
               <Menu className="h-5 w-5" />
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left">
+          <SheetContent side="bottom">
             <nav className="grid gap-6 text-lg font-medium">
               <p
                 onClick={() => handleActiveTab("/dashboard")}
@@ -169,17 +169,17 @@ export default function Dashboard() {
             </nav>
           </SheetContent>
         </Sheet>
-        <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-          <form className="ml-auto flex-1 sm:flex-initial flex items-center gap-2 border-b-1 flex-row border rounded-md px-2 py-[3px] ">
+        <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4 justify-between">
+          <form className="ml-auto flex-1 sm:flex-initial items-center gap-2 border-b-1 flex-row border rounded-md px-2 py-[3px] hidden md:flex">
             <i className="ri-search-line"></i>
             <input
               type="search"
               placeholder="Search projects."
-              className="focus:outline-none sm:w-[300px] md:w-[200px] lg:w-[300px] text-sm bg-transparent"
+              className="focus:outline-none sm:w-[200px] md:w-[200px] lg:w-[300px] text-sm bg-transparent"
             />
           </form>
           <button
-            className="text-sm px-3 bg-white text-gray-700 h-8 rounded-lg cursor-pointer font-medium"
+            className="text-sm px-3 bg-gray-700 text-white h-8 rounded-lg cursor-pointer font-medium"
             onClick={() => navigate("/create-new")}
           >
             ⚡ Add New 
