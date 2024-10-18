@@ -4,6 +4,7 @@ import { Schema, model, Document } from 'mongoose';
 interface Boilerplate extends Document {
   id: string;
   title: string;
+  titleDescription: string;
   description: string;
   category: string;
   githubUrl?: string;
@@ -15,6 +16,7 @@ interface Boilerplate extends Document {
 const boilerplateSchema = new Schema<Boilerplate>({
   id: { type: String, required: true },
   title: { type: String, required: true },
+  titleDescription: {type: String, required: true},
   description: { type: String, required: true },
   category: { type: String, required: true },
   githubUrl: { type: String, default: "" },
