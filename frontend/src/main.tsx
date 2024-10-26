@@ -18,6 +18,7 @@ import CurrentBuild from "./pages/CurrentBuild";
 import { ProjectProvider } from "./contexts/ProjectContext/ProjectContext";
 import ProjectPreview from "./pages/ProjectPreview";
 import Pricing from "./pages/Pricing";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -46,9 +47,11 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: (
-      <Layout>
-        <Dashboard />
-      </Layout>
+      <ProtectedRoute redirectPath="/login">
+        <Layout>
+          <Dashboard />
+        </Layout>
+      </ProtectedRoute>
     ),
   },
   {

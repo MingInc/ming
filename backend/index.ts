@@ -2,7 +2,11 @@ import {
   createProject,
   getProjectsByUser,
 } from "./controllers/ProjectRecord.ts";
-import { deployProject } from "./controllers/DeployProject.ts";
+import {
+  deployProject,
+  getAccessToken,
+  getUserData,
+} from "./controllers/DeployProject.ts";
 import {
   createBoilerplate,
   getAllBoilerplates,
@@ -12,12 +16,14 @@ import {
 } from "./controllers/Boilerplate.ts";
 import { addCorsHeaders } from "./helpers/CorsHeader.ts";
 import * as mongoose from "mongoose";
+import { createUser } from "./controllers/User.controller.ts";
 
 type Method = "GET" | "PUT" | "POST" | "DELETE" | "OPTIONS";
 
 mongoose
   .connect(
-    `mongodb+srv://Cluster53271:${process.env.MONGODB_PASSWORD}@cluster53271.l3uzg.mongodb.net/ming?retryWrites=true&w=majority&appName=Cluster53271`
+    "mongodb://localhost:27017/ming"
+    // `mongodb+srv://Cluster53271:${process.env.MONGODB_PASSWORD}@cluster53271.l3uzg.mongodb.net/ming?retryWrites=true&w=majority&appName=Cluster53271`
   )
   .then(() => {
     console.log("Connected to MongoDB!");
@@ -60,6 +66,16 @@ const server = Bun.serve({
           return updateBoilerplate(req); // Update a boilerplate by ID
         case `DELETE /api/v1/boilerplate/${url.pathname.split("/")[4]}`:
           return deleteBoilerplate(req); // Delete a boilerplate by ID
+
+        case "GET /api/v1/getAccessToken":
+          return getAccessToken(req);
+
+        case "GET /api/v1/getUserData":
+          return getUserData(req);
+
+        // User API endpoints
+        case "POST /api/v1/user":
+          return createUser(req);
 
         case "GET /api/v1/status":
           return addCorsHeaders(

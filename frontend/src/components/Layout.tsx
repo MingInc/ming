@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode  } from "react";
 import Navbar from "./Navbar";
 
 interface LayoutProps {
@@ -6,8 +6,9 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  
   return (
-    <div className="layout-container">
+    <div className="layout-container grid grid-rows-[auto_1fr_auto] min-h-screen">
       <header>
         {/* this is topbar */}
         <div className="bg-black text-white text-sm py-1 font-medium px-[3vw]">
