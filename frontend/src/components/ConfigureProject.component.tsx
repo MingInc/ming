@@ -19,7 +19,7 @@ export default function ConfigureProject() {
 
   useEffect(() => {
     const encryptedRepos = localStorage.getItem("ming_github_user_repos");
-    const exactRepos = encryptedRepos?.replace('"', "");
+    const exactRepos = encryptedRepos?.replace(/"/g, "");
     if (exactRepos) {
       const decryptedRepos = decryptData(exactRepos);
       const reposArray = JSON.parse(decryptedRepos);

@@ -4,12 +4,9 @@ import { useRepoContext } from "@/contexts/RepoContext";
 import {
   fetchRepositories,
   firebaseConfig,
-  signInWithGoogle,
 } from "@/firebase.config";
 // import firebase from "firebase/app"
 import "firebase/auth"
-import useAuthProvider from "@/hooks/useAuthProvider.hooks";
-// import useAuthProvider from "@/hooks/useAuthProvider.hooks";
 import { encryptData } from "@/lib/utils";
 import { initializeApp } from "firebase/app";
 import {
@@ -30,10 +27,11 @@ export default function Login() {
   const { login, authState } = useAuth();
   const navigate = useNavigate();
   const { setRepos } = useRepoContext();
-  const providers = useAuthProvider()
+  // const providers = useAuthProvider()
+  // const allowedProviders = ["google.com", "github.com"];
 
-  const isGoogleLinked = providers?.includes("google.com");
-  // const isGithubLinked = providers?.includes("github.com");
+  // const isGoogleLinked = providers?.some(provider => allowedProviders.includes(provider));
+  // const isGithubLinked = providers?.some(provider => allowedProviders.includes(provider));
 
   useEffect(() => {
     const _user = JSON.parse(
@@ -61,9 +59,6 @@ export default function Login() {
       const credential = GithubAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
       const user = result.user;
-
-      console.log("user :", user);
-      console.log("token :", token);
       const repos = await fetchRepositories(token!);
       setRepos(repos);
       const encryptedRepoData = encryptData(JSON.stringify(repos));

@@ -29,15 +29,15 @@ export default function EnhancedProjects() {
   const [outputDirectory, setOutputDirectory] = useState("");
   const [installCommand, setInstallCommand] = useState("");
   const [envVariables, setEnvVariables] = useState("");
+  const allowedProviders = ["google.com", "github.com"];
   const providers = useAuthProvider();
-  console.log(providers);
 
-  const isGoogleLinked = providers?.includes("google.com");
-  const isGithubLinked = providers?.includes("github.com");
+  const isGoogleLinked = providers?.some(provider => allowedProviders.includes(provider));
+  const isGithubLinked = providers?.some(provider => allowedProviders.includes(provider));
 
   const navigate = useNavigate();
   const { authState, login } = useAuth();
-
+  
   const handleDeploy = async () => {
     const data = {
       projectName,
