@@ -16,9 +16,22 @@ import {
 } from "./controllers/Boilerplate.ts";
 import { addCorsHeaders } from "./helpers/CorsHeader.ts";
 import * as mongoose from "mongoose";
-import { createUser } from "./controllers/User.controller.ts";
+import {
+  createUser,
+  getFirebaseUserFromEmail,
+  getGithubAccessToken,
+  getGithubAccessTokenFromRefreshToken,
+  updateUserById,
+} from "./controllers/User.controller.ts";
+import { initializeApp } from "firebase-admin/app";
+import admin from "firebase-admin";
+import serviceAccountKey from "./serviceAccountKey.json";
 
-type Method = "GET" | "PUT" | "POST" | "DELETE" | "OPTIONS";
+initializeApp({
+  credential: admin.credential.cert(serviceAccountKey as admin.ServiceAccount),
+});
+
+type Method = "GET" | "PUT" | "POST" | "DELETE" | "PATCH" | "OPTIONS";
 
 mongoose
   .connect(
@@ -76,6 +89,18 @@ const server = Bun.serve({
         // User API endpoints
         case "POST /api/v1/user":
           return createUser(req);
+
+        case "POST /api/v1/user/update":
+          return updateUserById(req);
+
+        case "POST /api/v1/user/accessToken":
+          return getGithubAccessToken(req);
+
+        case "POST /api/v1/user/access_token":
+          return getGithubAccessTokenFromRefreshToken(req);
+
+        case "POST /api/v1/user/getFirebaseUserByEmail":
+          return getFirebaseUserFromEmail(req);
 
         case "GET /api/v1/status":
           return addCorsHeaders(

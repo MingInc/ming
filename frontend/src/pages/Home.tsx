@@ -1,6 +1,3 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 const features = [
   {
     name: "☁️ Secure Cloud Environment",
@@ -25,37 +22,13 @@ const features = [
 ];
 
 export default function Home() {
-  const navigate = useNavigate();
-  const [accessToken,setAccessToken] = useState<null | string>(() => localStorage.getItem("accessToken") !== null ? localStorage.getItem("accessToken") : "")
 
-  useEffect(() => {
-    const _user = JSON.parse(
-      localStorage.getItem("ming_authenticated_user") || "{}"
-    );
-    if (_user.email) return navigate("/dashboard");
-  }, []);
-
-  useEffect(() => {
-    const queryString = window.location.search;
-    const urlParam = new URLSearchParams(queryString);
-    const codeParam = urlParam.get("code");
-
-    if(codeParam && localStorage.getItem("accessToken") === null){
-      async function getAccessToken(){
-        const response = await fetch(`http://localhost:3000/api/v1/getAccessToken?code=${codeParam}`,{
-          method:"GET",
-        });
-        const data = await response.json()
-        console.log(data)
-        if(data.data.access_token){
-          localStorage.setItem("accessToken",data.data.access_token)
-          setAccessToken(data.data.access_token)
-        }
-      }
-
-      getAccessToken()
-    }
-  },[])
+  // useEffect(() => {
+  //   const _user = JSON.parse(
+  //     localStorage.getItem("ming_authenticated_user") || "{}"
+  //   );
+  //   if (_user.email) return navigate("/dashboard");
+  // }, []);
 
   return (
     <div className="bg-white">

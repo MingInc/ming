@@ -1,5 +1,15 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import {
+  getAuth,
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  linkWithPopup,
+  signInWithPopup,
+  UserCredential,
+} from "firebase/auth";
+import { doc, setDoc, getFirestore, getDoc } from "firebase/firestore";
+import { encryptData } from "./lib/utils";
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -19,4 +29,109 @@ export const firebaseConfig = {
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider();
+const db = getFirestore(app);
+
 // const analytics = getAnalytics(app);
+
+//
+export async function saveAccessToken(userId: string, accessToken: string) {
+  await setDoc(
+    doc(db, "users", userId),
+    {
+      githubAccessToken: accessToken,
+    },
+    {
+      merge: true,
+    }
+  );
+}
+
+export async function getGithubToken(userId: string): Promise<string | null> {
+  const userRef = doc(db, "users", userId);
+  const userDoc = await getDoc(userRef);
+  if (userDoc.exists()) {
+    return userDoc.data()?.githubAccessToken || null;
+  }
+  return null;
+}
+
+export const fetchRepositories = async (token: string | null) => {
+  const response = await fetch(
+    "https://api.github.com/user/repos?affiliation=owner&sort=created&direction=desc",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  const repos = await response.json();
+  return repos;
+};
+
+export const signInWithGitHub = async () => {
+  try {
+    const result = await signInWithPopup(auth, githubProvider);
+    const credential = GithubAuthProvider.credentialFromResult(result);
+    return credential?.accessToken; // Get the GitHub access token
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const signInWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    return result; // Return result
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+// Link GitHub to Google Account
+export const linkGithubToGoogle = async (): Promise<UserCredential> => {
+  const provider = new GithubAuthProvider();
+  const auth = getAuth();
+  return await linkWithPopup(auth.currentUser!, provider);
+};
+
+export const redirectToGithubAuth = () => {
+  const authUrl = `https://github.com/login/oauth/authorize?client_id=${
+    import.meta.env.VITE_PUBLIC_GITHUB_CLIENT_ID
+  }&redirect_uri=${import.meta.env.VITE_GITHUB_REDIRECT_URL}&scope=${"repo"}`;
+  window.location.href = authUrl;
+};
+
+export const saveUserData = async (user: any, accessToken: string) => {
+  const userData = {
+    userUid: user.uid,
+    email: user.email,
+    provider: ["github", "google"],
+    accessToken: user?.accessToken,
+    github_accessToken: accessToken,
+  };
+  const response = await fetch(`http://localhost:3000/api/v1/user`, {
+    method: "POST",
+    body: JSON.stringify(userData),
+  });
+
+  // Check if response is okay
+  if (!response.ok) {
+    const errorData = await response.json(); // Fetch the error data
+    console.log("error Data :", errorData);
+    throw new Error(errorData || "Failed to save user data"); // Use a custom error message
+  }
+  const data = await response.json();
+  console.log("response data :", data);
+  // await saveAccessToken(user.uid,accessToken)
+  const repos = await fetchRepositories(accessToken!);
+  const encryptedRepoData = encryptData(JSON.stringify(repos));
+  localStorage.setItem(
+    "ming_github_user_repos",
+    JSON.stringify(encryptedRepoData)
+  );
+};
