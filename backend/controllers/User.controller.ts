@@ -206,9 +206,7 @@ export async function getFirebaseUserFromEmail(req: Request) {
 
     const user = await admin.auth().getUserByEmail(email);
 
-    // unlink the user in backend
 
-    // Unlink GitHub provider from the user
     // Unlink GitHub provider from the user
     const updatedUser = await admin.auth().updateUser(user.uid, {
       providersToUnlink: ["github.com"],
