@@ -8,24 +8,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useState } from "react";
-import { decryptData } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useAccessToken, useDebounce, useFetchUserData, useRepositories } from "@/hooks";
+import { useState } from "react";
 
 export default function ConfigureProject() {
-  const [repos, setRepos] = useState<[] | Component.Repo[]>([]);
-  const navigate = useNavigate()
-  console.log("repos :", repos);
+  const navigate = useNavigate();
+  const { authState } = useAuth();
+  const token = useAccessToken(authState?.user?.uid);
+  const { repos } = useRepositories(token!);
+  const { user } = useFetchUserData(token!);
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-  useEffect(() => {
-    const encryptedRepos = localStorage.getItem("ming_github_user_repos");
-    const exactRepos = encryptedRepos?.replace(/"/g, "");
-    if (exactRepos) {
-      const decryptedRepos = decryptData(exactRepos);
-      const reposArray = JSON.parse(decryptedRepos);
-      setRepos(reposArray);
-    }
-  }, []);
+  const filterRepos = repos.filter((repo) => repo.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
 
   return (
     <div className="w-full p-6 rounded-lg shadow-lg">
@@ -33,10 +30,10 @@ export default function ConfigureProject() {
       <div className="flex gap-2 mb-4">
         <Select>
           <SelectTrigger className="w-[180px] border-gray-700">
-            <SelectValue placeholder="surajgaire14" />
+            <SelectValue placeholder={user?.login} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="surajgaire14">surajgaire14</SelectItem>
+            <SelectItem value={user?.login}>{user?.login}</SelectItem>
           </SelectContent>
         </Select>
         <div className="relative flex-grow">
@@ -47,49 +44,59 @@ export default function ConfigureProject() {
           <Input
             type="text"
             placeholder="Search..."
-            className="pl-8 border-gray-700 text-white"
+            className="pl-8 border-gray-700 text-black"
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>
       <div className="space-y-2 max-h-96 overflow-y-auto">
-        {repos?.map((repo) => {
-          console.log(repo)
-          const parsedDate: Date = new Date(repo.updated_at);
-          const now: Date = new Date();
-          const timeDifference: number = now.getTime() - parsedDate.getTime();
-          const daysAgo: number = Math.floor(
-            timeDifference / (1000 * 60 * 60 * 24)
-          );
+        {filterRepos.length > 0 &&
+          filterRepos?.map((repo) => {
+            const parsedDate: Date = new Date(repo.updated_at);
+            const now: Date = new Date();
+            const timeDifference: number = now.getTime() - parsedDate.getTime();
+            const daysAgo: number = Math.floor(
+              timeDifference / (1000 * 60 * 60 * 24)
+            );
 
-          const handleImportClick = () => {
-            const repoSrcUrl = repo.html_url
-            const projectName = repo.name
-            const fullName = repo.full_name
-            navigate(`/new?s=${encodeURIComponent(repoSrcUrl)}&name=${projectName}&fullname=${fullName}`)
-            
-          }
-          return (
-            <div
-              key={repo.name}
-              className="flex items-center justify-between p-2 rounded"
-            >
-              <div className="flex items-center space-x-2">
-                <span className="w-6 h-6 flex items-center justify-center bg-gray-700 rounded">
-                  {/* {repo?.owner?.avatar_url} */}
-                </span>
-                <span>{repo.name}</span>
-                <span className="text-xs text-gray-400">
-                  {daysAgo} days ago
-                </span>
+            const handleImportClick = () => {
+              const repoSrcUrl = repo.html_url;
+              const fullName = repo.full_name;
+              const owner = repo.owner.login;
+              const defaultBranch = repo.default_branch;
+              const name = repo.name;
+              navigate(
+                `/new?s=${encodeURIComponent(
+                  repoSrcUrl
+                )}&name=${name}&fullname=${fullName}&owner=${owner}&default_branch=${defaultBranch}`
+              );
+            };
+            return (
+              <div
+                key={repo.name}
+                className="flex items-center justify-between p-2 rounded"
+              >
+                <div className="flex items-center space-x-2">
+                  <span className="w-6 h-6 flex items-center justify-center bg-gray-700 rounded">
+                    {/* {repo?.owner?.avatar_url} */}
+                  </span>
+                  <span>{repo.name}</span>
+                  <span className="text-xs text-gray-400">
+                    {daysAgo} days ago
+                  </span>
+                </div>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleImportClick}
+                >
+                  Import
+                </Button>
               </div>
-              <Button variant="secondary" size="sm" onClick={handleImportClick}>
-                Import
-              </Button>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
-      <a href="#" className="block mt-4 text-sm text-gray-400 hover:text-white">
+      <a href="#" className="block mt-4 text-sm text-gray-400 hover:text-gray-500 w-fit">
         Import Third-Party Git Repository →
       </a>
     </div>

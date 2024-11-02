@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {  useEffect, useState } from "react";
 import { ChevronDown, Github, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +11,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSearchParams } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useAccessToken, useFetchFrameworkInfo, useFrameworkPreset } from "@/hooks";
 
 export default function NewProject() {
   const [searchParams] = useSearchParams();
@@ -33,6 +35,16 @@ export default function NewProject() {
   const [showEnvVariable, setShowEnvVariable] = useState<boolean>(false);
   const fullname = searchParams.get("fullname");
   const src = searchParams.get("s");
+  const owner : string | null = searchParams.get("owner")
+  const defaultBranch = searchParams.get("default_branch")
+  const { authState } = useAuth();
+  const token = useAccessToken(authState?.user?.uid)
+  console.log("token :",token)
+  const { frameworkInfo  } = useFetchFrameworkInfo(owner,projectName,token)
+  const frameworkPreset = useFrameworkPreset(frameworkInfo!)
+
+  console.log("frameworkInfo :",frameworkInfo)
+
 
   const addEnvVariable = () => {
     setEnvVariables([...envVariables, { key: "", value: "" }]);
@@ -54,14 +66,14 @@ export default function NewProject() {
         <CardTitle className="text-2xl font-bold">New Project</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className=" bg-gray-300 p-4 rounded-md">
+        <div className=" bg-gray-200 p-4 rounded-md">
           <p className="text-sm text-zinc-400 mb-2">Importing from GitHub</p>
           <div className="flex items-center space-x-2 text-sm">
             <Github size={16} />
             <a href={`${src}`} target="_blank">
               <span>{fullname}</span>
             </a>
-            <span className="text-zinc-500">main</span>
+            <span className="text-zinc-500">{defaultBranch}</span>
           </div>
         </div>
 
@@ -73,12 +85,12 @@ export default function NewProject() {
             <div>
               <p className="text-xs text-zinc-400 mb-1">Ming Team</p>
               <Select>
-                <SelectTrigger className="w-full bg-gray-300 border-zinc-700">
-                  <SelectValue placeholder="surajgaire14's projects" />
+                <SelectTrigger className="w-full bg-gray-200 border-zinc-700">
+                  <SelectValue placeholder={`${owner}'s projects`} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="personal">
-                    surajgaire14's projects
+                    ${owner}'s projects
                   </SelectItem>
                   <SelectItem value="team">Team Projects</SelectItem>
                 </SelectContent>
@@ -87,7 +99,7 @@ export default function NewProject() {
             <div>
               <p className="text-xs text-zinc-400 mb-1">Project Name</p>
               <Input
-                className="w-full bg-gray-300 border-zinc-700"
+                className="w-full bg-gray-200 border-zinc-700"
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
               />
@@ -98,8 +110,8 @@ export default function NewProject() {
         <div>
           <p className="text-xs text-zinc-400 mb-1">Framework Preset</p>
           <Select>
-            <SelectTrigger className="w-full bg-gray-300 border-zinc-700">
-              <SelectValue placeholder="Vite" />
+            <SelectTrigger className="w-full bg-gray-200 border-zinc-700">
+              <SelectValue placeholder={frameworkPreset} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="vite">Vite</SelectItem>
@@ -113,13 +125,13 @@ export default function NewProject() {
           <p className="text-xs text-zinc-400 mb-1">Root Directory</p>
           <div className="flex">
             <Input
-              className="flex-grow bg-gray-300 border-zinc-700"
+              className="flex-grow bg-gray-200 border-zinc-700"
               value={rootDirectory}
               onChange={(e) => setRootDirectory(e.target.value)}
             />
             <Button
               variant="outline"
-              className="ml-2 border-zinc-700 bg-gray-300"
+              className="ml-2 border-zinc-700 bg-gray-200"
             >
               Edit
             </Button>
@@ -130,7 +142,7 @@ export default function NewProject() {
           <div>
             <Button
               variant="outline"
-              className="w-full justify-between bg-gray-300 border-zinc-700"
+              className="w-full justify-between bg-gray-200 border-zinc-700"
               onClick={() => setShowBuildOutputSettings((prev) => !prev)}
             >
               Build and Output Settings
@@ -142,7 +154,7 @@ export default function NewProject() {
                   <p className="text-xs text-zinc-400 mb-1">Build Command</p>
                   <div className="flex items-center">
                     <Input
-                      className="flex-grow bg-gray-300 border-zinc-700"
+                      className="flex-grow bg-gray-200 border-zinc-700"
                       value={buildCommand}
                       onChange={(e) => setBuildCommand(e.target.value)}
                     />
@@ -153,7 +165,7 @@ export default function NewProject() {
                   <p className="text-xs text-zinc-400 mb-1">Output Directory</p>
                   <div className="flex items-center">
                     <Input
-                      className="flex-grow bg-gray-300 border-zinc-700"
+                      className="flex-grow bg-gray-200 border-zinc-700"
                       value={outputDirectory}
                       onChange={(e) => setOutputDirectory(e.target.value)}
                     />
@@ -164,7 +176,7 @@ export default function NewProject() {
                   <p className="text-xs text-zinc-400 mb-1">Install Command</p>
                   <div className="flex items-center">
                     <Input
-                      className="flex-grow bg-gray-300 border-zinc-700"
+                      className="flex-grow bg-gray-200 border-zinc-700"
                       value={installCommand}
                       onChange={(e) => setInstallCommand(e.target.value)}
                     />
@@ -178,7 +190,7 @@ export default function NewProject() {
           <div>
             <Button
               variant="outline"
-              className="w-full justify-between bg-gray-300 border-zinc-700"
+              className="w-full justify-between bg-gray-200 border-zinc-700"
               onClick={() => setShowEnvVariable((prev) => !prev)}
             >
               Environment Variables
@@ -189,7 +201,7 @@ export default function NewProject() {
                 {envVariables.map((variable, index) => (
                   <div key={index} className="flex space-x-2">
                     <Input
-                      className="flex-grow bg-gray-300 border-zinc-700"
+                      className="flex-grow bg-gray-200 border-zinc-700"
                       placeholder="Key"
                       value={variable.key}
                       onChange={(e) =>
@@ -197,7 +209,7 @@ export default function NewProject() {
                       }
                     />
                     <Input
-                      className="flex-grow bg-gray-300 border-zinc-700"
+                      className="flex-grow bg-gray-200 border-zinc-700"
                       placeholder="Value"
                       value={variable.value}
                       onChange={(e) =>
@@ -206,7 +218,7 @@ export default function NewProject() {
                     />
                     <Button
                       variant="outline"
-                      className=" bg-gray-300 border-zinc-700"
+                      className=" bg-gray-200 border-zinc-700"
                       onClick={() => removeEnvVariable(index)}
                     >
                       -
@@ -215,7 +227,7 @@ export default function NewProject() {
                 ))}
                 <Button
                   variant="outline"
-                  className="w-full  bg-gray-300 border-zinc-700"
+                  className="w-full  bg-gray-200 border-zinc-700"
                   onClick={addEnvVariable}
                 >
                   + Add More

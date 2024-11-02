@@ -8,8 +8,7 @@ import {
   signInWithPopup,
   UserCredential,
 } from "firebase/auth";
-import { doc, setDoc, getFirestore, getDoc } from "firebase/firestore";
-import { encryptData } from "./lib/utils";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -49,26 +48,18 @@ export async function saveAccessToken(userId: string, accessToken: string) {
   );
 }
 
-export async function getGithubToken(userId: string): Promise<string | null> {
-  const userRef = doc(db, "users", userId);
-  const userDoc = await getDoc(userRef);
-  if (userDoc.exists()) {
-    return userDoc.data()?.githubAccessToken || null;
-  }
-  return null;
-}
-
-export const fetchRepositories = async (token: string | null) => {
+export const fetchFrameworkInfo = async (owner, repo, accessToken) => {
   const response = await fetch(
-    "https://api.github.com/user/repos?affiliation=owner&sort=created&direction=desc",
+    `https://api.github.com/repos/${owner}/${repo}/content`,
     {
+      method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     }
   );
-  const repos = await response.json();
-  return repos;
+  const data = await response.json();
+  return data;
 };
 
 export const signInWithGitHub = async () => {
@@ -126,12 +117,13 @@ export const saveUserData = async (user: any, accessToken: string) => {
     throw new Error(errorData || "Failed to save user data"); // Use a custom error message
   }
   const data = await response.json();
-  console.log("response data :", data);
-  // await saveAccessToken(user.uid,accessToken)
-  const repos = await fetchRepositories(accessToken!);
-  const encryptedRepoData = encryptData(JSON.stringify(repos));
-  localStorage.setItem(
-    "ming_github_user_repos",
-    JSON.stringify(encryptedRepoData)
-  );
+  return data;
+  // console.log("response data :", data);
+  // // await saveAccessToken(user.uid,accessToken)
+  // const repos = await fetchRepositories(accessToken!);
+  // const encryptedRepoData = encryptData(JSON.stringify(repos));
+  // localStorage.setItem(
+  //   "ming_github_user_repos",
+  //   JSON.stringify(encryptedRepoData)
+  // );
 };

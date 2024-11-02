@@ -4,11 +4,13 @@ declare namespace Component {
     id: number;
     name: string;
     html_url: string;
+    default_branch: string;
     owner: {
       avatar_url: string;
+      login: string;
     };
     updated_at: string;
     full_name: string;
-
+    language: string;
   }
 }

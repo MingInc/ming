@@ -16,7 +16,7 @@ export async function createUser(req: Request) {
     if (existingUser) {
       return addCorsHeaders(
         new Response(JSON.stringify({ message: "User already exists" }), {
-          status: 400,
+          status: 201,
         })
       );
     }
@@ -157,55 +157,12 @@ export async function getGithubAccessToken(req: Request) {
   }
 }
 
-export async function getGithubAccessTokenFromRefreshToken(req: Request) {
-  try {
-    const data = await req.json();
-    console.log(data);
-
-    const { refreshToken } = data;
-
-    // Your API call to refresh the GitHub token using firebaseToken
-    const response = await fetch(
-      "https://github.com/login/oauth/access_token",
-      {
-        method: "POST",
-        // headers: {
-        //   Authorization: `Bearer ${refreshToken}`,
-        //   "Content-Type": "application/json",
-        // },
-        body: JSON.stringify({
-          client_id: process.env.GITHUB_CLIENT_ID,
-          client_secret: process.env.GITHUB_CLIENT_SECRET,
-          grant_type: "refresh_token",
-          refresh_token: refreshToken,
-        }),
-      }
-    );
-
-    const _data = await response.json();
-
-    return addCorsHeaders(
-      new Response(JSON.stringify({ _data }), {
-        status: 500,
-      })
-    );
-  } catch (error) {
-    console.error("Failed to update user:", error);
-    return addCorsHeaders(
-      new Response(JSON.stringify({ error: "Failed to update user" }), {
-        status: 500,
-      })
-    );
-  }
-}
-
 export async function getFirebaseUserFromEmail(req: Request) {
   try {
     const data = await req.json();
     const { email } = data;
 
     const user = await admin.auth().getUserByEmail(email);
-
 
     // Unlink GitHub provider from the user
     const updatedUser = await admin.auth().updateUser(user.uid, {
@@ -229,6 +186,104 @@ export async function getFirebaseUserFromEmail(req: Request) {
     );
   } catch (error) {
     console.error("Failed to update user:", error);
+    return addCorsHeaders(
+      new Response(JSON.stringify({ error: "Failed to get user" }), {
+        status: 500,
+      })
+    );
+  }
+}
+
+export async function getGithubUserDetails(req: Request) {
+  const data = await req.json();
+  const { accessToken } = data;
+  try {
+    const response = await fetch("https://api.github.com/user", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const data = await response.json();
+
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          message: "user found successfully",
+          user: data,
+        }),
+        {
+          status: 201,
+        }
+      )
+    );
+  } catch (error) {
+    return addCorsHeaders(
+      new Response(JSON.stringify({ error: "Failed to get user" }), {
+        status: 500,
+      })
+    );
+  }
+}
+
+export async function getFrameworkInfo(req: Request) {
+  try {
+    const data = await req.json();
+    const { owner, repo, token } = data;
+    const response = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/contents/package.json`,
+      {
+        method: "GET",
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        //   Accept: "application/vnd.github.v3.raw", // To get the raw content
+        // },
+      }
+    );
+    const _data = await response.json();
+    console.log("data :", atob(_data.content));
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          message: "frameworkInfo found successfully",
+          data: atob(_data.content),
+        }),
+        {
+          status: 201,
+        }
+      )
+    );
+  } catch (error) {
+    return addCorsHeaders(
+      new Response(JSON.stringify({ error }), {
+        status: 500,
+      })
+    );
+  }
+}
+export async function getFrameworkContent(req: Request) {
+  try {
+    const data = await req.json();
+    const { owner, repo, path } = data;
+    const response = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
+      {
+        method: "GET",
+      }
+    );
+    const _data = await response.json();
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          message: "frameworkInfo found successfully",
+          data: _data,
+        }),
+        {
+          status: 201,
+        }
+      )
+    );
+  } catch (error) {
     return addCorsHeaders(
       new Response(JSON.stringify({ error: "Failed to get user" }), {
         status: 500,

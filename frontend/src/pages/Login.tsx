@@ -2,12 +2,11 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useRepoContext } from "@/contexts/RepoContext";
 import {
-  fetchRepositories,
   firebaseConfig,
+  saveUserData,
 } from "@/firebase.config";
 // import firebase from "firebase/app"
 import "firebase/auth"
-import { encryptData } from "@/lib/utils";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -26,7 +25,6 @@ export default function Login() {
   const [auth, setAuth] = useState<any>();
   const { login, authState } = useAuth();
   const navigate = useNavigate();
-  const { setRepos } = useRepoContext();
   // const providers = useAuthProvider()
   // const allowedProviders = ["google.com", "github.com"];
 
@@ -37,8 +35,9 @@ export default function Login() {
     const _user = JSON.parse(
       localStorage.getItem("ming_authenticated_user") || "{}"
     );
+    console.log("user ", _user)
 
-    if (_user.email) return navigate("/dashboard");
+    // if (_user) return navigate("/dashboard");
 
     const app = initializeApp(firebaseConfig);
     const authInstance = getAuth(app);
@@ -59,15 +58,9 @@ export default function Login() {
       const credential = GithubAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
       const user = result.user;
-      const repos = await fetchRepositories(token!);
-      setRepos(repos);
-      const encryptedRepoData = encryptData(JSON.stringify(repos));
-      localStorage.setItem(
-        "ming_github_user_repos",
-        JSON.stringify(encryptedRepoData)
-      );
+      await saveUserData(user,token!)
 
-      if (user.email) {
+      if (user) {
         login(user);
         localStorage.setItem("ming_authenticated_user", JSON.stringify(user));
         // navigate("/dashboard");

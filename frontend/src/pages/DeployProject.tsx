@@ -15,10 +15,10 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/components/ui/use-toast";
 import ConfigureProject from "@/components/ConfigureProject.component";
-import useAuthProvider from "@/hooks/useAuthProvider.hooks";
-import { fetchRepositories, linkGithubToGoogle, auth, saveUserData } from "@/firebase.config";
-import { getAuth, GithubAuthProvider, signInWithPopup, unlink } from "firebase/auth";
-import { encryptData } from "@/lib/utils";
+import {useAuthProvider} from "@/hooks";
+import {  linkGithubToGoogle, auth, saveUserData } from "@/firebase.config";
+import {  GithubAuthProvider } from "firebase/auth";
+// import { encryptData } from "@/lib/utils";
 
 export default function EnhancedProjects() {
   const [projectName, setProjectName] = useState("");
@@ -155,103 +155,6 @@ export default function EnhancedProjects() {
               <GearIcon className="mr-2" /> Configure Project
             </CardTitle>
           </CardHeader>
-          {/* <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="projectName">Project Name</Label>
-              <Input
-                id="projectName"
-                placeholder="Your Amazing Project"
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="githubUrl">GitHub URL</Label>
-              <Input
-                id="githubUrl"
-                placeholder="https://github.com/MingInc/ming.git"
-                value={githubUrl}
-                onChange={(e) => setGitHubUrl(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="projectFramework">Framework</Label>
-              <Select
-                value={projectFramework}
-                onValueChange={setProjectFramework}
-              >
-                <SelectTrigger id="projectFramework">
-                  <SelectValue placeholder="Choose framework..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Vite">Vite</SelectItem>
-                  <SelectItem value="React.js">React.js</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="rootDirectory">Root Directory</Label>
-              <Input
-                id="rootDirectory"
-                placeholder="./"
-                value={rootDirectory}
-                onChange={(e) => setRootDirectory(e.target.value)}
-              />
-            </div>
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="build-settings">
-                <AccordionTrigger>Build & Output Settings</AccordionTrigger>
-                <AccordionContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="buildCommand">Build Command</Label>
-                    <Input
-                      id="buildCommand"
-                      placeholder="npm run build"
-                      value={buildCommand}
-                      onChange={(e) => setBuildCommand(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="outputDirectory">Output Directory</Label>
-                    <Input
-                      id="outputDirectory"
-                      placeholder="dist"
-                      value={outputDirectory}
-                      onChange={(e) => setOutputDirectory(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="installCommand">Install Command</Label>
-                    <Input
-                      id="installCommand"
-                      placeholder="npm install"
-                      value={installCommand}
-                      onChange={(e) => setInstallCommand(e.target.value)}
-                    />
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="env-variables">
-                <AccordionTrigger>Environment Variables</AccordionTrigger>
-                <AccordionContent>
-                  <Textarea
-                    placeholder="Paste your .env content here"
-                    className="min-h-[100px]"
-                    value={envVariables}
-                    onChange={(e) => setEnvVariables(e.target.value)}
-                  />
-                  <p className="text-sm text-muted-foreground mt-2">
-                    TIP: Paste a .env above to populate the form
-                  </p>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </CardContent>
-          <CardFooter>
-            <Button className="w-full" onClick={handleDeploy}>
-              <RocketIcon className="mr-2" /> Deploy
-            </Button>
-          </CardFooter> */}
           {!isGithubLinked && isGoogleLinked ? (
             <Button onClick={handleLinkToGithubAccount}>
               Link Account with GitHub
@@ -294,11 +197,7 @@ export default function EnhancedProjects() {
               variant="outline"
               className="w-full"
               onClick={() => {
-                localStorage.setItem(
-                  "ming_dashboard_active_tab",
-                  "/boilerplates"
-                );
-                navigate("/");
+                navigate("/dashboard/boilerplates");
               }}
             >
               Browse All Templates

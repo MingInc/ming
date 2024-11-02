@@ -17,7 +17,7 @@ import CurrentBuild from "./pages/CurrentBuild";
 import { ProjectProvider } from "./contexts/ProjectContext/ProjectContext";
 import ProjectPreview from "./pages/ProjectPreview";
 import Pricing from "./pages/Pricing";
-import ProtectedRoute from "./components/ProtectedRoute";
+// import ProtectedRoute from "./components/ProtectedRoute";
 import { RepoProvider } from "./contexts/RepoContext";
 import NewProject from "./components/NewProject.component";
 import TemplatesPage from "./pages/Boilerplates";

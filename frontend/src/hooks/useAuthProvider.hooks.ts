@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "@/firebase.config";
 
-const useAuthProvider = () => {
+export const useAuthProvider = () => {
   const [providers, setProviders] = useState<string[]>([]);
 
   useEffect(() => {
@@ -22,5 +22,3 @@ const useAuthProvider = () => {
 
   return providers;
 };
-
-export default useAuthProvider;
