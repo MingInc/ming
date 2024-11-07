@@ -10,11 +10,12 @@
   },
   "scripts": {
     "start": "bun --hot run index.ts",
-     "build": "bun bun --outdir=dist",
-     "server": "nohup bun run start > ./logs/bun-server.log 2>&1 &",
-     "proxy": "nohup ngrok http 3000 --log=stdout > ./logs/ngrok-proxy.log 2> ./logs/ngrok-error.log &"
+    "build": "bun bun --outdir=dist",
+    "server": "nohup bun run start > ./logs/bun-server.log 2>&1 &",
+    "proxy": "nohup ngrok http 3000 --log=stdout > ./logs/ngrok-proxy.log 2> ./logs/ngrok-error.log &"
   },
   "dependencies": {
+    "firebase-admin": "^12.7.0",
     "mongoose": "^8.6.1"
   }
 }

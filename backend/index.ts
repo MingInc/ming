@@ -2,7 +2,11 @@ import {
   createProject,
   getProjectsByUser,
 } from "./controllers/ProjectRecord.ts";
-import { deployProject } from "./controllers/DeployProject.ts";
+import {
+  deployProject,
+  getAccessToken,
+  getUserData,
+} from "./controllers/DeployProject.ts";
 import {
   createBoilerplate,
   getAllBoilerplates,
@@ -12,12 +16,28 @@ import {
 } from "./controllers/Boilerplate.ts";
 import { addCorsHeaders } from "./helpers/CorsHeader.ts";
 import * as mongoose from "mongoose";
+import {
+  createUser,
+  getFirebaseUserFromEmail,
+  getFrameworkInfo,
+  getGithubAccessToken,
+  getGithubUserDetails,
+  updateUserById,
+} from "./controllers/User.controller.ts";
+import { initializeApp } from "firebase-admin/app";
+import admin from "firebase-admin";
+import serviceAccountKey from "./serviceAccountKey.json";
 
-type Method = "GET" | "PUT" | "POST" | "DELETE" | "OPTIONS";
+initializeApp({
+  credential: admin.credential.cert(serviceAccountKey as admin.ServiceAccount),
+});
+
+type Method = "GET" | "PUT" | "POST" | "DELETE" | "PATCH" | "OPTIONS";
 
 mongoose
   .connect(
-    `mongodb+srv://Cluster53271:${process.env.MONGODB_PASSWORD}@cluster53271.l3uzg.mongodb.net/ming?retryWrites=true&w=majority&appName=Cluster53271`
+    "mongodb://localhost:27017/ming"
+    // `mongodb+srv://Cluster53271:${process.env.MONGODB_PASSWORD}@cluster53271.l3uzg.mongodb.net/ming?retryWrites=true&w=majority&appName=Cluster53271`
   )
   .then(() => {
     console.log("Connected to MongoDB!");
@@ -60,6 +80,31 @@ const server = Bun.serve({
           return updateBoilerplate(req); // Update a boilerplate by ID
         case `DELETE /api/v1/boilerplate/${url.pathname.split("/")[4]}`:
           return deleteBoilerplate(req); // Delete a boilerplate by ID
+
+        case "GET /api/v1/getAccessToken":
+          return getAccessToken(req);
+
+        case "GET /api/v1/getUserData":
+          return getUserData(req);
+
+        // User API endpoints
+        case "POST /api/v1/user":
+          return createUser(req);
+
+        case "POST /api/v1/user/update":
+          return updateUserById(req);
+
+        case "POST /api/v1/user/accessToken":
+          return getGithubAccessToken(req);
+
+        case "POST /api/v1/user/getRepoContents":
+          return getFrameworkInfo(req);
+
+        case "POST /api/v1/getUserData":
+          return getGithubUserDetails(req);
+
+        case "POST /api/v1/user/getFirebaseUserByEmail":
+          return getFirebaseUserFromEmail(req);
 
         case "GET /api/v1/status":
           return addCorsHeaders(

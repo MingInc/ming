@@ -7,29 +7,18 @@ import {
   CardDescription,
   CardFooter,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Textarea } from "@/components/ui/textarea";
-import { RocketIcon, GearIcon, FileIcon } from "@radix-ui/react-icons";
+import { GearIcon, FileIcon } from "@radix-ui/react-icons";
 import TemplateCard from "@/components/TemplateCard";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/components/ui/use-toast";
+import ConfigureProject from "@/components/ConfigureProject.component";
+import {useAuthProvider} from "@/hooks";
+import {  linkGithubToGoogle, auth, saveUserData } from "@/firebase.config";
+import {  GithubAuthProvider } from "firebase/auth";
+// import { encryptData } from "@/lib/utils";
 
 export default function EnhancedProjects() {
   const [projectName, setProjectName] = useState("");
@@ -40,10 +29,15 @@ export default function EnhancedProjects() {
   const [outputDirectory, setOutputDirectory] = useState("");
   const [installCommand, setInstallCommand] = useState("");
   const [envVariables, setEnvVariables] = useState("");
+  const allowedProviders = ["google.com", "github.com"];
+  const providers = useAuthProvider();
+
+  const isGoogleLinked = providers?.some(provider => allowedProviders.includes(provider));
+  const isGithubLinked = providers?.some(provider => allowedProviders.includes(provider));
 
   const navigate = useNavigate();
-  const { authState } = useAuth();
-
+  const { authState, login } = useAuth();
+  
   const handleDeploy = async () => {
     const data = {
       projectName,
@@ -94,112 +88,80 @@ export default function EnhancedProjects() {
       });
   };
 
+  const handleLinkToGithubAccount = async () => {
+    try {
+      const result = await linkGithubToGoogle();
+      const user = result.user;
+      const credential = GithubAuthProvider.credentialFromResult(result);
+      const accessToken = credential?.accessToken;
+
+      const providerData = user?.providerData
+
+      console.log(providerData)
+
+      if (accessToken) {
+        await saveUserData(user,accessToken)
+      }
+      if (user.email) {
+        login(user);
+        localStorage.setItem("ming_authenticated_user", JSON.stringify(user));
+        // navigate("/dashboard");
+      }
+    } catch(error) {
+      console.log("error :", error);
+      console.log("error code :", error?.code);
+
+      console.log("email :", error?.customData?.email)
+      
+      // const isGithubLinked = user?.providerData.some((provider) => provider.providerId === "github.com")
+      
+      if (error?.code === "auth/credential-already-in-use") {
+        const existingEmail = error?.customData?.email 
+        try {
+
+          const response = await fetch("http://localhost:3000/api/v1/user/getFirebaseUserByEmail",{
+            method:"POST",
+            body:JSON.stringify({email: existingEmail})
+          })
+          console.log(response)
+          const _data = await response.json()
+          console.log(_data)
+      
+          console.log(_data.user)
+          console.log("current user :", auth.currentUser) 
+          if(response.status === 201){
+            const result = await linkGithubToGoogle()
+            const _user = result.user
+            const credential = GithubAuthProvider.credentialFromResult(result)
+            const accessToken = credential?.accessToken
+            if (accessToken) {
+              await saveUserData(_user,accessToken)
+            }
+          }
+        }catch(error){
+          console.log(error)
+        }
+        console.log("GitHub account unlinked from previous user.");
+      }
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-4">
       <div className="grid gap-8 md:grid-cols-2">
-        <Card className="md:row-span-2">
+        <Card className="md:row-span-2 px-3">
           <CardHeader>
             <CardTitle className="flex items-center">
               <GearIcon className="mr-2" /> Configure Project
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="projectName">Project Name</Label>
-              <Input
-                id="projectName"
-                placeholder="Your Amazing Project"
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="githubUrl">GitHub URL</Label>
-              <Input
-                id="githubUrl"
-                placeholder="https://github.com/MingInc/ming.git"
-                value={githubUrl}
-                onChange={(e) => setGitHubUrl(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="projectFramework">Framework</Label>
-              <Select
-                value={projectFramework}
-                onValueChange={setProjectFramework}
-              >
-                <SelectTrigger id="projectFramework">
-                  <SelectValue placeholder="Choose framework..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Vite">Vite</SelectItem>
-                  <SelectItem value="React.js">React.js</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="rootDirectory">Root Directory</Label>
-              <Input
-                id="rootDirectory"
-                placeholder="./"
-                value={rootDirectory}
-                onChange={(e) => setRootDirectory(e.target.value)}
-              />
-            </div>
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="build-settings">
-                <AccordionTrigger>Build & Output Settings</AccordionTrigger>
-                <AccordionContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="buildCommand">Build Command</Label>
-                    <Input
-                      id="buildCommand"
-                      placeholder="npm run build"
-                      value={buildCommand}
-                      onChange={(e) => setBuildCommand(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="outputDirectory">Output Directory</Label>
-                    <Input
-                      id="outputDirectory"
-                      placeholder="dist"
-                      value={outputDirectory}
-                      onChange={(e) => setOutputDirectory(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="installCommand">Install Command</Label>
-                    <Input
-                      id="installCommand"
-                      placeholder="npm install"
-                      value={installCommand}
-                      onChange={(e) => setInstallCommand(e.target.value)}
-                    />
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="env-variables">
-                <AccordionTrigger>Environment Variables</AccordionTrigger>
-                <AccordionContent>
-                  <Textarea
-                    placeholder="Paste your .env content here"
-                    className="min-h-[100px]"
-                    value={envVariables}
-                    onChange={(e) => setEnvVariables(e.target.value)}
-                  />
-                  <p className="text-sm text-muted-foreground mt-2">
-                    TIP: Paste a .env above to populate the form
-                  </p>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </CardContent>
-          <CardFooter>
-            <Button className="w-full" onClick={handleDeploy}>
-              <RocketIcon className="mr-2" /> Deploy
+          {!isGithubLinked && isGoogleLinked ? (
+            <Button onClick={handleLinkToGithubAccount}>
+              Link Account with GitHub
             </Button>
-          </CardFooter>
+          ) : (
+            <ConfigureProject />
+          )}
         </Card>
 
         <Card className="md:self-start">
@@ -235,11 +197,7 @@ export default function EnhancedProjects() {
               variant="outline"
               className="w-full"
               onClick={() => {
-                localStorage.setItem(
-                  "ming_dashboard_active_tab",
-                  "/boilerplates"
-                );
-                navigate("/");
+                navigate("/dashboard/boilerplates");
               }}
             >
               Browse All Templates

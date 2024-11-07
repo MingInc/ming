@@ -1,4 +1,3 @@
-// import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
@@ -18,80 +17,108 @@ import CurrentBuild from "./pages/CurrentBuild";
 import { ProjectProvider } from "./contexts/ProjectContext/ProjectContext";
 import ProjectPreview from "./pages/ProjectPreview";
 import Pricing from "./pages/Pricing";
+// import ProtectedRoute from "./components/ProtectedRoute";
+import { RepoProvider } from "./contexts/RepoContext";
+import NewProject from "./components/NewProject.component";
+import TemplatesPage from "./pages/Boilerplates";
+import AccountUsageDashboard from "./pages/AccountUsageAndAnalytics";
+import IPFSStorage from "./pages/storage";
+import SupportCenter from "./pages/support-center";
+import SettingsPage from "./pages/settings";
+import DeployedProjects from "./components/ProjectCard";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: (
-      <Layout>
-        <Home />
-      </Layout>
-    ),
-    // children: [
-    //   {
-    //     path: "team",
-    //     element: <Team />,
-    //     loader: teamLoader,
-    //   },
-    // ],
-  },
-  {
-    path: "/login",
-    element: (
-      <Layout>
-        <Login />
-      </Layout>
-    ),
-  },
-  {
-    path: "/dashboard",
-    element: (
-      <Layout>
-        <Dashboard />
-      </Layout>
-    ),
-  },
-  {
-    path: "/create-new",
-    element: (
-      <Layout>
-        <Projects />
-      </Layout>
-    ),
-  },
-  {
-    path: "/build",
-    element: (
-      <Layout>
-        <CurrentBuild />
-      </Layout>
-    ),
-  },
-  {
-    path: "/pricing",
-    element: (
-      <Layout>
-        <Pricing />
-      </Layout>
-    ),
-  },
-  {
-    path: "/preview",
-    element: (
-      <Layout>
-        <ProjectPreview />
-      </Layout>
-    ),
+    path:"/",
+    element: <Layout />,
+    children:[
+      {
+        index:true,
+        element: <Home />
+      },
+      {
+        path:"/login",
+        element: <Login />
+      },
+      {
+        path: "/create-new",
+        element: (
+          // <ProtectedRoute redirectPath="/login">
+              <Projects />
+          // </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/new",
+        element: (
+            <NewProject />
+        ),
+      },
+      {
+        path: "/build",
+        element: (
+            <CurrentBuild />
+        ),
+      },
+      {
+        path: "/pricing",
+        element: (
+            <Pricing />
+        ),
+      },
+      {
+        path: "/preview",
+        element: (
+            <ProjectPreview />
+        ),
+      },
+      {
+        path: "/dashboard",
+        element: (
+          // <ProtectedRoute redirectPath="/login">
+            <Dashboard />
+          // </ProtectedRoute>
+        ),
+        children: [
+          {
+            index: true,
+            element: <DeployedProjects />
+          },
+          {
+            path: "boilerplates",
+            element: <TemplatesPage />,
+          },
+          {
+            path: "usage",
+            element: <AccountUsageDashboard />,
+          },
+          {
+            path: "storage",
+            element: <IPFSStorage />,
+          },
+          {
+            path: "support",
+            element: <SupportCenter />,
+          },
+          {
+            path: "settings",
+            element: <SettingsPage />,
+          },
+        ],
+      },
+    ]
   },
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <AuthProvider>
-    <ProjectProvider>
-      <RouterProvider router={router} />
-      <Toaster />
-      <Analytics />
-      <SpeedInsights />
-    </ProjectProvider>
+    <RepoProvider>
+      <ProjectProvider>
+        <RouterProvider router={router} />
+        <Toaster />
+        <Analytics />
+        <SpeedInsights />
+      </ProjectProvider>
+    </RepoProvider>
   </AuthProvider>
 );
