@@ -1,5 +1,6 @@
  import {
   firebaseConfig,
+  githubProvider,
   saveUserData,
 } from "@/firebase.config";
 // import firebase from "firebase/app"
@@ -14,10 +15,6 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks";
-
-// const provider = new GoogleAuthProvider();
-const githubProvider = new GithubAuthProvider();
-githubProvider.addScope("repo");
 
 export default function Login() {
   const [auth, setAuth] = useState<any>();
@@ -56,9 +53,9 @@ export default function Login() {
       const credential = GithubAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
       const user = result.user;
-      // console.log("response :",response)
+      console.log("github user :",user)
+      await saveUserData(user,token!)
       if (user) {
-        await saveUserData(user,token!)
         login(user);
         localStorage.setItem("ming_authenticated_user", JSON.stringify(user));
         navigate("/dashboard");

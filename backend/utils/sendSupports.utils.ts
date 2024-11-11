@@ -49,13 +49,15 @@ export async function sendWelcomeEmail(userEmail: string | null) {
     return;
   }
 
+  console.log("gmail password :", process.env.GMAIL_APP_PASSWORD);
+
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com", // Use your email provider (e.g., Gmail, SendGrid, etc.)
     port: 465,
     secure: true,
     auth: {
       user: "eriag321@gmail.com", // Your email address
-      pass: process.env.GMAIL_APP_PASSWORD as string, // Your email password or app-specific password
+      pass: process.env.GMAIL_APP_PASSWORD, // Your email password or app-specific password
     },
   });
 

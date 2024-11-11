@@ -103,6 +103,10 @@ const router = createBrowserRouter([
             path: "settings",
             element: <SettingsPage />,
           },
+          {
+            path:"billing",
+            element: <h1>Welcome to Billing Page</h1>
+          }
         ],
       },
     ]

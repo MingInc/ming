@@ -20,16 +20,12 @@ export async function createSupport(req: Request) {
       accessToken = req.headers.get("Authorization");
     }
 
-    console.log("ticketInfo:", ticketInfo);
-    console.log("image File:", imageFile);
-    console.log("authorization ", accessToken);
-
     const { title, description } = ticketInfo;
 
     let imagePath = null;
 
     if (imageFile instanceof File) {
-      imagePath = "http://localhost:3000" + `/uploads/${imageFile.name}`;
+      imagePath = `uploads/${imageFile.name}`;
       await Bun.write(imagePath, imageFile);
     }
 
@@ -72,14 +68,14 @@ export async function createSupport(req: Request) {
       userInfo: userUid,
       status,
       assignedTo,
-      image: imagePath,
+      image: `http://localhost:3000/` + imagePath,
     });
 
     await newTicket.save();
 
     // Sending emails to both user and admin
     if (accessToken) {
-      await sendSupportEmails(
+      sendSupportEmails(
         user.email as string,
         adminEmail,
         title,

@@ -30,7 +30,7 @@ export const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
+export const googleProvider = new GoogleAuthProvider();
 export const githubProvider = new GithubAuthProvider();
 const db = getFirestore(app);
 
@@ -131,15 +131,15 @@ export const saveUserData = async (user: any, accessToken: string) => {
     throw new Error(errorData || "Failed to save user data"); // Use a custom error message
   }
   const data = await response.json();
-  const userWithPremium = {
-    ...data,
-    premium: data.premium || false, // Assuming `premium` flag is included in the response
-  };
+  // const userWithPremium = {
+  //   ...data,
+  //   premium: data.premium || false, // Assuming `premium` flag is included in the response
+  // };
 
-  localStorage.setItem(
-    "ming_authenticated_user",
-    JSON.stringify(userWithPremium)
-  );
+  // localStorage.setItem(
+  //   "ming_authenticated_user",
+  //   JSON.stringify(userWithPremium)
+  // );
 
   return data;
 };
