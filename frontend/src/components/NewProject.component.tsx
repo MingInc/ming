@@ -1,4 +1,4 @@
-import {  useEffect, useState } from "react";
+import {   useState } from "react";
 import { ChevronDown, Github, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,8 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSearchParams } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
-import { useAccessToken, useFetchFrameworkInfo, useFrameworkPreset } from "@/hooks";
+import { useAccessToken, useAuth, useFetchFrameworkInfo, useFrameworkPreset } from "@/hooks";
 
 export default function NewProject() {
   const [searchParams] = useSearchParams();
@@ -40,8 +39,8 @@ export default function NewProject() {
   const { authState } = useAuth();
   const token = useAccessToken(authState?.user?.uid)
   console.log("token :",token)
-  const { frameworkInfo  } = useFetchFrameworkInfo(owner,projectName,token)
-  const frameworkPreset = useFrameworkPreset(frameworkInfo!)
+  const { frameworkInfo  } = useFetchFrameworkInfo(owner,projectName)
+  const frameworkPreset = useFrameworkPreset(frameworkInfo!,owner,projectName)
 
   console.log("frameworkInfo :",frameworkInfo)
 

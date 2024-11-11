@@ -1,10 +1,9 @@
-import { getFrameworkInfo } from "@/services/github.services";
+import { getRepoContents } from "@/services/github.services";
 import { useEffect, useState } from "react";
 
 export const useFetchFrameworkInfo = (
   owner: string | null,
-  projectName: string,
-  token: string | null
+  projectName: string
 ) => {
   const [frameworkInfo, setFrameworkInfo] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -16,7 +15,8 @@ export const useFetchFrameworkInfo = (
         setLoading(true);
         setError(null);
         try {
-          const data = await getFrameworkInfo(owner, projectName, token!);
+          const data = await getRepoContents(owner, projectName);
+          console.log("data :", data);
           if (data?.data) {
             setFrameworkInfo(data?.data);
           }
@@ -32,7 +32,7 @@ export const useFetchFrameworkInfo = (
     };
 
     fetchFrameworkInfo();
-  }, [owner, projectName, token]);
+  }, [owner, projectName]);
 
   return { frameworkInfo, loading, error };
 };

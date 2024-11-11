@@ -13,4 +13,19 @@ declare namespace Component {
     full_name: string;
     language: string;
   }
+
+  // Define the types for the ticket structure
+  export type Ticket = {
+    _id: string; // This would correspond to the _id field in MongoDB (or ticket._id)
+    ticketInfo: {
+      title: string;
+      description: string;
+    };
+    userInfo: string; // This could be a user ID, corresponding to `userInfo` in your schema
+    status: "open" | "closed" | "assigned"; // Based on the enum in your schema
+    assignedTo: string; // This would be the ID of the user the ticket is assigned to
+    image: string; // URL or path to the image associated with the ticket
+    createdAt?: string; // Corresponds to the `timestamps` feature in Mongoose
+    updatedAt?: string; // Corresponds to the `timestamps` feature in Mongoose
+  };
 }

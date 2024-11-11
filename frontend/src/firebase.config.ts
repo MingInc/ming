@@ -1,5 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+// import { getMessaging, getToken } from "firebase/messaging";
 import {
   getAuth,
   GithubAuthProvider,
@@ -32,8 +33,14 @@ export const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
 const db = getFirestore(app);
+// const messaging = getMessaging();
 
 // const analytics = getAnalytics(app);
+
+// getToken(messaging, {
+//   vapidKey:
+//     "BI3zLcLPEC3HNVBo5i7qELHOm3TL9L0Uw8s5x6MqtjXve-dsmQrYgzefNEGvqCO84Fomh43IpIS9Mgwvc_hUHlI",
+// });
 
 //
 export async function saveAccessToken(userId: string, accessToken: string) {
@@ -48,7 +55,11 @@ export async function saveAccessToken(userId: string, accessToken: string) {
   );
 }
 
-export const fetchFrameworkInfo = async (owner, repo, accessToken) => {
+export const fetchFrameworkInfo = async (
+  owner: string,
+  repo: string,
+  accessToken: string
+) => {
   const response = await fetch(
     `https://api.github.com/repos/${owner}/${repo}/content`,
     {

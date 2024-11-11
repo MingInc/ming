@@ -1,39 +1,21 @@
 import React, {
   createContext,
   useReducer,
-  useContext,
   ReactNode,
   useEffect,
 } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "@/firebase.config";
-
-interface AuthState {
-  isAuthenticated: boolean;
-  user: any | null;
-}
-
-interface AuthContextType {
-  authState: AuthState;
-  login: (user: any) => void;
-  logout: () => void;
-  linkAccount: (user: any) => void
-}
-
-type AuthAction = { type: "LOGIN"; payload: any } | { type: "LOGOUT" };
 
 // Create the Context
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<Auth.AuthContextType | undefined>(undefined);
 
 // Define the initial authState
-const initialState: AuthState = {
+const initialState: Auth.AuthState = {
   isAuthenticated: false,
   user: null,
 };
 
 // Reducer function
-const authReducer = (authState: AuthState, action: AuthAction): AuthState => {
+const authReducer = (authState: Auth.AuthState, action: Auth.AuthAction): Auth.AuthState => {
   switch (action.type) {
     case "LOGIN":
       return {
@@ -102,13 +84,5 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   );
 };
 
-// Custom hook to use the AuthContext
-const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-};
 
-export { AuthProvider, useAuth };
+export { AuthProvider };

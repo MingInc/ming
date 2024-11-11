@@ -1,8 +1,12 @@
 import { getUserData } from "@/services/github.services";
 import { useEffect, useState } from "react";
 
+interface User {
+  login: string;
+}
+
 export const useFetchUserData = (token: string) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

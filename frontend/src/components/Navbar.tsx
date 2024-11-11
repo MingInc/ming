@@ -1,4 +1,4 @@
-import { useAuth } from "@/contexts/AuthContext";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -27,6 +27,7 @@ import {
   UserPlus,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { useAuth } from "@/hooks";
 
 export default function Navbar() {
   const navigate = useNavigate();

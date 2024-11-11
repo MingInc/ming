@@ -1,13 +1,10 @@
-// eslint-disable-next-line no-use-before-define
-import { useAuth } from "@/contexts/AuthContext";
-import { useRepoContext } from "@/contexts/RepoContext";
-import {
+ import {
   firebaseConfig,
   saveUserData,
 } from "@/firebase.config";
 // import firebase from "firebase/app"
 import "firebase/auth"
-import { initializeApp } from "firebase/app";
+import { FirebaseError, initializeApp } from "firebase/app";
 import {
   getAuth,
   signInWithPopup,
@@ -16,6 +13,7 @@ import {
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks";
 
 // const provider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider();
@@ -61,6 +59,12 @@ export default function Login() {
       await saveUserData(user,token!)
 
       if (user) {
+        const response = await fetch('http://localhost:3000/api/v1/greet_mail',{
+          method:"POST",
+          body:JSON.stringify(user)
+        })
+        const data = await response.json()
+        console.log("data :",data)
         login(user);
         localStorage.setItem("ming_authenticated_user", JSON.stringify(user));
         // navigate("/dashboard");
@@ -68,29 +72,31 @@ export default function Login() {
 
       return token;
     } catch (error) {
-      const errorCode = error?.code;
-      const errorMessage = error?.message;
-      console.log(errorMessage);
-
-      if (errorCode === "auth/account-exists-with-different-credential") {
-        const email = error?.customData?.email;
-        console.log("email :", email);
-        
-
-        // Fetch the sign-in methods for the email
-        const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-
-        console.log(`Sign-in methods for ${email}:`, signInMethods);
-
-        // Inform the user about the existing providers
-        if (signInMethods.length > 0) {
-          alert(`This email is linked with: ${signInMethods.join(", ")}`);
-        } else {
-          alert("No sign-in methods found for this email.");
-        }
-      } else {
+      if(error instanceof FirebaseError){
+        const errorCode = error?.code;
+        const errorMessage = error?.message;
         console.log(errorMessage);
+        if (errorCode === "auth/account-exists-with-different-credential") {
+          const email : string = error?.customData?.email as string;
+          console.log("email :", email);
+          
+  
+          // Fetch the sign-in methods for the email
+          const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+  
+          console.log(`Sign-in methods for ${email}:`, signInMethods);
+  
+          // Inform the user about the existing providers
+          if (signInMethods.length > 0) {
+            alert(`This email is linked with: ${signInMethods.join(", ")}`);
+          } else {
+            alert("No sign-in methods found for this email.");
+          }
+        } else {
+          console.log(errorMessage);
+        }
       }
+
     }
   };
 
