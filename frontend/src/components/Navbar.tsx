@@ -27,12 +27,14 @@ import {
   UserPlus,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { useAuth } from "@/hooks";
+import { useAuth, useUser } from "@/hooks";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { authState, logout } = useAuth();
+  const { user } = useUser(authState?.user?.uid)
+  console.log("user :",user)
 
   const isDashboardRoute =
     location.pathname === "/dashboard" ||

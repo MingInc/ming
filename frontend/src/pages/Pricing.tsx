@@ -113,7 +113,7 @@ export default function Pricing() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="text-4xl font-bold">
-                $49{" "}
+                $19{" "}
                 <span className="text-xl font-normal text-muted-foreground">
                   /month
                 </span>
