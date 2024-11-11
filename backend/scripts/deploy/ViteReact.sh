@@ -58,9 +58,6 @@ if ! docker exec $CONTAINER_NAME /bin/bash -c "cd $PROJECT_FOLDER_NAME && pm2 se
     exit 1
 fi
 
-# Configure ngrok API key and start ngrok with the wildcard subdomain
-docker exec $CONTAINER_NAME /bin/bash -c "ngrok config add-api-key $NGROK_API_KEY"
-
 # Start ngrok with a wildcard subdomain for the project
 echo "Starting ngrok with subdomain..."
 docker exec $CONTAINER_NAME /bin/bash -c "ngrok http --domain ming.ngrok.dev 8080 > /dev/null 2>&1 &" # PORT Should be dynamic
