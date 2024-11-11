@@ -23,7 +23,6 @@ import {
   getGithubAccessToken,
   getGithubUserDetails,
   getRepoContents,
-  handleGreetMail,
   updateUserById,
 } from "./controllers/User.controller.ts";
 import { initializeApp } from "firebase-admin/app";
@@ -144,9 +143,6 @@ const server = Bun.serve({
 
         case "POST /webhook":
           return handleWebHook(req);
-
-        case "POST /api/v1/greet_mail":
-          return handleGreetMail(req);
 
         case "GET /api/v1/status":
           return addCorsHeaders(

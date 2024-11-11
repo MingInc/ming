@@ -29,6 +29,8 @@ export async function createUser(req: Request) {
     const newUser = new UserModel(data);
     await newUser.save();
 
+    await sendWelcomeEmail(newUser?.email!);
+
     return addCorsHeaders(
       new Response(JSON.stringify(newUser), { status: 201 })
     );
@@ -321,34 +323,6 @@ export async function getFrameworkInfo(req: Request) {
           status: 201,
         }
       )
-    );
-  } catch (error) {
-    return addCorsHeaders(
-      new Response(JSON.stringify({ error }), {
-        status: 500,
-      })
-    );
-  }
-}
-
-export async function handleGreetMail(req: Request) {
-  try {
-    const data = await req.json();
-
-    if (data) {
-      await sendWelcomeEmail(data?.email);
-
-      return addCorsHeaders(
-        new Response(JSON.stringify({ message: "mail send successfully" }), {
-          status: 201,
-        })
-      );
-    }
-
-    return addCorsHeaders(
-      new Response(JSON.stringify({ message: "" }), {
-        status: 500,
-      })
     );
   } catch (error) {
     return addCorsHeaders(

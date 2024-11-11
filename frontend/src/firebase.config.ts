@@ -31,8 +31,11 @@ export const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
-const githubProvider = new GithubAuthProvider();
+export const githubProvider = new GithubAuthProvider();
 const db = getFirestore(app);
+
+githubProvider.addScope("repo");
+githubProvider.addScope("user:email");
 // const messaging = getMessaging();
 
 // const analytics = getAnalytics(app);
@@ -112,7 +115,7 @@ export const saveUserData = async (user: any, accessToken: string) => {
   const userData = {
     userUid: user.uid,
     email: user.email,
-    provider: ["github", "google"],
+    provider: ["github"],
     accessToken: user?.accessToken,
     github_accessToken: accessToken,
   };
@@ -129,12 +132,4 @@ export const saveUserData = async (user: any, accessToken: string) => {
   }
   const data = await response.json();
   return data;
-  // console.log("response data :", data);
-  // // await saveAccessToken(user.uid,accessToken)
-  // const repos = await fetchRepositories(accessToken!);
-  // const encryptedRepoData = encryptData(JSON.stringify(repos));
-  // localStorage.setItem(
-  //   "ming_github_user_repos",
-  //   JSON.stringify(encryptedRepoData)
-  // );
 };

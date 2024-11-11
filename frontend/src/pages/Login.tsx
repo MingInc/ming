@@ -59,12 +59,6 @@ export default function Login() {
       await saveUserData(user,token!)
 
       if (user) {
-        const response = await fetch('http://localhost:3000/api/v1/greet_mail',{
-          method:"POST",
-          body:JSON.stringify(user)
-        })
-        const data = await response.json()
-        console.log("data :",data)
         login(user);
         localStorage.setItem("ming_authenticated_user", JSON.stringify(user));
         // navigate("/dashboard");
@@ -149,7 +143,7 @@ export default function Login() {
           className=" rounded-sm bg-black text-white text-sm py-2 px-4 w-[80vw] md:w-[30vw]"
           onClick={() => handleGithubSign()}
         >
-          Continue with Github
+          Sign up with Github
         </button>
       </div>
     </div>
