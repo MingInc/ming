@@ -23,6 +23,7 @@ import {
   getGithubAccessToken,
   getGithubUserDetails,
   getRepoContents,
+  getUserById,
   updateUserById,
 } from "./controllers/User.controller.ts";
 import { initializeApp } from "firebase-admin/app";
@@ -112,6 +113,9 @@ const server = Bun.serve({
         // User API endpoints
         case "POST /api/v1/user":
           return createUser(req);
+
+        case "GET /api/v1/user/:id":
+          return getUserById(req);
 
         case "POST /api/v1/user/update":
           return updateUserById(req);

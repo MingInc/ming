@@ -29,7 +29,9 @@ export async function createUser(req: Request) {
     const newUser = new UserModel(data);
     await newUser.save();
 
-    await sendWelcomeEmail(newUser?.email!);
+    if (newUser) {
+      await sendWelcomeEmail(newUser?.email!);
+    }
 
     return addCorsHeaders(
       new Response(JSON.stringify(newUser), { status: 201 })
@@ -51,6 +53,11 @@ export async function getUserById(req: Request) {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("id");
 
+    // console.log(req.params)
+
+    console.log("user id :", userId);
+    console.log("req :", req);
+
     if (!userId) {
       // Return a 400 Bad Request response if the ID parameter is missing
       return addCorsHeaders(
@@ -61,7 +68,9 @@ export async function getUserById(req: Request) {
     }
 
     // Fetch the user from the database by ID
-    const user = await UserModel.findById(userId);
+    const user = await UserModel.find({
+      userUid: userId,
+    });
 
     if (!user) {
       // Return a 404 Not Found response if the user does not exist

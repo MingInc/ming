@@ -131,5 +131,15 @@ export const saveUserData = async (user: any, accessToken: string) => {
     throw new Error(errorData || "Failed to save user data"); // Use a custom error message
   }
   const data = await response.json();
+  const userWithPremium = {
+    ...data,
+    premium: data.premium || false, // Assuming `premium` flag is included in the response
+  };
+
+  localStorage.setItem(
+    "ming_authenticated_user",
+    JSON.stringify(userWithPremium)
+  );
+
   return data;
 };

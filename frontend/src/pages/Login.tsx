@@ -56,12 +56,12 @@ export default function Login() {
       const credential = GithubAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
       const user = result.user;
-      await saveUserData(user,token!)
-
+      // console.log("response :",response)
       if (user) {
+        await saveUserData(user,token!)
         login(user);
         localStorage.setItem("ming_authenticated_user", JSON.stringify(user));
-        // navigate("/dashboard");
+        navigate("/dashboard");
       }
 
       return token;
