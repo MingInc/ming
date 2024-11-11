@@ -9,8 +9,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
-import { useAccessToken, useDebounce, useFetchUserData, useRepositories } from "@/hooks";
+import {
+  useAccessToken,
+  useAuth,
+  useDebounce,
+  useFetchUserData,
+  useRepositories,
+} from "@/hooks";
 import { useState } from "react";
 
 export default function ConfigureProject() {
@@ -18,11 +23,13 @@ export default function ConfigureProject() {
   const { authState } = useAuth();
   const token = useAccessToken(authState?.user?.uid);
   const { repos } = useRepositories(token!);
-  const { user } = useFetchUserData(token!);
+  const { user  } = useFetchUserData(token!);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-  const filterRepos = repos.filter((repo) => repo.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
+  const filterRepos = repos.filter((repo) =>
+    repo.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+  );
 
   return (
     <div className="w-full p-6 rounded-lg shadow-lg">
@@ -33,7 +40,7 @@ export default function ConfigureProject() {
             <SelectValue placeholder={user?.login} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={user?.login}>{user?.login}</SelectItem>
+            <SelectItem value={user?.login as string}>{user?.login}</SelectItem>
           </SelectContent>
         </Select>
         <div className="relative flex-grow">
@@ -96,7 +103,10 @@ export default function ConfigureProject() {
             );
           })}
       </div>
-      <a href="#" className="block mt-4 text-sm text-gray-400 hover:text-gray-500 w-fit">
+      <a
+        href="#"
+        className="block mt-4 text-sm text-gray-400 hover:text-gray-500 w-fit"
+      >
         Import Third-Party Git Repository →
       </a>
     </div>

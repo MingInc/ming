@@ -10,12 +10,15 @@
   },
   "scripts": {
     "start": "bun --hot run index.ts",
-    "build": "bun bun --outdir=dist",
+    "build": "bun build index.ts --outdir=dist",
     "server": "nohup bun run start > ./logs/bun-server.log 2>&1 &",
     "proxy": "nohup ngrok http 3000 --log=stdout > ./logs/ngrok-proxy.log 2> ./logs/ngrok-error.log &"
   },
   "dependencies": {
+    "@types/nodemailer": "^6.4.16",
     "firebase-admin": "^12.7.0",
-    "mongoose": "^8.6.1"
+    "mongoose": "^8.6.1",
+    "nodemailer": "^6.9.16",
+    "stripe": "^17.3.1"
   }
 }

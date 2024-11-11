@@ -22,11 +22,24 @@ import {
   getFrameworkInfo,
   getGithubAccessToken,
   getGithubUserDetails,
+  getRepoContents,
+  handleGreetMail,
   updateUserById,
 } from "./controllers/User.controller.ts";
 import { initializeApp } from "firebase-admin/app";
 import admin from "firebase-admin";
 import serviceAccountKey from "./serviceAccountKey.json";
+import {
+  createSupport,
+  getAllSupportTickets,
+} from "./controllers/Support.controller.ts";
+import Stripe from "stripe";
+import {
+  handleStripePayment,
+  handleWebHook,
+} from "./controllers/Payment.controller.ts";
+
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 initializeApp({
   credential: admin.credential.cert(serviceAccountKey as admin.ServiceAccount),
@@ -60,6 +73,16 @@ const server = Bun.serve({
 
       const apiEndpoint = `${method} ${url.pathname}`;
       console.log(Date.now(), apiEndpoint); // works as morgan for Bun
+
+      // if (method === "POST" && apiEndpoint === "POST /api/v1/user") {
+      //   // Run validation middleware before createUser
+      //   const validationResponse = await validateUser(req);
+      //   console.log("validte response :", validationResponse);
+      //   if (validationResponse) return validationResponse;
+
+      //   // Call createUser if validation passed
+      //   return createUser(req);
+      // }
 
       switch (apiEndpoint) {
         case "POST /api/v1/deploy-project":
@@ -98,6 +121,9 @@ const server = Bun.serve({
           return getGithubAccessToken(req);
 
         case "POST /api/v1/user/getRepoContents":
+          return getRepoContents(req);
+
+        case "POST /api/v1/repo/getFrameworkInfo":
           return getFrameworkInfo(req);
 
         case "POST /api/v1/getUserData":
@@ -105,6 +131,22 @@ const server = Bun.serve({
 
         case "POST /api/v1/user/getFirebaseUserByEmail":
           return getFirebaseUserFromEmail(req);
+
+        // Support API endpoints
+        case "POST /api/v1/user/support":
+          return createSupport(req);
+
+        case "GET /api/v1/user/support":
+          return getAllSupportTickets(req);
+
+        case "POST /api/v1/user/create-checkout-session":
+          return handleStripePayment(req);
+
+        case "POST /webhook":
+          return handleWebHook(req);
+
+        case "POST /api/v1/greet_mail":
+          return handleGreetMail(req);
 
         case "GET /api/v1/status":
           return addCorsHeaders(

@@ -1,27 +1,31 @@
 import admin from "firebase-admin";
 import { addCorsHeaders } from "../helpers/CorsHeader";
 import { UserModel } from "../models/User.models";
+import { sendWelcomeEmail } from "../utils";
 
 // create a new user
 export async function createUser(req: Request) {
   try {
     const data = await req.json();
-    console.log("data:", data);
 
     // Check if a user with the provided email or userUid already exists
     const existingUser = await UserModel.findOne({
-      $or: [{ email: data?.email }, { userUid: data?.userUid }],
+      $or: [{ email: data.email }, { userUid: data.userUid }],
     });
 
     if (existingUser) {
+      // Return a 409 Conflict response if the user already exists
       return addCorsHeaders(
-        new Response(JSON.stringify({ message: "User already exists" }), {
-          status: 201,
-        })
+        new Response(
+          JSON.stringify({
+            messge: "User already exists",
+          }),
+          { status: 201 }
+        )
       );
     }
 
-    // Create a new user if no matching user is found
+    // Create a new user since validation passed
     const newUser = new UserModel(data);
     await newUser.save();
 
@@ -38,15 +42,44 @@ export async function createUser(req: Request) {
   }
 }
 
-// get user by id
+// Function to get a user by ID
 export async function getUserById(req: Request) {
   try {
+    // Extract the `id` parameter from the URL's query parameters
+    const { searchParams } = new URL(req.url);
+    const userId = searchParams.get("id");
+
+    if (!userId) {
+      // Return a 400 Bad Request response if the ID parameter is missing
+      return addCorsHeaders(
+        new Response(JSON.stringify({ error: "User ID is required" }), {
+          status: 400,
+        })
+      );
+    }
+
+    // Fetch the user from the database by ID
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      // Return a 404 Not Found response if the user does not exist
+      return addCorsHeaders(
+        new Response(JSON.stringify({ error: "User not found" }), {
+          status: 404,
+        })
+      );
+    }
+
+    // Return the user data if found
     return addCorsHeaders(
-      new Response(JSON.stringify({ error: "Failed to update user" }), {
-        status: 500,
+      new Response(JSON.stringify(user), {
+        status: 200,
       })
     );
   } catch (error) {
+    console.error("Failed to get user:", error);
+
+    // Return a 500 Internal Server Error response if an error occurs
     return addCorsHeaders(
       new Response(JSON.stringify({ error: "Failed to get user" }), {
         status: 500,
@@ -226,12 +259,48 @@ export async function getGithubUserDetails(req: Request) {
   }
 }
 
+export async function getRepoContents(req: Request) {
+  try {
+    const data = await req.json();
+    const { owner, repo } = data;
+    const response = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/contents/`,
+      {
+        method: "GET",
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        //   Accept: "application/vnd.github.v3.raw", // To get the raw content
+        // },
+      }
+    );
+    const _data = await response.json();
+    console.log("data :", _data);
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          message: "frameworkInfo found successfully",
+          data: _data,
+        }),
+        {
+          status: 201,
+        }
+      )
+    );
+  } catch (error) {
+    return addCorsHeaders(
+      new Response(JSON.stringify({ error }), {
+        status: 500,
+      })
+    );
+  }
+}
+
 export async function getFrameworkInfo(req: Request) {
   try {
     const data = await req.json();
-    const { owner, repo, token } = data;
+    const { owner, repo, path } = data;
     const response = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/contents/package.json`,
+      `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
       {
         method: "GET",
         // headers: {
@@ -261,31 +330,29 @@ export async function getFrameworkInfo(req: Request) {
     );
   }
 }
-export async function getFrameworkContent(req: Request) {
+
+export async function handleGreetMail(req: Request) {
   try {
     const data = await req.json();
-    const { owner, repo, path } = data;
-    const response = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
-      {
-        method: "GET",
-      }
-    );
-    const _data = await response.json();
-    return addCorsHeaders(
-      new Response(
-        JSON.stringify({
-          message: "frameworkInfo found successfully",
-          data: _data,
-        }),
-        {
+
+    if (data) {
+      await sendWelcomeEmail(data?.email);
+
+      return addCorsHeaders(
+        new Response(JSON.stringify({ message: "mail send successfully" }), {
           status: 201,
-        }
-      )
+        })
+      );
+    }
+
+    return addCorsHeaders(
+      new Response(JSON.stringify({ message: "" }), {
+        status: 500,
+      })
     );
   } catch (error) {
     return addCorsHeaders(
-      new Response(JSON.stringify({ error: "Failed to get user" }), {
+      new Response(JSON.stringify({ error }), {
         status: 500,
       })
     );

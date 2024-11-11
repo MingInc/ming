@@ -40,11 +40,7 @@ export async function getUserData(token: string) {
   return data?.user;
 }
 
-export async function getFrameworkInfo(
-  owner: string | null,
-  repo: string,
-  token: string
-) {
+export async function getRepoContents(owner: string | null, repo: string) {
   const response = await fetch(
     `http://localhost:3000/api/v1/user/getRepoContents`,
     {
@@ -52,7 +48,25 @@ export async function getFrameworkInfo(
       body: JSON.stringify({
         owner,
         repo,
-        token,
+      }),
+    }
+  );
+  return await response.json();
+}
+
+export async function getFrameworkInfo(
+  owner: string | null,
+  repo: string,
+  path: string
+) {
+  const response = await fetch(
+    `http://localhost:3000/api/v1/repo/getFrameworkInfo`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        owner,
+        repo,
+        path,
       }),
     }
   );

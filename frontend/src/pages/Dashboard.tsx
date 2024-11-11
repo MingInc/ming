@@ -1,9 +1,9 @@
-import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 
 import { fetchProjects } from "@/contexts/ProjectContext/ProjectActions";
 import { useProjectContext } from "@/contexts/ProjectContext/ProjectContext";
 import { Outlet } from "react-router-dom";
+import { useAuth } from "@/hooks";
 
 export default function Dashboard() {
   const { authState } = useAuth();
