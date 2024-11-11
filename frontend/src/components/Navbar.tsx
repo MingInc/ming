@@ -226,31 +226,31 @@ export default function Navbar() {
                   <i className="ri-box-3-line"></i> Overview
                 </p>
                 <p
-                  onClick={() => navigate("boilerplates")}
+                  onClick={() => navigate("/dashboard/boilerplates")}
                   className="cursor-pointer text-foreground transition-colors hover:text-foreground flex items-center gap-1"
                 >
                   <i className="ri-archive-2-line"></i>Boilerplates
                 </p>
                 <p
-                  onClick={() => navigate("usage")}
+                  onClick={() => navigate("/dashboard/usage")}
                   className="cursor-pointer text-foreground transition-colors hover:text-foreground flex items-center gap-1"
                 >
                   <i className="ri-line-chart-line"></i>Usage
                 </p>
                 <p
-                  onClick={() => navigate("storage")}
+                  onClick={() => navigate("/dashboard/storage")}
                   className="cursor-pointer flex items-center gap-1 text-foreground transition-colors hover:text-foreground"
                 >
                   <i className="ri-hard-drive-3-line"></i> Storage
                 </p>
                 <p
-                  onClick={() => navigate("support")}
+                  onClick={() => navigate("/dashboard/support")}
                   className="cursor-pointer flex items-center gap-1 text-foreground transition-colors hover:text-foreground"
                 >
                   <i className="ri-customer-service-line"></i> Support
                 </p>
                 <p
-                  onClick={() => navigate("settings")}
+                  onClick={() => navigate("/dashboard/settings")}
                   className="cursor-pointer flex items-center gap-1 text-foreground transition-colors hover:text-foreground"
                 >
                   <i className="ri-settings-4-line"></i> Settings
