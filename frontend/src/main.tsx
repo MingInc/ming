@@ -4,19 +4,13 @@ import "./index.css";
 import "remixicon/fonts/remixicon.css";
 
 import Layout from "./components/Layout";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
 import { AuthProvider } from "./contexts/AuthContext";
-import Dashboard from "./pages/Dashboard";
-import Projects from "./pages/DeployProject";
 
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
-import CurrentBuild from "./pages/CurrentBuild";
+
 import { ProjectProvider } from "./contexts/ProjectContext/ProjectContext";
-import ProjectPreview from "./pages/ProjectPreview";
-import Pricing from "./pages/Pricing";
 import { RepoProvider } from "./contexts/RepoContext";
 import NewProject from "./components/NewProject.component";
 import TemplatesPage from "./pages/Boilerplates";
@@ -25,6 +19,9 @@ import IPFSStorage from "./pages/storage";
 import SupportCenter from "./pages/support-center";
 import SettingsPage from "./pages/settings";
 import DeployedProjects from "./components/ProjectCard";
+import { Billing, CurrentBuild, Dashboard, Home, Login, ProjectPreview } from "./pages";
+import { Pricing } from "./pages/Pricing";
+import Projects from "./pages/DeployProject"
 
 const router = createBrowserRouter([
   {
@@ -105,7 +102,7 @@ const router = createBrowserRouter([
           },
           {
             path:"billing",
-            element: <h1>Welcome to Billing Page</h1>
+            element:  <Billing />
           }
         ],
       },

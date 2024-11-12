@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useAuth, useUser } from "@/hooks";
+import { Badge } from "./ui";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ export default function Navbar() {
               navigate("/")
             }
           }}
-          className="flex items-center gap-1 cursor-pointer"
+          className="flex items-center gap-1 cursor-pointer relative"
         >
           <img
             className="w-6"
@@ -69,6 +70,11 @@ export default function Navbar() {
             alt="Ming Logo"
           />
           <p className="text-sm font-semibold">Ming</p>
+          {
+            user && user[0]?.premium && (
+              <Badge className=" bg-green-500 absolute -top-[16px] left-10 text-xs" >Pro</Badge>
+            )
+          }
         </div>
         {authState.isAuthenticated ? (
           <DropdownMenu>

@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks";
 
-export default function Login() {
+export function Login() {
   const [auth, setAuth] = useState<any>();
   const { login, authState } = useAuth();
   const navigate = useNavigate();
