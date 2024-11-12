@@ -48,10 +48,7 @@ initializeApp({
 type Method = "GET" | "PUT" | "POST" | "DELETE" | "PATCH" | "OPTIONS";
 
 mongoose
-  .connect(
-    "mongodb://localhost:27017/ming"
-    // `mongodb+srv://Cluster53271:${process.env.MONGODB_PASSWORD}@cluster53271.l3uzg.mongodb.net/ming?retryWrites=true&w=majority&appName=Cluster53271`
-  )
+  .connect(`${process.env.MONGODB_URI}`)
   .then(() => {
     console.log("Connected to MongoDB!");
   })

@@ -1,4 +1,3 @@
-
 import { useLocation, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -33,8 +32,8 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { authState, logout } = useAuth();
-  const { user } = useUser(authState?.user?.uid)
-  console.log("user :",user)
+  const { user } = useUser(authState?.user?.uid);
+  console.log("user :", user);
 
   const isDashboardRoute =
     location.pathname === "/dashboard" ||
@@ -55,10 +54,10 @@ export default function Navbar() {
       <nav className="flex items-center justify-between flex-wrap py-3 mx-[2vw]">
         <div
           onClick={() => {
-            if(authState.isAuthenticated){
-              navigate("/dashboard")
-            }else{
-              navigate("/")
+            if (authState.isAuthenticated) {
+              navigate("/dashboard");
+            } else {
+              navigate("/");
             }
           }}
           className="flex items-center gap-1 cursor-pointer"
@@ -81,7 +80,11 @@ export default function Navbar() {
                   </AvatarFallback>
                 </Avatar>
                 <p className="text-sm">
-                  {(authState && authState?.user?.email.split("@")[0]) ||
+                  {(authState &&
+                    authState.user &&
+                    (authState.user.email
+                      ? authState.user.email.split("@")[0]
+                      : authState.user.displayName)) ||
                     authState.user.data.email}
                 </p>
               </div>
@@ -172,6 +175,7 @@ export default function Navbar() {
           </button>
         )}
       </nav>
+      <hr />
       {isDashboardRoute && (
         <div className="sticky top-0 flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6 justify-between">
           <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
