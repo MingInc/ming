@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 export const useUser = (userId: string) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<Component.User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,7 +23,7 @@ export const useUser = (userId: string) => {
           throw new Error("Failed to fetch user");
         }
 
-        const data = await response.json();
+        const data: Component.User[] = await response.json();
         if (data) {
           setUser(data);
         }

@@ -71,7 +71,7 @@ export default function Navbar() {
           />
           <p className="text-sm font-semibold">Ming</p>
           {
-            user && user[0].premium && (
+            user && user[0]?.premium && (
               <Badge className=" bg-green-500 absolute -top-[16px] left-10 text-xs" >Pro</Badge>
             )
           }
