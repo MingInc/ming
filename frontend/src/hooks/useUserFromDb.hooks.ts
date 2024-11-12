@@ -13,8 +13,9 @@ export const useUser = (userId: string) => {
         setLoading(true);
         setError(null);
         const response = await fetch(
-          `http://localhost:3000/api/v1/user/${userId}`,{
-            method:"GET",
+          `http://localhost:3000/api/v1/user?id=${userId}`,
+          {
+            method: "GET",
           }
         );
 
@@ -23,7 +24,9 @@ export const useUser = (userId: string) => {
         }
 
         const data = await response.json();
-        setUser(data);
+        if (data) {
+          setUser(data);
+        }
       } catch (error) {
         setError((error as Error).message);
       } finally {

@@ -5,7 +5,7 @@ import { useProjectContext } from "@/contexts/ProjectContext/ProjectContext";
 import { Outlet } from "react-router-dom";
 import { useAuth } from "@/hooks";
 
-export default function Dashboard() {
+export function Dashboard() {
   const { authState } = useAuth();
   const { projectState, projectDispatch } = useProjectContext();
 

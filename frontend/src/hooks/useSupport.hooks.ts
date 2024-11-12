@@ -11,6 +11,7 @@ export const useSupport = () => {
   const [error, setError] = useState<string | null>(null);
   const [creating, setCreating] = useState<boolean>(false);
   const { authState } = useAuth();
+  // const { closeDialog } = useDialog();
 
   // Fetching the support cases from the server
   useEffect(() => {
@@ -59,13 +60,12 @@ export const useSupport = () => {
       if (!response.ok) {
         throw new Error("Failed to create new case");
       }
-
       const data: Component.Ticket = await response.json();
       setSupport((prevSupport) => [...prevSupport, data]);
     } catch (error) {
-      setError((error as Error).message); 
+      setError((error as Error).message);
     } finally {
-      setCreating(false); 
+      setCreating(false);
     }
   };
 

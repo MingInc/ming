@@ -24,6 +24,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { PlusCircle, Search } from "lucide-react";
 import { useAuth, useFileInput, useSupport } from "@/hooks";
 import { cn } from "@/lib/utils";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { useToast } from "@/components/ui";
 
 // type Case = {
 //   id: string;
@@ -38,11 +40,10 @@ export default function SupportCenter() {
   const { authState } = useAuth();
   const { file, handleFileChange, fileName, fileURL, handleRemoveFile } =
     useFileInput();
-  const { cases, filteredCases, createCase, searchTerm, setSearchTerm , creating } =
+  const {  filteredCases, createCase, searchTerm, setSearchTerm , creating } =
     useSupport();
+ const { toast  } = useToast()
 
-  console.log(cases);
-  console.log("filtered Cases :", filteredCases);
 
   // const filteredCases = cases.filter((c) =>
   //   c.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -55,8 +56,6 @@ export default function SupportCenter() {
       title: newCaseTitle,
       description: newCaseDescription,
     };
-    console.log(file);
-    console.log(ticketInfo);
     formData.append("ticketInfo", JSON.stringify(ticketInfo));
     formData.append("userInfo", authState.user?.uid);
     formData.append("status", "open");
@@ -64,7 +63,12 @@ export default function SupportCenter() {
       formData.append("image", file);
     }
 
-    await createCase(formData);
+    createCase(formData);
+
+    toast({
+      title: "Tickt Submitted Successfully",
+      description: "Please Check your email further",
+    });
 
     setNewCaseTitle("");
     setNewCaseDescription("");
@@ -167,7 +171,10 @@ export default function SupportCenter() {
                   </div>
                 </div>
                 <DialogFooter>
+                  <DialogClose>
+
                   <Button disabled = {creating} onClick={createNewCase}>Submit Case</Button>
+                  </DialogClose>
                 </DialogFooter>
               </DialogContent>
             </Dialog>

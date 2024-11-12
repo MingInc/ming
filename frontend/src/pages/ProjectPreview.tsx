@@ -30,7 +30,7 @@ const projectData = {
   created_at: new Date("2023-05-15T10:30:00Z"),
 }
 
-export default function ProjectPreview() {
+export function ProjectPreview() {
   const [activeTab, setActiveTab] = useState("overview")
 
   return (

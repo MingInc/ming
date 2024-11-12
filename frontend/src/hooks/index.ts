@@ -11,3 +11,4 @@ export * from "./useFileInput.hooks";
 export * from "./useSupport.hooks";
 export * from "./useStripe.hooks";
 export * from "./useUserFromDb.hooks";
+export * from "./useDialog.hooks";

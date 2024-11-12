@@ -7,7 +7,7 @@ import {
 
 import { useEffect, useRef, useState } from "react";
 
-export default function CurrentBuild() {
+export function CurrentBuild() {
   const [projectDeploymentPayload, setProjectDeploymentPayload] = useState({
     githubUrl: "", // Initialize with a default value
     projectName: "",

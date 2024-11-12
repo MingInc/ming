@@ -21,7 +21,8 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Bell, CreditCard, Key, Lock, Menu, User } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
+import { useAuth, useUser } from "@/hooks";
 
 // Define the type for navigation item
 type NavigationItem = {
@@ -39,6 +40,25 @@ export default function SettingsPage() {
   const [language, setLanguage] = useState("en");
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const navigate = useNavigate()
+  const {authState} = useAuth()
+  const { user } = useUser(authState?.user?.uid)
+
+  console.log("user :",user)
+
+  useEffect(() => {
+    const storedActiveSection = localStorage.getItem("activeSection");
+    if (storedActiveSection) {
+      setActiveSection(storedActiveSection);
+    }
+  },[])
+
+  useEffect(() => {
+    localStorage.setItem("activeSection", activeSection);
+  }, [activeSection]);
+
+  // useEffect(() => {
+  //   setActiveSection("account")
+  // },[location])
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -233,7 +253,11 @@ export default function SettingsPage() {
             </CardContent>
             <CardFooter className="flex justify-between">
               <Button variant="outline">View Invoices</Button>
-              <Button onClick={() => navigate("/pricing")}>Upgrade Plan</Button>
+              {
+                user && user[0]?.premium === false && (
+                  <Button onClick={() => navigate("/pricing")}>Upgrade Plan</Button>
+                )
+              }
             </CardFooter>
           </Card>
         );
