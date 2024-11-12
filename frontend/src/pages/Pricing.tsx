@@ -14,7 +14,7 @@ import { useAuth, useStripe } from "@/hooks";
 
 // const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
-export default function Pricing() {
+export function Pricing() {
   const [loading, setLoading] = useState<boolean>(false);
   const { authState } = useAuth()
   const stripe = useStripe()

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "./useAuth.hooks";
 
 export const useSupport = () => {
-  const [support, setSupport] = useState<Component.Ticket[]>([]); // Directly storing the array of tickets
+  const [support, setSupport] = useState<Component.Ticket[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "all" | "open" | "transferred" | "closed"
@@ -11,12 +11,13 @@ export const useSupport = () => {
   const [error, setError] = useState<string | null>(null);
   const [creating, setCreating] = useState<boolean>(false);
   const { authState } = useAuth();
+  // const { closeDialog } = useDialog();
 
   // Fetching the support cases from the server
   useEffect(() => {
     const fetchSupport = async () => {
-      setLoading(true); // Start loading
-      setError(null); // Reset error state before the fetch
+      setLoading(true);
+      setError(null);
 
       try {
         const response = await fetch(
@@ -29,21 +30,20 @@ export const useSupport = () => {
           throw new Error("Failed to fetch support tickets");
         }
         const data = await response.json();
-        setSupport(data?.tickets || []); // Assuming the response is an array of ticket objects
+        setSupport(data?.tickets || []);
       } catch (error) {
         setError((error as Error).message);
       } finally {
-        setLoading(false); // End loading, no matter what
+        setLoading(false);
       }
     };
 
     fetchSupport();
   }, []);
 
-  // Function to create a new support case
   const createCase = async (formData: FormData) => {
-    setCreating(true); // Start loading while creating a case
-    setError(null); // Reset any previous error messages
+    setCreating(true);
+    setError(null);
 
     try {
       const response = await fetch(
@@ -60,14 +60,12 @@ export const useSupport = () => {
       if (!response.ok) {
         throw new Error("Failed to create new case");
       }
-
       const data: Component.Ticket = await response.json();
-      // Add the new ticket to the existing tickets list
       setSupport((prevSupport) => [...prevSupport, data]);
     } catch (error) {
-      setError((error as Error).message); // Set error message if creation fails
+      setError((error as Error).message);
     } finally {
-      setCreating(false); // End loading for creation process
+      setCreating(false);
     }
   };
 

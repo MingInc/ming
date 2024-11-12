@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 export const useUser = (userId: string) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<Component.User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -13,8 +13,9 @@ export const useUser = (userId: string) => {
         setLoading(true);
         setError(null);
         const response = await fetch(
-          `http://localhost:3000/api/v1/user/${userId}`,{
-            method:"GET",
+          `http://localhost:3000/api/v1/user?id=${userId}`,
+          {
+            method: "GET",
           }
         );
 
@@ -22,8 +23,10 @@ export const useUser = (userId: string) => {
           throw new Error("Failed to fetch user");
         }
 
-        const data = await response.json();
-        setUser(data);
+        const data: Component.User[] = await response.json();
+        if (data) {
+          setUser(data);
+        }
       } catch (error) {
         setError((error as Error).message);
       } finally {

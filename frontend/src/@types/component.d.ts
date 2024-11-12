@@ -28,4 +28,16 @@ declare namespace Component {
     createdAt?: string; // Corresponds to the `timestamps` feature in Mongoose
     updatedAt?: string; // Corresponds to the `timestamps` feature in Mongoose
   };
+
+  export interface User {
+    userUid: string;
+    email?: string;
+    provider: string[];
+    created_at: Date;
+    githubUrl?: string;
+    accessToken?: string;
+    github_accessToken?: string;
+    role: "user" | "admin";
+    premium: boolean;
+  }
 }

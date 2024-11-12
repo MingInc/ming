@@ -1,7 +1,7 @@
 import admin from "firebase-admin";
 import { addCorsHeaders } from "../helpers/CorsHeader";
-import { UserModel } from "../models/User.models";
 import { sendWelcomeEmail } from "../utils";
+import { SupportModel, UserModel } from "../models";
 
 // create a new user
 export async function createUser(req: Request) {
@@ -29,9 +29,7 @@ export async function createUser(req: Request) {
     const newUser = new UserModel(data);
     await newUser.save();
 
-    if (newUser) {
-      await sendWelcomeEmail(newUser?.email!);
-    }
+    sendWelcomeEmail(newUser?.email!);
 
     return addCorsHeaders(
       new Response(JSON.stringify(newUser), { status: 201 })
@@ -49,14 +47,8 @@ export async function createUser(req: Request) {
 // Function to get a user by ID
 export async function getUserById(req: Request) {
   try {
-    // Extract the `id` parameter from the URL's query parameters
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("id");
-
-    // console.log(req.params)
-
-    console.log("user id :", userId);
-    console.log("req :", req);
 
     if (!userId) {
       // Return a 400 Bad Request response if the ID parameter is missing
@@ -151,6 +143,67 @@ export async function updateUserById(req: Request) {
       new Response(JSON.stringify({ error: "Failed to update user" }), {
         status: 500,
       })
+    );
+  }
+}
+
+export async function deleteUser(req: Request) {
+  try {
+    const { userUid } = await req.json();
+
+    if (!userUid) {
+      return addCorsHeaders(
+        new Response(
+          JSON.stringify({
+            error: "User UID is required",
+          }),
+          { status: 400 }
+        )
+      );
+    }
+
+    // Check if the user exists
+    const user = await UserModel.findOne({ userUid });
+    if (!user) {
+      return addCorsHeaders(
+        new Response(
+          JSON.stringify({
+            error: "User not found",
+          }),
+          { status: 404 }
+        )
+      );
+    }
+
+    // Step 1: Delete related support tickets (find by userUid in the userInfo field)
+    await SupportModel.deleteMany({ userInfo: userUid });
+    console.log(
+      `All support tickets for user with UID ${userUid} have been deleted.`
+    );
+
+    // Step 2: Delete the user from the UserModel
+    await UserModel.deleteOne({ userUid });
+    console.log(`User with UID ${userUid} has been deleted.`);
+
+    // Return success response
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          message:
+            "User and their support tickets have been deleted successfully",
+        }),
+        { status: 200 }
+      )
+    );
+  } catch (error) {
+    console.error("Failed to delete user and support tickets:", error);
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          error: "Failed to delete user and support tickets",
+        }),
+        { status: 500 }
+      )
     );
   }
 }

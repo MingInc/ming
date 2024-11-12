@@ -21,7 +21,7 @@ const features = [
   },
 ];
 
-export default function Home() {
+export function Home() {
 
   // useEffect(() => {
   //   const _user = JSON.parse(

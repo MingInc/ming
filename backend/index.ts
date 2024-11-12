@@ -111,7 +111,7 @@ const server = Bun.serve({
         case "POST /api/v1/user":
           return createUser(req);
 
-        case "GET /api/v1/user/:id":
+        case `GET /api/v1/user`:
           return getUserById(req);
 
         case "POST /api/v1/user/update":
