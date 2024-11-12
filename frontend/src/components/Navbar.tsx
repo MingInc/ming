@@ -86,9 +86,18 @@ export default function Navbar() {
                   </AvatarFallback>
                 </Avatar>
                 <p className="text-sm">
+<<<<<<< HEAD
                   {authState?.user?.email
                     ? authState.user.email.split("@")[0]
                     : authState.user.displayName}
+=======
+                  {(authState &&
+                    authState.user &&
+                    (authState.user.email
+                      ? authState.user.email.split("@")[0]
+                      : authState.user.displayName)) ||
+                    authState.user.data.email}
+>>>>>>> 353202c8e23afbe17d4747ae8eacd70ec7e2e170
                 </p>
               </div>
             </DropdownMenuTrigger>
@@ -178,6 +187,7 @@ export default function Navbar() {
           </button>
         )}
       </nav>
+      <hr />
       {isDashboardRoute && (
         <div className="sticky top-0 flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6 justify-between">
           <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">

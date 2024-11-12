@@ -4,7 +4,10 @@
 PROJECT_NAME=$1
 GIT_URL=$2
 PROJECT_FOLDER_NAME=$3
+<<<<<<< HEAD
 NGROK_AUTH_TOKEN=$4  # Optional: If you want to use ngrok instead of Serveo
+=======
+>>>>>>> 353202c8e23afbe17d4747ae8eacd70ec7e2e170
 
 # Function to clean up Docker container and image
 cleanup() {

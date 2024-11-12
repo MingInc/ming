@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 const Layout: React.FC = () => {
   return (
     <div className="layout-container grid grid-rows-[auto_1fr_auto] min-h-screen">
-      <header>
+      <header className="border-b-1 border-black">
         {/* this is topbar */}
         <div className="bg-black text-white text-sm py-1 font-medium px-[3vw]">
           <i className="ri-notification-2-line"></i> We received a Seed Grant
