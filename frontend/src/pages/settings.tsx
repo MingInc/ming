@@ -21,6 +21,14 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Bell, CreditCard, Key, Lock, Menu, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+// Define the type for navigation item
+type NavigationItem = {
+  id: string;
+  label: string;
+  icon: React.ComponentType;
+};
 
 export default function SettingsPage() {
   const [activeSection, setActiveSection] = useState("account");
@@ -30,6 +38,7 @@ export default function SettingsPage() {
   const [twoFactor, setTwoFactor] = useState(false);
   const [language, setLanguage] = useState("en");
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -40,7 +49,7 @@ export default function SettingsPage() {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  const navigationItems = [
+  const navigationItems : NavigationItem[] = [
     { id: "account", label: "Account", icon: User },
     { id: "security", label: "Security", icon: Lock },
     { id: "notifications", label: "Notifications", icon: Bell },
@@ -57,7 +66,8 @@ export default function SettingsPage() {
           className="w-full justify-start"
           onClick={() => setActiveSection(item.id)}
         >
-          <item.icon className="mr-2 h-4 w-4" />
+          {/* className="mr-2 h-4 w-4" */}
+          <item.icon  />
           {item.label}
         </Button>
       ))}
@@ -223,7 +233,7 @@ export default function SettingsPage() {
             </CardContent>
             <CardFooter className="flex justify-between">
               <Button variant="outline">View Invoices</Button>
-              <Button>Upgrade Plan</Button>
+              <Button onClick={() => navigate("/pricing")}>Upgrade Plan</Button>
             </CardFooter>
           </Card>
         );

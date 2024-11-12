@@ -77,7 +77,9 @@ export async function deployProject(req: any) {
 
                 // Check for build time in each log entry
                 if (decodedChunk.includes("build time:")) {
-                  const match = decodedChunk.match(/build time: (\d+) seconds./);
+                  const match = decodedChunk.match(
+                    /build time: (\d+) seconds./
+                  );
                   if (match) {
                     buildTimeInSeconds = match[1];
                   }
@@ -119,7 +121,9 @@ export async function deployProject(req: any) {
 
             if (!project) {
               // console.error("Project not found with _id:", _id);
-              return addCorsHeaders(new Response(JSON.stringify({project: []}), { status: 200 }))
+              return addCorsHeaders(
+                new Response(JSON.stringify({ project: [] }), { status: 200 })
+              );
             }
 
             // console.log("Project updated successfully:", project);
@@ -139,6 +143,98 @@ export async function deployProject(req: any) {
     );
   } catch (err: any) {
     console.error("Script execution error:", err);
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          message: "Script execution failed",
+          error: err.stderr ? err.stderr.toString() : err.message,
+        }),
+        {
+          headers: { "Content-Type": "application/json" },
+          status: 500,
+        }
+      )
+    );
+  }
+}
+
+export async function getAccessToken(req: Request) {
+  try {
+    const url = new URL(req.url);
+    const params = Object.fromEntries(url.searchParams.entries());
+
+    const response = await fetch(
+      `https://github.com/login/oauth/access_token?client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_CLIENT_SECRET}&code=${params.code}`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          message: "default success message",
+          data,
+        }),
+        {
+          headers: { "Content-Type": "text/plain" },
+        }
+      )
+    );
+  } catch (err: any) {
+    console.error("Error :", err);
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          message: "Script execution failed",
+          error: err.stderr ? err.stderr.toString() : err.message,
+        }),
+        {
+          headers: { "Content-Type": "application/json" },
+          status: 500,
+        }
+      )
+    );
+  }
+}
+
+export async function getUserData(req: Request) {
+  try {
+    const authHeader = req.headers.get("Authorization");
+    const response = await fetch("https://api.github.com/user", {
+      method: "GET",
+      headers: {
+        Authorization: authHeader || "",
+      },
+    });
+
+    const data = await response.json();
+
+    const emailResponse = await fetch("https://api.github.com/user/emails", {
+      method: "GET",
+      headers: {
+        Authorization: authHeader || "",
+      },
+    });
+
+    const emails = await emailResponse.json();
+    console.log(emails);
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          message: "default success message",
+          data,
+        }),
+        {
+          headers: { "Content-Type": "text/plain" },
+        }
+      )
+    );
+  } catch (err: any) {
+    console.error("Error :", err);
     return addCorsHeaders(
       new Response(
         JSON.stringify({

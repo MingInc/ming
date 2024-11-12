@@ -44,7 +44,7 @@ fi
 
 # Navigate to the project directory and build the project
 echo "Building the project..."
-if ! docker exec $CONTAINER_NAME /bin/bash -c "cd $PROJECT_FOLDER_NAME && npm install && npm run build && ngrok config add-authtoken $NGROK_AUTH_TOKEN"; then
+if ! docker exec $CONTAINER_NAME /bin/bash -c "cd $PROJECT_FOLDER_NAME && npm install && npm run build"; then
     echo "Error: Project build failed."
     cleanup
     exit 1
@@ -60,7 +60,7 @@ fi
 
 # Start ngrok with a wildcard subdomain for the project
 echo "Starting ngrok with subdomain..."
-docker exec $CONTAINER_NAME /bin/bash -c "ngrok http --domain ming.ngrok.dev 8080 > /dev/null 2>&1 &" # PORT Should be dynamic
+docker exec $CONTAINER_NAME /bin/bash -c "ngrok http 8080 > /dev/null 2>&1 &" # PORT Should be dynamic
 
 # Output ngrok logs
 docker exec $CONTAINER_NAME /bin/bash -c "cat ngrok.log"

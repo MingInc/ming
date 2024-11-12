@@ -18,6 +18,7 @@ const projectSchema = new mongoose.Schema(
       buildUrl: { type: String },
       buildTime: { type: String },
     },
+    loginProvider: { type: String },
     created_at: {
       type: Date,
       default: Date.now(),

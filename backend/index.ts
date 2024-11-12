@@ -2,7 +2,11 @@ import {
   createProject,
   getProjectsByUser,
 } from "./controllers/ProjectRecord.ts";
-import { deployProject } from "./controllers/DeployProject.ts";
+import {
+  deployProject,
+  getAccessToken,
+  getUserData,
+} from "./controllers/DeployProject.ts";
 import {
   createBoilerplate,
   getAllBoilerplates,
@@ -12,12 +16,41 @@ import {
 } from "./controllers/Boilerplate.ts";
 import { addCorsHeaders } from "./helpers/CorsHeader.ts";
 import * as mongoose from "mongoose";
+import {
+  createUser,
+  getFirebaseUserFromEmail,
+  getFrameworkInfo,
+  getGithubAccessToken,
+  getGithubUserDetails,
+  getRepoContents,
+  getUserById,
+  updateUserById,
+} from "./controllers/User.controller.ts";
+import { initializeApp } from "firebase-admin/app";
+import admin from "firebase-admin";
+import serviceAccountKey from "./serviceAccountKey.json";
+import {
+  createSupport,
+  getAllSupportTickets,
+} from "./controllers/Support.controller.ts";
+import Stripe from "stripe";
+import {
+  handleStripePayment,
+  handleWebHook,
+} from "./controllers/Payment.controller.ts";
 
-type Method = "GET" | "PUT" | "POST" | "DELETE" | "OPTIONS";
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+initializeApp({
+  credential: admin.credential.cert(serviceAccountKey as admin.ServiceAccount),
+});
+
+type Method = "GET" | "PUT" | "POST" | "DELETE" | "PATCH" | "OPTIONS";
 
 mongoose
   .connect(
-    `mongodb+srv://Cluster53271:${process.env.MONGODB_PASSWORD}@cluster53271.l3uzg.mongodb.net/ming?retryWrites=true&w=majority&appName=Cluster53271`
+    "mongodb://localhost:27017/ming"
+    // `mongodb+srv://Cluster53271:${process.env.MONGODB_PASSWORD}@cluster53271.l3uzg.mongodb.net/ming?retryWrites=true&w=majority&appName=Cluster53271`
   )
   .then(() => {
     console.log("Connected to MongoDB!");
@@ -41,6 +74,16 @@ const server = Bun.serve({
       const apiEndpoint = `${method} ${url.pathname}`;
       console.log(Date.now(), apiEndpoint); // works as morgan for Bun
 
+      // if (method === "POST" && apiEndpoint === "POST /api/v1/user") {
+      //   // Run validation middleware before createUser
+      //   const validationResponse = await validateUser(req);
+      //   console.log("validte response :", validationResponse);
+      //   if (validationResponse) return validationResponse;
+
+      //   // Call createUser if validation passed
+      //   return createUser(req);
+      // }
+
       switch (apiEndpoint) {
         case "POST /api/v1/deploy-project":
           return deployProject(req);
@@ -60,6 +103,50 @@ const server = Bun.serve({
           return updateBoilerplate(req); // Update a boilerplate by ID
         case `DELETE /api/v1/boilerplate/${url.pathname.split("/")[4]}`:
           return deleteBoilerplate(req); // Delete a boilerplate by ID
+
+        case "GET /api/v1/getAccessToken":
+          return getAccessToken(req);
+
+        case "GET /api/v1/getUserData":
+          return getUserData(req);
+
+        // User API endpoints
+        case "POST /api/v1/user":
+          return createUser(req);
+
+        case "GET /api/v1/user/:id":
+          return getUserById(req);
+
+        case "POST /api/v1/user/update":
+          return updateUserById(req);
+
+        case "POST /api/v1/user/accessToken":
+          return getGithubAccessToken(req);
+
+        case "POST /api/v1/user/getRepoContents":
+          return getRepoContents(req);
+
+        case "POST /api/v1/repo/getFrameworkInfo":
+          return getFrameworkInfo(req);
+
+        case "POST /api/v1/getUserData":
+          return getGithubUserDetails(req);
+
+        case "POST /api/v1/user/getFirebaseUserByEmail":
+          return getFirebaseUserFromEmail(req);
+
+        // Support API endpoints
+        case "POST /api/v1/user/support":
+          return createSupport(req);
+
+        case "GET /api/v1/user/support":
+          return getAllSupportTickets(req);
+
+        case "POST /api/v1/user/create-checkout-session":
+          return handleStripePayment(req);
+
+        case "POST /webhook":
+          return handleWebHook(req);
 
         case "GET /api/v1/status":
           return addCorsHeaders(

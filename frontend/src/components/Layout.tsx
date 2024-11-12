@@ -1,13 +1,10 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import Navbar from "./Navbar";
+import { Outlet } from "react-router-dom";
 
-interface LayoutProps {
-  children: ReactNode;
-}
-
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC = () => {
   return (
-    <div className="layout-container">
+    <div className="layout-container grid grid-rows-[auto_1fr_auto] min-h-screen">
       <header>
         {/* this is topbar */}
         <div className="bg-black text-white text-sm py-1 font-medium px-[3vw]">
@@ -24,7 +21,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
         <Navbar />
       </header>
-      <main className="layout-main border-t-[0.5px]">{children}</main>
+      <main className="layout-main border-t-[0.5px]">
+          <div className="flex w-full flex-col">
+            <main className="mx-[5vw] py-3">
+              <Outlet />
+            </main>
+          </div>
+      </main>
       <footer className="layout-footer mb-3">
         <div>
           <div className="flex gap-3 items-center justify-center text-xl mt-6">
