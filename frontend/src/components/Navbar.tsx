@@ -86,18 +86,12 @@ export default function Navbar() {
                   </AvatarFallback>
                 </Avatar>
                 <p className="text-sm">
-<<<<<<< HEAD
-                  {authState?.user?.email
-                    ? authState.user.email.split("@")[0]
-                    : authState.user.displayName}
-=======
                   {(authState &&
                     authState.user &&
                     (authState.user.email
                       ? authState.user.email.split("@")[0]
                       : authState.user.displayName)) ||
                     authState.user.data.email}
->>>>>>> 353202c8e23afbe17d4747ae8eacd70ec7e2e170
                 </p>
               </div>
             </DropdownMenuTrigger>
