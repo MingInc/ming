@@ -22,6 +22,7 @@ import DeployedProjects from "./components/ProjectCard";
 import { Billing, CurrentBuild, Dashboard, Home, Login, ProjectPreview } from "./pages";
 import { Pricing } from "./pages/Pricing";
 import Projects from "./pages/DeployProject"
+import NotFound from "./pages/NotFound.pages";
 
 const router = createBrowserRouter([
   {
@@ -108,6 +109,10 @@ const router = createBrowserRouter([
       },
     ]
   },
+  {
+    path:"*",
+    element:<NotFound />
+  }
 ]);
 
 createRoot(document.getElementById("root")!).render(

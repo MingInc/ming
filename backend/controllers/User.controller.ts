@@ -208,6 +208,157 @@ export async function deleteUser(req: Request) {
   }
 }
 
+// github controller
+
+export async function loginWithGithub(req: Request) {
+  try {
+    console.log("redirect URI :", process.env.GITHUB_REDIRECT_URI);
+    const clientId = process.env.GITHUB_CLIENT_ID;
+    const redirectUri = process.env.GITHUB_REDIRECT_URI as string;
+    const scope = "user repo"; // Define the scope according to your needs
+    const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
+
+    return addCorsHeaders(
+      new Response(null, {
+        status: 302,
+        headers: {
+          Location: url,
+        },
+      })
+    );
+  } catch (error) {
+    return addCorsHeaders(
+      new Response(JSON.stringify({ error: "Failed to login with github" }), {
+        status: 500,
+      })
+    );
+  }
+}
+
+export async function handleGithubCallback(req: Request) {
+  try {
+    const url = new URL(req.url);
+    const code = url.searchParams.get("code");
+
+    if (!code) {
+      return addCorsHeaders(
+        new Response(
+          JSON.stringify({ message: "Authorization code is missing" }),
+          {
+            status: 500,
+          }
+        )
+      );
+    }
+
+    const clientId = process.env.GITHUB_CLIENT_ID;
+    const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+    const redirectUri = process.env.GITHUB_REDIRECT_URI;
+
+    const response = await fetch(
+      "https://github.com/login/oauth/access_token",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json", // Ensure the body is JSON encoded
+        },
+        body: JSON.stringify({
+          client_id: clientId,
+          client_secret: clientSecret,
+          code,
+          redirect_uri: redirectUri,
+        }),
+      }
+    );
+
+    // Check if the request was successful
+    if (!response.ok) {
+      throw new Error("Failed to exchange code for access token");
+    }
+
+    const data = await response.json();
+
+    console.log("data :", data);
+
+    const { access_token, refresh_token } = data;
+
+    //  Fetch user details from GitHub using the access token
+    const userResponse = await fetch("https://api.github.com/user", {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+
+    if (!userResponse.ok) {
+      throw new Error("Failed to fetch user data from GitHub");
+    }
+
+    const userData = await userResponse.json();
+
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({
+          message: "Login with github",
+          data: JSON.stringify({
+            access_token,
+            refresh_token,
+            user: userData,
+          }),
+        }),
+        {
+          status: 201,
+        }
+      )
+    );
+  } catch (error) {
+    return addCorsHeaders(
+      new Response(JSON.stringify({ error: "Failed to login with github" }), {
+        status: 500,
+      })
+    );
+  }
+}
+
+export async function handleGithubRevoke(req: Request) {
+  try {
+    const url = new URL(req.url);
+    const token = url.searchParams.get("token");
+
+    const response = await fetch(
+      `https://api.github.com/applications/${process.env.GITHUB_CLIENT_ID}/tokens/${token}`,
+      {
+        headers: {
+          Authorization: `Basic ${Buffer.from(
+            process.env.GITHUB_CLIENT_ID +
+              ":" +
+              process.env.GITHUB_CLIENT_SECRET
+          ).toString("base64")}`,
+        },
+      }
+    );
+    const data = await response.json();
+    console.log("data :", data);
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({ message: "Revoked github access token successfully" }),
+        {
+          status: 201,
+        }
+      )
+    );
+  } catch (error) {
+    return addCorsHeaders(
+      new Response(
+        JSON.stringify({ message: "Failed to revoke token :", error: error }),
+        {
+          status: 500,
+        }
+      )
+    );
+  }
+}
+
 export async function getGithubAccessToken(req: Request) {
   try {
     const data = await req.json();

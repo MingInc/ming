@@ -72,3 +72,41 @@ export async function getFrameworkInfo(
   );
   return await response.json();
 }
+
+export const refreshGitHubToken = async (refreshToken: string) => {
+  try {
+    const response = await fetch(
+      "https://github.com/login/oauth/access_token",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          client_id: process.env.GITHUB_CLIENT_ID,
+          client_secret: process.env.GITHUB_CLIENT_SECRET,
+          refresh_token: refreshToken,
+          grant_type: "refresh_token",
+        }),
+      }
+    );
+    const data = await response.json();
+    const { access_token } = data;
+    localStorage.setItem("githubAccessToken", access_token);
+    return access_token;
+  } catch (error) {
+    console.error("Error refreshing GitHub token:", error);
+    throw error;
+  }
+};
+
+export const revokeGitHubToken = async (token: string) => {
+  try {
+    await fetch(`http://localhost:3000/github/revoke?token=${token}`);
+    localStorage.removeItem("githubAccessToken");
+    localStorage.removeItem("githubRefreshToken");
+    alert("Token revoked successfully");
+  } catch (error) {
+    console.error("Error revoking GitHub token:", error);
+  }
+};

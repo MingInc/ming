@@ -1,16 +1,16 @@
  import {
   firebaseConfig,
-  githubProvider,
-  saveUserData,
+  // githubProvider,
+  // saveUserData,
 } from "@/firebase.config";
 // import firebase from "firebase/app"
 import "firebase/auth"
-import { FirebaseError, initializeApp } from "firebase/app";
+import { initializeApp } from "firebase/app";
 import {
   getAuth,
-  signInWithPopup,
-  GithubAuthProvider,
-  fetchSignInMethodsForEmail,
+  // signInWithPopup,
+  // GithubAuthProvider,
+  // fetchSignInMethodsForEmail,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -48,47 +48,56 @@ export function Login() {
   const handleGithubSign = async () => {
     if (!auth) return;
 
-    try {
-      const result = await signInWithPopup(auth, githubProvider);
-      const credential = GithubAuthProvider.credentialFromResult(result);
-      const token = credential?.accessToken;
-      const user = result.user;
-      console.log("github user :",user)
-      await saveUserData(user,token!)
-      if (user) {
-        login(user);
-        localStorage.setItem("ming_authenticated_user", JSON.stringify(user));
-        navigate("/dashboard");
-      }
+    const clientId = import.meta.env.VITE_PUBLIC_GITHUB_CLIENT_ID
+    const redirectUri = import.meta.env.VITE_GITHUB_REDIRECT_URL
 
-      return token;
-    } catch (error) {
-      if(error instanceof FirebaseError){
-        const errorCode = error?.code;
-        const errorMessage = error?.message;
-        console.log(errorMessage);
-        if (errorCode === "auth/account-exists-with-different-credential") {
-          const email : string = error?.customData?.email as string;
-          console.log("email :", email);
+    const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}`;
+
+    window.location.href = githubAuthUrl
+    // window.location.href = "http://localhost:3000/github/login"
+    // window.location.href = `https://github.com/login/oauth/authorize?client_id=Iv23liS10VfRc85UWSq8&redirect_uri=http://localhost:5173&scope=user:email`
+
+    // try {
+    //   const result = await signInWithPopup(auth, githubProvider);
+    //   const credential = GithubAuthProvider.credentialFromResult(result);
+    //   const token = credential?.accessToken;
+    //   const user = result.user;
+    //   console.log("github user :",user)
+    //   await saveUserData(user,token!)
+    //   if (user) {
+    //     login(user);
+    //     localStorage.setItem("ming_authenticated_user", JSON.stringify(user));
+    //     navigate("/dashboard");
+    //   }
+
+    //   return token;
+    // } catch (error) {
+    //   if(error instanceof FirebaseError){
+    //     const errorCode = error?.code;
+    //     const errorMessage = error?.message;
+    //     console.log(errorMessage);
+    //     if (errorCode === "auth/account-exists-with-different-credential") {
+    //       const email : string = error?.customData?.email as string;
+    //       console.log("email :", email);
           
   
-          // Fetch the sign-in methods for the email
-          const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+    //       // Fetch the sign-in methods for the email
+    //       const signInMethods = await fetchSignInMethodsForEmail(auth, email);
   
-          console.log(`Sign-in methods for ${email}:`, signInMethods);
+    //       console.log(`Sign-in methods for ${email}:`, signInMethods);
   
-          // Inform the user about the existing providers
-          if (signInMethods.length > 0) {
-            alert(`This email is linked with: ${signInMethods.join(", ")}`);
-          } else {
-            alert("No sign-in methods found for this email.");
-          }
-        } else {
-          console.log(errorMessage);
-        }
-      }
+    //       // Inform the user about the existing providers
+    //       if (signInMethods.length > 0) {
+    //         alert(`This email is linked with: ${signInMethods.join(", ")}`);
+    //       } else {
+    //         alert("No sign-in methods found for this email.");
+    //       }
+    //     } else {
+    //       console.log(errorMessage);
+    //     }
+    //   }
 
-    }
+    // }
   };
 
   // const handleGoogleSignin = async () => {

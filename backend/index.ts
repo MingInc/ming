@@ -24,6 +24,9 @@ import {
   getGithubUserDetails,
   getRepoContents,
   getUserById,
+  handleGithubCallback,
+  handleGithubRevoke,
+  loginWithGithub,
   updateUserById,
 } from "./controllers/User.controller.ts";
 import { initializeApp } from "firebase-admin/app";
@@ -109,6 +112,16 @@ const server = Bun.serve({
 
         case "GET /api/v1/getUserData":
           return getUserData(req);
+
+        // Github Api Endpoints
+        case "GET /github/login":
+          return loginWithGithub(req);
+
+        case "GET /github/callback":
+          return handleGithubCallback(req);
+
+        case "GET /github/revoke":
+          return handleGithubRevoke(req);
 
         // User API endpoints
         case "POST /api/v1/user":

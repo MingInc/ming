@@ -47,6 +47,7 @@ export default function Navbar() {
     localStorage.removeItem("ming_authenticated_user");
     localStorage.removeItem("ming_github_user_repos");
     localStorage.removeItem("ming_github_access_token");
+    localStorage.clear()
     navigate("/");
     logout();
   };

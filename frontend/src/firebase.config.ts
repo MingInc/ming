@@ -111,13 +111,19 @@ export const redirectToGithubAuth = () => {
   window.location.href = authUrl;
 };
 
-export const saveUserData = async (user: any, accessToken: string) => {
+export const saveUserData = async (
+  user: any,
+  accessToken: string,
+  refreshToken: string
+) => {
   const userData = {
-    userUid: user.uid,
+    userUid: user.id,
     email: user.email,
     provider: ["github"],
-    accessToken: user?.accessToken,
+    // accessToken: user?.accessToken,
+    githubUrl: user.html_url,
     github_accessToken: accessToken,
+    github_refreshToken: refreshToken,
   };
   const response = await fetch(`http://localhost:3000/api/v1/user`, {
     method: "POST",

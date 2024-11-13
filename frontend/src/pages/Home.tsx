@@ -1,3 +1,8 @@
+import { saveUserData } from "@/firebase.config";
+import { useAuth } from "@/hooks";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
 const features = [
   {
     name: "☁️ Secure Cloud Environment",
@@ -22,6 +27,9 @@ const features = [
 ];
 
 export function Home() {
+  const location = useLocation();
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   const _user = JSON.parse(
@@ -29,6 +37,34 @@ export function Home() {
   //   );
   //   if (_user.email) return navigate("/dashboard");
   // }, []);
+
+  useEffect(() => {
+    async function handelGithubCallback() {
+      const queryParams = new URLSearchParams(location.search);
+      const code = queryParams.get("code");
+      if (code) {
+        const response = await fetch(
+          `http://localhost:3000/github/callback?code=${code}`
+        );
+        const data = await response.json();
+        console.log("data :", data);
+        const parsedData = JSON.parse(data.data);
+
+        const user = parsedData.user;
+        const accessToken = parsedData.access_token
+        const refreshToken = parsedData.refresh_token
+        saveUserData(user,accessToken,refreshToken)
+        if (user) {
+          login(user);
+          localStorage.setItem("ming_authenticated_user", JSON.stringify(user));
+          localStorage.setItem("githubAccessToken", parsedData.access_token);
+          localStorage.setItem("githubRefreshToken", parsedData.refresh_token);
+          navigate("/dashboard");
+        }
+      }
+    }
+    handelGithubCallback();
+  }, [location.search, login, navigate]);
 
   return (
     <div className="bg-white">
