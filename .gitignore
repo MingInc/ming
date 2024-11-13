@@ -1,3 +1,5 @@
 *-lock.json
 *.lock
 *.lockb
+
+serviceAccountKey.json

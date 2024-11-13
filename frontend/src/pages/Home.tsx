@@ -79,12 +79,11 @@ export function Home() {
               src="https://ik.imagekit.io/lexy/Ming/Screenshot%202024-08-22%20174630.png?updatedAt=1724363207670"
             />
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Distributed, Secure, & Open-Source Cloud
+              🌁 Making web more Accessible.
             </h2>
           </div>
           <p className="mt-4 text-gray-500">
-            Empowering idle devices to create secure and efficient cloud
-            environments through Web3 and decentralized architecture.
+            Empowering self-hosting to more open web and contribution to decentralized web (Web3) utilizing what we consider web2.0.
           </p>
 
           <dl className="mt-6 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 sm:gap-y-7 lg:gap-x-8">
