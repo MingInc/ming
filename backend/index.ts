@@ -133,7 +133,7 @@ const server = Bun.serve({
         case "POST /api/v1/user/update":
           return updateUserById(req);
 
-        case "POST /api/v1/user/accessToken":
+        case "GET /api/v1/user/accessToken":
           return getGithubAccessToken(req);
 
         case "POST /api/v1/user/getRepoContents":

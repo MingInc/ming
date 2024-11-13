@@ -361,10 +361,9 @@ export async function handleGithubRevoke(req: Request) {
 
 export async function getGithubAccessToken(req: Request) {
   try {
-    const data = await req.json();
-    const { id } = data;
+    const _id = new URL(req.url).searchParams.get("id");
 
-    if (!id) {
+    if (!_id) {
       return addCorsHeaders(
         new Response(JSON.stringify({ message: "User ID not provided" }), {
           status: 400,
@@ -372,7 +371,7 @@ export async function getGithubAccessToken(req: Request) {
       );
     }
 
-    const user = await UserModel.findOne({ userUid: id });
+    const user = await UserModel.findOne({ userUid: _id });
 
     if (!user) {
       return addCorsHeaders(

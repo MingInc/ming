@@ -1,12 +1,6 @@
 export async function getAccessToken(userId: string) {
   const response = await fetch(
-    "http://localhost:3000/api/v1/user/accessToken",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        id: userId,
-      }),
-    }
+    `http://localhost:3000/api/v1/user/accessToken?id=${userId}`
   );
   const data = await response.json();
   return data?.github_accessToken;

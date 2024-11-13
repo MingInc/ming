@@ -22,7 +22,7 @@ export default function ConfigureProject() {
   const navigate = useNavigate();
   const { authState } = useAuth();
   console.log("user ", authState.user)
-  const token = useAccessToken(authState?.user?.uid);
+  const token = useAccessToken(authState?.user?.id);
   const { repos } = useRepositories(token!);
   const { user  } = useFetchUserData(token!);
   const [searchTerm, setSearchTerm] = useState("");

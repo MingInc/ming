@@ -18,7 +18,7 @@ import { useAuth } from "@/hooks";
 
 export function Login() {
   const [auth, setAuth] = useState<any>();
-  const { login, authState } = useAuth();
+  const {  authState } = useAuth();
   const navigate = useNavigate();
   // const providers = useAuthProvider()
   // const allowedProviders = ["google.com", "github.com"];
@@ -54,8 +54,6 @@ export function Login() {
     const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}`;
 
     window.location.href = githubAuthUrl
-    // window.location.href = "http://localhost:3000/github/login"
-    // window.location.href = `https://github.com/login/oauth/authorize?client_id=Iv23liS10VfRc85UWSq8&redirect_uri=http://localhost:5173&scope=user:email`
 
     // try {
     //   const result = await signInWithPopup(auth, githubProvider);
