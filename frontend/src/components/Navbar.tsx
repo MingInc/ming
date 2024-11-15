@@ -35,22 +35,18 @@ export default function Navbar() {
   const location = useLocation();
   const { authState, logout } = useAuth();
   const { user } = useUser(authState?.user?.uid)
-  console.log("user :",user)
 
   const isDashboardRoute =
     location.pathname === "/dashboard" ||
     location.pathname.startsWith("/dashboard");
 
-  console.log("authState :", authState);
-
   const handleLogout = () => {
     localStorage.removeItem("ming_authenticated_user");
-    localStorage.removeItem("ming_github_user_repos");
-    localStorage.removeItem("ming_github_access_token");
-    localStorage.clear()
     navigate("/");
     logout();
   };
+
+  console.log("auth state user:",authState.user)
 
   return (
     <header>
@@ -82,7 +78,7 @@ export default function Navbar() {
             <DropdownMenuTrigger asChild>
               <div className="flex items-center gap-1 cursor-pointer border-[2px] rounded-xl py-1 pl-1 pr-2">
                 <Avatar className="w-6 object-contain h-6">
-                  <AvatarImage src={authState && authState?.user?.photoURL} />
+                  <AvatarImage src={authState && authState?.user?.avatar_url} />
                   <AvatarFallback>
                     <AvatarImage src="https://images.unsplash.com/photo-1644912325393-cb31907c98f0?q=80&w=1530&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
                   </AvatarFallback>

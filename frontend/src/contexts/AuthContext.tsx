@@ -57,24 +57,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.getItem("ming_authenticated_user") || "{}"
     );
 
-    if (_user.email) {
+    if (_user?.email) {
       dispatch({ type: "LOGIN", payload: _user });
     }
-
-    // const app = initializeApp(firebaseConfig);
-    // const authInstance = getAuth(app);
-
-    // const unsubscribe = onAuthStateChanged(authInstance, (user) => {
-    //   if (user) {
-    //     dispatch({ type: "LOGIN", payload: user });
-    //     localStorage.setItem("ming_authenticated_user", JSON.stringify(user));
-    //   } else {
-    //     dispatch({ type: "LOGOUT" });
-    //     localStorage.removeItem("ming_authenticated_user")
-    //   }
-    // });
-
-    // return () => unsubscribe(); // Cleanup subscription on unmount
   }, []);
 
   return (

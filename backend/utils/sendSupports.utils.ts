@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { GmailAppPassword } from "../constants";
 
 export async function sendSupportEmails(
   userEmail?: string,
@@ -6,7 +7,6 @@ export async function sendSupportEmails(
   title?: string,
   description?: string,
   assignedTo?: string,
-  accessToken?: string
 ) {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com", // Use your email provider (e.g., Gmail, SendGrid, etc.)
@@ -14,7 +14,7 @@ export async function sendSupportEmails(
     secure: true,
     auth: {
       user: "eriag321@gmail.com", // Your email address
-      pass: process.env.GMAIL_APP_PASSWORD as string,
+      pass: GmailAppPassword,
     },
   });
 
@@ -55,7 +55,7 @@ export async function sendWelcomeEmail(userEmail: string | null) {
     secure: true,
     auth: {
       user: "eriag321@gmail.com", // Your email address
-      pass: process.env.GMAIL_APP_PASSWORD, // Your email password or app-specific password
+      pass: GmailAppPassword, // Your email password or app-specific password
     },
   });
 

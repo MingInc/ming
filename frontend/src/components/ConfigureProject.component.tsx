@@ -10,10 +10,8 @@ import {
 } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
 import {
-  useAccessToken,
   useAuth,
   useDebounce,
-  useFetchUserData,
   useRepositories,
 } from "@/hooks";
 import { useState } from "react";
@@ -21,10 +19,7 @@ import { useState } from "react";
 export default function ConfigureProject() {
   const navigate = useNavigate();
   const { authState } = useAuth();
-  console.log("user ", authState.user)
-  const token = useAccessToken(authState?.user?.id);
-  const { repos } = useRepositories(token!);
-  const { user  } = useFetchUserData(token!);
+  const { repos } = useRepositories(authState?.user?.id);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
@@ -38,10 +33,10 @@ export default function ConfigureProject() {
       <div className="flex gap-2 mb-4">
         <Select>
           <SelectTrigger className="w-[180px] border-gray-700">
-            <SelectValue placeholder={user?.login} />
+            <SelectValue placeholder={authState.user.login} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={user?.login as string}>{user?.login}</SelectItem>
+            <SelectItem value={authState.user.login as string}>{authState.user.login}</SelectItem>
           </SelectContent>
         </Select>
         <div className="relative flex-grow">
@@ -104,12 +99,6 @@ export default function ConfigureProject() {
             );
           })}
       </div>
-      <a
-        href="#"
-        className="block mt-4 text-sm text-gray-400 hover:text-gray-500 w-fit"
-      >
-        Import Third-Party Git Repository →
-      </a>
     </div>
   );
 }

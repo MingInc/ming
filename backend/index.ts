@@ -17,16 +17,19 @@ import {
 import { addCorsHeaders } from "./helpers/CorsHeader.ts";
 import * as mongoose from "mongoose";
 import {
+  checkGithubSession,
   createUser,
   getFirebaseUserFromEmail,
   getFrameworkInfo,
   getGithubAccessToken,
   getGithubUserDetails,
   getRepoContents,
+  getRepositories,
   getUserById,
   handleGithubCallback,
   handleGithubRevoke,
   loginWithGithub,
+  refreshAccessToken,
   updateUserById,
 } from "./controllers/User.controller.ts";
 import { initializeApp } from "firebase-admin/app";
@@ -123,6 +126,9 @@ const server = Bun.serve({
         case "GET /github/revoke":
           return handleGithubRevoke(req);
 
+        case "GET /check-github-session":
+          return checkGithubSession(req);
+
         // User API endpoints
         case "POST /api/v1/user":
           return createUser(req);
@@ -135,6 +141,12 @@ const server = Bun.serve({
 
         case "GET /api/v1/user/accessToken":
           return getGithubAccessToken(req);
+
+        case "GET /api/v1/user/refreshToken":
+          return refreshAccessToken(req);
+
+        case "GET /api/v1/user/repos":
+          return getRepositories(req);
 
         case "POST /api/v1/user/getRepoContents":
           return getRepoContents(req);

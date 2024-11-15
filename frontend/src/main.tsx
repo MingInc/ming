@@ -23,6 +23,8 @@ import { Billing, CurrentBuild, Dashboard, Home, Login, ProjectPreview } from ".
 import { Pricing } from "./pages/Pricing";
 import Projects from "./pages/DeployProject"
 import NotFound from "./pages/NotFound.pages";
+import { GithubCallback } from "./pages/GithubCallback.pages";
+// import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +44,7 @@ const router = createBrowserRouter([
         element: (
           // <ProtectedRoute redirectPath="/login">
               <Projects />
-          // </ProtectedRoute>
+          //  </ProtectedRoute>
         ),
       },
       {
@@ -74,7 +76,7 @@ const router = createBrowserRouter([
         element: (
           // <ProtectedRoute redirectPath="/login">
             <Dashboard />
-          // </ProtectedRoute>
+          //  </ProtectedRoute>
         ),
         children: [
           {
@@ -112,6 +114,10 @@ const router = createBrowserRouter([
   {
     path:"*",
     element:<NotFound />
+  },
+  {
+    path:"/github/callback",
+    element: <GithubCallback />
   }
 ]);
 
