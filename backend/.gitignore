@@ -179,3 +179,5 @@ dist
 node_modules
 *.lockb
 *-lock.json
+
+serviceAccountKey.json

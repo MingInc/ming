@@ -45,15 +45,7 @@ export async function deployProject(req: any) {
     sink.start({ asUint8Array: true });
 
     const proc: any = Bun.spawn(
-      [
-        "./scripts/deploy/ViteReact.sh",
-        uid,
-        _githubUrl,
-        projectFolderName,
-        Bun.env.NGROK_API_KEY,
-        Bun.env.NGROK_AUTH_TOKEN,
-        Bun.env.NGROK_DOMAIN,
-      ],
+      ["./scripts/deploy/ViteReact.sh", uid, _githubUrl, projectFolderName],
       { stderr: "pipe" }
     );
 
