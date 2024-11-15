@@ -102,7 +102,7 @@ export function Login() {
           className=" rounded-sm bg-black text-white text-sm py-2 px-4 w-[80vw] md:w-[30vw]"
           onClick={() => handleGithubSign()}
         >
-          Sign up with Github
+          <i className="ri-github-fill"></i> Sign in with Github
         </button>
       </div>
     </div>
