@@ -34,7 +34,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { authState, logout } = useAuth();
-  const { user } = useUser(authState?.user?.uid)
+  const { user } = useUser(authState?.user?.id)
 
   const isDashboardRoute =
     location.pathname === "/dashboard" ||
@@ -45,8 +45,6 @@ export default function Navbar() {
     navigate("/");
     logout();
   };
-
-  console.log("auth state user:",authState.user)
 
   return (
     <header>

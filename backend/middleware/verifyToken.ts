@@ -1,13 +1,21 @@
 import jwt from "jsonwebtoken";
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret"; // Your JWT secret
+import { JWT_SECRET } from "../constants";
 
 // Middleware to verify JWT and get userId
-export const verifyToken = (token: string) => {
+export const verifyToken = (token: string): string | null => {
+  if (!JWT_SECRET) {
+    console.error("JWT_SECRET is not defined!");
+    return null; 
+  }
+
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
-    return decoded.userId; // Return the userId from the decoded JWT payload
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (decoded && typeof decoded === "object" && "userId" in decoded) {
+      return (decoded as { userId: string }).userId;
+    }
+    return null;
   } catch (err) {
     console.error("Token verification failed:", err);
-    return null; // Return null if the token is invalid or expired
+    return null;
   }
 };
