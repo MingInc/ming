@@ -12,10 +12,53 @@ import {
 } from "@/components/ui/table";
 import { FileText, HelpCircle } from "lucide-react";
 import { useAuth, useUser } from "@/hooks";
+import usePayments from "@/hooks/usePayments.hooks";
+// import { Payment } from "@/types/payment"; // Assuming you've defined this type
 
 export function Billing() {
   const { authState } = useAuth();
-  const { user } = useUser(authState?.user?.uid);
+  const { user } = useUser(authState?.user?.id);
+  const { payments, loading, error } = usePayments(authState?.user?.id);
+
+  const handleDownloadInvoice = async (payment: Component.Payment) => {
+    try {
+      const response = await fetch("http://localhost:3000/download-invoice", {
+        method: "POST",
+        body: JSON.stringify(payment),
+      });
+      const blob = await response.blob();
+      const contentDisposition = response.headers.get("Content-Disposition");
+      const fileName =
+        contentDisposition?.split("filename=")[1] || "ming_invoice.pdf";
+      console.log("content disposition", contentDisposition);
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+
+      link.setAttribute("download", fileName);
+      link.click();
+    } catch (error) {
+      console.error("Error downloading invoice:", error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto p-6 space-y-6">
+        <h1 className="text-2xl font-semibold">Billing</h1>
+        <div>Loading payments...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto p-6 space-y-6">
+        <h1 className="text-2xl font-semibold">Billing</h1>
+        <div>Error: {error}</div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       <h1 className="text-2xl font-semibold">Billing</h1>
@@ -87,13 +130,13 @@ export function Billing() {
               <div>
                 <div className="font-medium text-sm">Account Admins</div>
                 <div className="text-sm text-muted-foreground">
-                  laxman.rai.07.26@gmail.com
+                  {user[0].email}
                 </div>
               </div>
               <div>
                 <div className="font-medium text-sm">Additional Recipients</div>
                 <div className="text-sm text-muted-foreground">
-                  lexy@minginc.xyz
+                  {user[0].email}
                 </div>
               </div>
             </div>
@@ -122,54 +165,49 @@ export function Billing() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    <TableRow>
-                      <TableCell>
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700">
-                          Paid
-                        </span>
-                      </TableCell>
-                      <TableCell>76AFPBM11XZ-0003</TableCell>
-                      <TableCell>$15.00</TableCell>
-                      <TableCell>Oct 17, 2024 (Local Time)</TableCell>
-                      <TableCell>Oct 17, 2024 (Local Time)</TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="icon">
-                          <FileText className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-                          Void
-                        </span>
-                      </TableCell>
-                      <TableCell>76AFPBM11XZ-0002</TableCell>
-                      <TableCell>$33.00</TableCell>
-                      <TableCell>Oct 6, 2024 (Local Time)</TableCell>
-                      <TableCell>Oct 6, 2024 (Local Time)</TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="icon">
-                          <FileText className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700">
-                          Paid
-                        </span>
-                      </TableCell>
-                      <TableCell>76AFPBM11XZ-0001</TableCell>
-                      <TableCell>$18.00</TableCell>
-                      <TableCell>Sep 6, 2024 (Local Time)</TableCell>
-                      <TableCell>Sep 6, 2024 (Local Time)</TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="icon">
-                          <FileText className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
+                    {payments?.map((payment: Component.Payment) => (
+                      <TableRow key={payment.stripePaymentId}>
+                        <TableCell>
+                          <span
+                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                              payment.status === "succeeded"
+                                ? "bg-green-50 text-green-700"
+                                : payment.status === "failed"
+                                ? "bg-red-50 text-red-700"
+                                : "bg-gray-100 text-gray-700"
+                            }`}
+                          >
+                            {payment.status.charAt(0).toUpperCase() +
+                              payment.status.slice(1)}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          {payment.stripePaymentId.slice(0, 5) +
+                            "..." +
+                            payment.stripePaymentId.slice(
+                              payment.stripePaymentId.length - 5
+                            )}
+                        </TableCell>
+                        <TableCell>
+                          ${(payment.amount / 100).toFixed(2)}
+                        </TableCell>
+                        <TableCell>
+                          {new Date(payment.createdAt).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>
+                          {new Date(payment.updatedAt).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDownloadInvoice(payment)}
+                          >
+                            <FileText className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </div>

@@ -21,26 +21,27 @@ export function Pricing() {
 
   const handleCheckout = async () => {
     setLoading(true);
+    const print = console.log.bind(console,">")
 
     try {
       // Make a request to your backend to create a checkout session
       const response = await fetch("http://localhost:3000/api/v1/user/create-checkout-session", {
         method: "POST",
         body: JSON.stringify({
-          userUid: authState.user.uid
+          userUid: authState.user.id
         })
       });
 
       const { sessionUrl,sessionId } = await response.json();
 
-      console.log(sessionUrl)
+      console.log("session Id", sessionId)
+      print("session Url", sessionUrl)
+      
       // Redirect to Stripe Checkout
       if(stripe){
         const result = await stripe?.redirectToCheckout({
           sessionId: sessionId
         });
-  
-        console.log("result :", result)
   
         if (result?.error) {
           console.error(result.error.message);

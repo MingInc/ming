@@ -83,10 +83,10 @@ export default function Navbar() {
                 <p className="text-sm">
                   {(authState &&
                     authState.user &&
-                    (authState.user.email
-                      ? authState.user.email.split("@")[0]
-                      : authState.user.displayName)) ||
-                    authState.user.data.email}
+                    (authState?.user?.email
+                      ? authState?.user?.email?.split("@")[0]
+                      : authState?.user?.displayName)) ||
+                    authState?.user?.data?.email}
                 </p>
               </div>
             </DropdownMenuTrigger>

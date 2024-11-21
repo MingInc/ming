@@ -19,69 +19,69 @@ import IPFSStorage from "./pages/storage";
 import SupportCenter from "./pages/support-center";
 import SettingsPage from "./pages/settings";
 import DeployedProjects from "./components/ProjectCard";
-import { Billing, CurrentBuild, Dashboard, Home, Login, ProjectPreview } from "./pages";
+import {
+  Billing,
+  CurrentBuild,
+  Dashboard,
+  Home,
+  Login,
+  ProjectPreview,
+} from "./pages";
 import { Pricing } from "./pages/Pricing";
-import Projects from "./pages/DeployProject"
+import Projects from "./pages/DeployProject";
 import NotFound from "./pages/NotFound.pages";
 import { GithubCallback } from "./pages/GithubCallback.pages";
+import { CookiesProvider } from "react-cookie";
 // import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
-    path:"/",
+    path: "/",
     element: <Layout />,
-    children:[
+    children: [
       {
-        index:true,
-        element: <Home />
+        index: true,
+        element: <Home />,
       },
       {
-        path:"/login",
-        element: <Login />
+        path: "/login",
+        element: <Login />,
       },
       {
         path: "/create-new",
         element: (
           // <ProtectedRoute redirectPath="/login">
-              <Projects />
+          <Projects />
           //  </ProtectedRoute>
         ),
       },
       {
         path: "/new",
-        element: (
-            <NewProject />
-        ),
+        element: <NewProject />,
       },
       {
         path: "/build",
-        element: (
-            <CurrentBuild />
-        ),
+        element: <CurrentBuild />,
       },
       {
         path: "/pricing",
-        element: (
-            <Pricing />
-        ),
+        element: <Pricing />,
       },
       {
         path: "/preview",
-        element: (
-            <ProjectPreview />
-        ),
+        element: <ProjectPreview />,
       },
       {
         path: "/dashboard",
         element: (
           // <ProtectedRoute redirectPath="/login">
-            <Dashboard />
+          <Dashboard />
           //  </ProtectedRoute>
         ),
         children: [
           {
             index: true,
-            element: <DeployedProjects />
+            element: <DeployedProjects />,
           },
           {
             path: "boilerplates",
@@ -104,32 +104,34 @@ const router = createBrowserRouter([
             element: <SettingsPage />,
           },
           {
-            path:"billing",
-            element:  <Billing />
-          }
+            path: "billing",
+            element: <Billing />,
+          },
         ],
       },
-    ]
+    ],
   },
   {
-    path:"*",
-    element:<NotFound />
+    path: "*",
+    element: <NotFound />,
   },
   {
-    path:"/github/callback",
-    element: <GithubCallback />
-  }
+    path: "/github/callback",
+    element: <GithubCallback />,
+  },
 ]);
 
 createRoot(document.getElementById("root")!).render(
-  <AuthProvider>
-    <RepoProvider>
-      <ProjectProvider>
-        <RouterProvider router={router} />
-        <Toaster />
-        <Analytics />
-        <SpeedInsights />
-      </ProjectProvider>
-    </RepoProvider>
-  </AuthProvider>
+  <CookiesProvider defaultSetOptions={{ path: "/" }}>
+    <AuthProvider>
+      <RepoProvider>
+        <ProjectProvider>
+          <RouterProvider router={router} />
+          <Toaster />
+          <Analytics />
+          <SpeedInsights />
+        </ProjectProvider>
+      </RepoProvider>
+    </AuthProvider>
+  </CookiesProvider>
 );

@@ -3,7 +3,7 @@ import { addCorsHeaders } from "../helpers/CorsHeader";
 import { getNewTokensFromGithub, sendWelcomeEmail } from "../utils";
 import { SupportModel, UserModel } from "../models";
 import jwt from "jsonwebtoken";
-import { verifyToken } from "../middleware";
+import { validateSession } from "../middleware";
 import {
   clientId,
   clientSecret,
@@ -11,6 +11,8 @@ import {
   JWT_SECRET,
   redirectUri,
 } from "../constants";
+import { v4 as uuidv4 } from "uuid";
+import { SessionModel } from "../models/sessions.models";
 
 // create a new user
 export async function createUser(req: Request) {
@@ -43,13 +45,15 @@ export async function createUser(req: Request) {
       email: newUser.email,
     };
 
-    const sessionToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+    const sessionToken = jwt.sign(payload, JWT_SECRET as string, {
+      expiresIn: "7d",
+    });
 
     return addCorsHeaders(
       new Response(JSON.stringify({ newUser, sessionToken }), {
         status: 201,
         headers: {
-          "Set-Cookie": `${COOKIE_NAME}=${sessionToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=3600; Path=/`,
+          "Set-Cookie": `${COOKIE_NAME}=${sessionToken}; HttpOnly; SameSite=Strict; Max-Age=3600; Path=/`,
         },
       })
     );
@@ -258,6 +262,7 @@ export async function handleGithubCallback(req: Request) {
   try {
     const url = new URL(req.url);
     const code = url.searchParams.get("code");
+    const { deviceInfo } = await req.json();
 
     if (!code) {
       return addCorsHeaders(
@@ -310,45 +315,80 @@ export async function handleGithubCallback(req: Request) {
     }
 
     const userData = await userResponse.json();
+    const userUid = userData.id;
 
-    const _userData = {
-      userUid: userData.id,
-      email: userData.email,
-      provider: ["github"],
-      githubUrl: userData.html_url,
-      github_accessToken: access_token,
-      github_refreshToken: refresh_token,
-    };
+    // check if user exists
+    const user = await UserModel.findOne({ userUid });
+    if (user) {
+      await UserModel.findOneAndUpdate(
+        { userUid },
+        {
+          email: userData.email,
+          github_accessToken: access_token,
+          github_refreshToken: refresh_token,
+        }
+      );
+    } else {
+      const sessionId = uuidv4();
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
+      await SessionModel.create({
+        sessionId,
+        userUid,
+        expiresAt,
+        deviceInfo,
+      });
 
-    const _response = await fetch(`http://localhost:3000/api/v1/user`, {
-      method: "POST",
-      body: JSON.stringify(_userData),
-    });
+      const _userData = {
+        userUid: userUid,
+        email: userData.email,
+        provider: ["github"],
+        githubUrl: userData.html_url,
+        github_accessToken: access_token,
+        github_refreshToken: refresh_token,
+        githubUser: userData,
+      };
 
-    const _data = await _response.json();
-
-    const { newUser, sessionToken  } = _data
-
+      const _response = await fetch(`http://localhost:3000/api/v1/user`, {
+        method: "POST",
+        body: JSON.stringify(_userData),
+        credentials: "include",
+      });
+      const _data = await _response.json();
+      const { newUser, sessionToken } = _data;
+      return addCorsHeaders(
+        new Response(
+          JSON.stringify({
+            message: "Login with github and user saved to db",
+            data: JSON.stringify({
+              access_token,
+              refresh_token,
+              user: userData,
+              _data: {
+                newUser,
+                sessionToken,
+                sessionId,
+              },
+            }),
+          }),
+          {
+            status: 201,
+            headers: {
+              "Set-Cookie": `${COOKIE_NAME}=${sessionToken}; SameSite=Strict; HttpOnly; Max-Age=604800; Path=/`,
+            },
+          }
+        )
+      );
+    }
     return addCorsHeaders(
       new Response(
         JSON.stringify({
           message: "Login with github and user saved to db",
-          data: JSON.stringify({
-            access_token,
-            refresh_token,
-            user: userData,
-            _data: {
-              newUser,
-              sessionToken,
-            },
-          }),
-        }),
-        {
-          status: 201,
-        }
+        })
       )
     );
+
+    // }
   } catch (error) {
     return addCorsHeaders(
       new Response(JSON.stringify({ error: "Failed to login with github" }), {
@@ -802,47 +842,106 @@ export async function getRepositories(req: Request) {
 }
 
 // Endpoint to check if the user session is valid
+// export async function checkGithubSession(req: Request) {
+//   try {
+//     const token = req.headers.get("Authorization")?.split(" ")[1]; // Get the token from the header
+
+//     if (!token) {
+//       return addCorsHeaders(
+//         new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 })
+//       );
+//     }
+
+//     const userId = verifyToken(token);
+
+//     if (!userId) {
+//       return addCorsHeaders(
+//         new Response(JSON.stringify({ error: "Invalid session" }), {
+//           status: 401,
+//         })
+//       );
+//     }
+
+//     // Check if the user exists in the database
+//     const user = await UserModel.findOne({
+//       userUid: userId,
+//     });
+
+//     if (!user) {
+//       return addCorsHeaders(
+//         new Response(JSON.stringify({ userExists: false }), { status: 404 })
+//       );
+//     }
+
+//     // If user exists, send the user data
+//     return addCorsHeaders(
+//       new Response(JSON.stringify({ userExists: true, user }), { status: 200 })
+//     );
+//   } catch (error) {
+//     console.error("Failed to check session:", error);
+//     return addCorsHeaders(
+//       new Response(JSON.stringify({ error: "Failed to check session" }), {
+//         status: 500,
+//       })
+//     );
+//   }
+// }
+
 export async function checkGithubSession(req: Request) {
-  try {
-    const token = req.headers.get("Authorization")?.split(" ")[1]; // Get the token from the header
+  const userUid = await validateSession(req);
 
-    if (!token) {
-      return addCorsHeaders(
-        new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 })
-      );
-    }
-
-    const userId = verifyToken(token);
-
-    if (!userId) {
-      return addCorsHeaders(
-        new Response(JSON.stringify({ error: "Invalid session" }), {
-          status: 401,
-        })
-      );
-    }
-
-    // Check if the user exists in the database
-    const user = await UserModel.findOne({
-      userUid: userId,
-    });
-
-    if (!user) {
-      return addCorsHeaders(
-        new Response(JSON.stringify({ userExists: false }), { status: 404 })
-      );
-    }
-
-    // If user exists, send the user data
-    return addCorsHeaders(
-      new Response(JSON.stringify({ userExists: true, user }), { status: 200 })
-    );
-  } catch (error) {
-    console.error("Failed to check session:", error);
-    return addCorsHeaders(
-      new Response(JSON.stringify({ error: "Failed to check session" }), {
-        status: 500,
-      })
-    );
+  if (!userUid) {
+    return addCorsHeaders(new Response("Unauthorized", { status: 401 }));
   }
+
+  const user = await UserModel.findOne({ userUid });
+
+  if (!user) {
+    return addCorsHeaders(new Response("User not found", { status: 404 }));
+  }
+
+  const githubAccessToken = user.github_accessToken;
+  let githubUser = user.githubUser;
+
+  // Determine if GitHub user data needs to be refreshed
+  const shouldRefresh =
+    !user.githubUserFetchedAt ||
+    new Date().getTime() - new Date(user.githubUserFetchedAt).getTime() >
+      24 * 60 * 60 * 1000; // 24 hours threshold
+
+  if (shouldRefresh && githubAccessToken) {
+    try {
+      // Fetch GitHub user data using the access token
+      const response = await fetch("https://api.github.com/user", {
+        headers: {
+          Authorization: `Bearer ${githubAccessToken}`,
+        },
+      });
+
+      if (response.ok) {
+        githubUser = await response.json();
+
+        // Update the user document with fresh GitHub data
+        await UserModel.findOneAndUpdate(
+          { userUid },
+          { githubUser, githubUserFetchedAt: new Date() }
+        );
+      } else {
+        console.error("Failed to fetch GitHub user data:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching GitHub user data:", error);
+    }
+  }
+
+  return addCorsHeaders(
+    new Response(
+      JSON.stringify({
+        userExists: true,
+        user,
+        githubUser, // Return cached or refreshed GitHub user data
+      }),
+      { status: 200 }
+    )
+  );
 }
