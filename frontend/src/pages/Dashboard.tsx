@@ -11,7 +11,7 @@ export function Dashboard() {
 
   useEffect(() => {
     if (authState.user) {
-      fetchProjects(projectDispatch, authState.user.uid);
+      fetchProjects(projectDispatch, authState.user.id);
     }
   }, [authState.user, projectDispatch]);
 

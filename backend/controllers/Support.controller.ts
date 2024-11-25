@@ -15,11 +15,6 @@ export async function createSupport(req: Request) {
     const status = formData.get("status") || "open";
     const imageFile = formData.get("image");
 
-    let accessToken = null;
-    // if (req.headers.get("Authorization")) {
-    //   accessToken = req.headers.get("Authorization");
-    // }
-
     const { title, description } = ticketInfo;
 
     let imagePath = null;
@@ -80,7 +75,7 @@ export async function createSupport(req: Request) {
       adminEmail,
       title,
       description,
-      assignedTo as string,
+      assignedTo as string
     );
     // }
 
@@ -126,11 +121,21 @@ export async function getAllSupportTickets(req: Request) {
 
 export async function getSupportTicketById(req: Request) {
   try {
-    const url = new URL(req.url);
-    const ticketId = url.searchParams.get("id");
-    const ticket = await SupportModel.findById(ticketId);
+    const userId = new URL(req.url).searchParams.get("id");
 
-    if (!ticket) {
+    if (!userId) {
+      return addCorsHeaders(
+        new Response(JSON.stringify({ error: "User id not found" }), {
+          status: 404,
+        })
+      );
+    }
+
+    const tickets = await SupportModel.find({
+      userInfo: userId,
+    });
+
+    if (!tickets) {
       return addCorsHeaders(
         new Response(JSON.stringify({ error: "Support ticket not found" }), {
           status: 404,
@@ -139,7 +144,7 @@ export async function getSupportTicketById(req: Request) {
     }
 
     return addCorsHeaders(
-      new Response(JSON.stringify({ ticket }), {
+      new Response(JSON.stringify({ tickets }), {
         status: 200,
       })
     );

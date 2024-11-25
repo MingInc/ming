@@ -40,4 +40,17 @@ declare namespace Component {
     role: "user" | "admin";
     premium: boolean;
   }
+
+  // types/payment.ts
+  export interface Payment {
+    userId: string;
+    stripePaymentId: string;
+    amount: number;
+    currency: string;
+    status: "succeeded" | "pending" | "failed" | "canceled";
+    paymentMethod: string;
+    description: string;
+    createdAt: string;
+    updatedAt: string;
+  }
 }

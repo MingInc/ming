@@ -181,3 +181,5 @@ node_modules
 *-lock.json
 
 serviceAccountKey.json
+
+.test
