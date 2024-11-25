@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -25,30 +25,54 @@ import { PlusCircle, Search } from "lucide-react";
 import { useAuth, useFileInput, useSupport } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { useToast } from "@/components/ui";
-
-// type Case = {
-//   id: string;
-//   title: string;
-//   status: "open" | "transferred" | "closed";
-//   date: string;
-// };
 
 export default function SupportCenter() {
+  const [support, setSupport] = useState<Component.Ticket[]>([]);
   const [newCaseTitle, setNewCaseTitle] = useState("");
   const [newCaseDescription, setNewCaseDescription] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");  // Declare `searchTerm` state here
   const { authState } = useAuth();
   const { file, handleFileChange, fileName, fileURL, handleRemoveFile } =
     useFileInput();
-  const {  filteredCases, createCase, searchTerm, setSearchTerm , creating } =
-    useSupport();
- const { toast  } = useToast()
+  const { creating , createCase } = useSupport(support); 
+    // Declare filteredCases as a reactive state
+    const [filteredCases, setFilteredCases] = useState<Component.Ticket[]>([]);
 
+  // Recalculate filteredCases whenever support or searchTerm is updated
+  useEffect(() => {
+    // Filter cases based on searchTerm
+    setFilteredCases(
+      support.filter((ticket) =>
+        ticket.ticketInfo?.title.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+  }, [support, searchTerm]); 
 
-  // const filteredCases = cases.filter((c) =>
-  //   c.title.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
+  // Fetching the support cases from the server
+  const fetchSupport = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/v1/user/support",
+        {
+          method: "GET",
+        }
+      );
 
+      if (!response.ok) {
+        throw new Error("Failed to fetch support tickets");
+      }
+
+      const data = await response.json();
+      setSupport(data?.tickets || []);
+    } catch (error) {
+      console.error("Error fetching support tickets:", error);
+    }
+  };
+  useEffect(() => {
+    fetchSupport();
+  }, []); 
+
+  // Function to handle new case creation
   const createNewCase = async () => {
     const formData = new FormData();
 
@@ -57,19 +81,21 @@ export default function SupportCenter() {
       description: newCaseDescription,
     };
     formData.append("ticketInfo", JSON.stringify(ticketInfo));
-    formData.append("userInfo", authState.user?.uid);
+    formData.append("userInfo", authState.user?.id);
     formData.append("status", "open");
     if (file) {
       formData.append("image", file);
     }
 
-    createCase(formData);
+    // Call createCase with the formData and handle the response to update the state
+     createCase(formData, (newTicket: Component.Ticket) => {
+      // Add the new ticket to support state immutably
+      setSupport((prev) => [...prev, newTicket]);
 
-    toast({
-      title: "Tickt Submitted Successfully",
-      description: "Please Check your email further",
+      fetchSupport()
     });
 
+    // Clear the form after submitting
     setNewCaseTitle("");
     setNewCaseDescription("");
     handleRemoveFile();
@@ -95,7 +121,7 @@ export default function SupportCenter() {
                 placeholder="Search..."
                 className="pl-8"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm here
               />
             </div>
             <Dialog>
@@ -171,9 +197,12 @@ export default function SupportCenter() {
                   </div>
                 </div>
                 <DialogFooter>
-                  <DialogClose>
-
-                  <Button disabled = {creating} onClick={createNewCase}>Submit Case</Button>
+                  <DialogClose
+                    type="button"
+                    disabled={creating}
+                    onClick={createNewCase}
+                  >
+                    Submit Case
                   </DialogClose>
                 </DialogFooter>
               </DialogContent>
@@ -200,25 +229,11 @@ export default function SupportCenter() {
                   <div className="space-y-4">
                     {filteredCases
                       .filter((c) => status === "all" || c.status === status)
+                      .reverse()
                       .map((supportCase) => {
                         const date = new Date(String(supportCase?.createdAt));
-                        const year = date.getFullYear();
-                        const month = String(date.getMonth() + 1).padStart(
-                          2,
-                          "0"
-                        ); // Months are 0-indexed
-                        const day = String(date.getDate()).padStart(2, "0");
-                        const hours = String(date.getHours()).padStart(2, "0");
-                        const minutes = String(date.getMinutes()).padStart(
-                          2,
-                          "0"
-                        );
-                        const seconds = String(date.getSeconds()).padStart(
-                          2,
-                          "0"
-                        );
+                        const formattedDate = date.toLocaleString();
 
-                        const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
                         return (
                           <Card key={supportCase._id}>
                             <CardHeader>

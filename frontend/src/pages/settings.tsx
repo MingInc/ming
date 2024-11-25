@@ -41,7 +41,7 @@ export default function SettingsPage() {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const navigate = useNavigate()
   const {authState} = useAuth()
-  const { user } = useUser(authState?.user?.uid)
+  const { user } = useUser(authState?.user?.id)
 
   console.log("user :",user)
 

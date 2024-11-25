@@ -1,30 +1,21 @@
  import {
   firebaseConfig,
-  githubProvider,
-  saveUserData,
 } from "@/firebase.config";
-// import firebase from "firebase/app"
 import "firebase/auth"
-import { FirebaseError, initializeApp } from "firebase/app";
+import { initializeApp } from "firebase/app";
 import {
   getAuth,
-  signInWithPopup,
-  GithubAuthProvider,
-  fetchSignInMethodsForEmail,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks";
+import { useAuth, useFetchUserData } from "@/hooks";
 
 export function Login() {
   const [auth, setAuth] = useState<any>();
-  const { login, authState } = useAuth();
+  const {  authState , login } = useAuth();
   const navigate = useNavigate();
-  // const providers = useAuthProvider()
-  // const allowedProviders = ["google.com", "github.com"];
-
-  // const isGoogleLinked = providers?.some(provider => allowedProviders.includes(provider));
-  // const isGithubLinked = providers?.some(provider => allowedProviders.includes(provider));
+  const [accessToken, setAccessToken] = useState<string | null>(null); 
+  const { user : githubUser, loading, error  } = useFetchUserData(accessToken!)
 
   useEffect(() => {
     const _user = JSON.parse(
@@ -46,85 +37,56 @@ export function Login() {
   }, [authState.isAuthenticated, navigate]);
 
   const handleGithubSign = async () => {
-    if (!auth) return;
-
+    if (!auth) return;  
+    const sessionToken = localStorage.getItem('ming_session_token'); 
+  
+    if(!sessionToken){
+      redirectToGithubAuth()
+    }
     try {
-      const result = await signInWithPopup(auth, githubProvider);
-      const credential = GithubAuthProvider.credentialFromResult(result);
-      const token = credential?.accessToken;
-      const user = result.user;
-      console.log("github user :",user)
-      await saveUserData(user,token!)
-      if (user) {
-        login(user);
-        localStorage.setItem("ming_authenticated_user", JSON.stringify(user));
-        navigate("/dashboard");
-      }
-
-      return token;
-    } catch (error) {
-      if(error instanceof FirebaseError){
-        const errorCode = error?.code;
-        const errorMessage = error?.message;
-        console.log(errorMessage);
-        if (errorCode === "auth/account-exists-with-different-credential") {
-          const email : string = error?.customData?.email as string;
-          console.log("email :", email);
-          
+      // Send a request to the backend to check if the user exists in the database (session-based)
+      const response = await fetch(`http://localhost:3000/check-github-session`,{
+        headers:{
+          'Authorization': `Bearer ${sessionToken}`,
+        },
+      });
   
-          // Fetch the sign-in methods for the email
-          const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+      const data = await response.json();
   
-          console.log(`Sign-in methods for ${email}:`, signInMethods);
-  
-          // Inform the user about the existing providers
-          if (signInMethods.length > 0) {
-            alert(`This email is linked with: ${signInMethods.join(", ")}`);
-          } else {
-            alert("No sign-in methods found for this email.");
-          }
+      if (response.ok) {
+        if (data.userExists) {
+          setAccessToken(data?.user?.github_accessToken)
         } else {
-          console.log(errorMessage);
+          // User does not exist, initiate GitHub authentication
+          redirectToGithubAuth();
         }
+      } else {
+        // If the response isn't ok (e.g., 401 Unauthorized), redirect to GitHub for login
+        redirectToGithubAuth();
       }
-
+    } catch (error) {
+      console.error('Error checking GitHub session:', error);
+      // If there's an error, redirect to GitHub for authentication
+      redirectToGithubAuth();
     }
   };
 
-  // const handleGoogleSignin = async () => {
-  //     const result = await signInWithGoogle();
-  //     const user = result?.user;
-  //     console.log("result :", result);
-  //     if (user) {
-  //       const linkedProviders = user.providerData.map(
-  //         (provider) => provider.providerId
-  //       );
-  //       console.log(linkedProviders);
-  //       if (linkedProviders.includes("github.com")) {
-  //         const response = await fetch("http://localhost:3000/api/v1/user/accessToken",{
-  //           method:"POST",
-  //           body:JSON.stringify({
-  //             id: user.uid
-  //           })
-  //         })
-  //         const data = await response.json()
-  //         console.log("response data :", data)
-  //         console.log("access token :", data.github_accessToken)
-  //         const accessToken = data.github_accessToken
-  //         if (accessToken) {
-  //           const repos = await fetchRepositories(accessToken);
-  //           const encryptedRepoData = encryptData(JSON.stringify(repos));
-  //           localStorage.setItem("ming_github_user_repos", JSON.stringify(encryptedRepoData));
-  //           navigate("/dashboard");
-  //         }
-  //       }
-  //       if (user.email) {
-  //         login(user);
-  //         localStorage.setItem("ming_authenticated_user", JSON.stringify(user));
-  //         navigate("/dashboard");
-  //       }
-  //     }
-  // };
+  useEffect(() => {
+    if(githubUser && !loading && !error){
+      localStorage.setItem("ming_authenticated_user", JSON.stringify(githubUser)); // Store basic user info
+      login(githubUser)
+      navigate("/dashboard");
+    }
+  },[error, githubUser, loading, login, navigate])
+  
+  // Redirect to GitHub OAuth URL for authentication
+  const redirectToGithubAuth = () => {
+    const clientId = import.meta.env.VITE_PUBLIC_GITHUB_CLIENT_ID;
+    const redirectUri = import.meta.env.VITE_GITHUB_REDIRECT_URL;
+    const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}`;
+  
+    window.location.href = githubAuthUrl;
+  };
 
   return (
     <div className="mx-auto text-center flex flex-col gap-2">

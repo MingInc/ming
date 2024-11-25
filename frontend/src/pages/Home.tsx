@@ -29,6 +29,8 @@ export function Home() {
   //   if (_user.email) return navigate("/dashboard");
   // }, []);
 
+
+
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl gap-x-8 gap-y-8 px-4 py-2 sm:px-6 sm:py-8 lg:max-w-7xl flex flex-col xl:flex-row items-center">

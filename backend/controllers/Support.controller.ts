@@ -16,9 +16,9 @@ export async function createSupport(req: Request) {
     const imageFile = formData.get("image");
 
     let accessToken = null;
-    if (req.headers.get("Authorization")) {
-      accessToken = req.headers.get("Authorization");
-    }
+    // if (req.headers.get("Authorization")) {
+    //   accessToken = req.headers.get("Authorization");
+    // }
 
     const { title, description } = ticketInfo;
 
@@ -74,16 +74,15 @@ export async function createSupport(req: Request) {
     await newTicket.save();
 
     // Sending emails to both user and admin
-    if (accessToken) {
-      sendSupportEmails(
-        user.email as string,
-        adminEmail,
-        title,
-        description,
-        assignedTo as string,
-        accessToken
-      );
-    }
+    // if (accessToken) {
+    sendSupportEmails(
+      user.email as string,
+      adminEmail,
+      title,
+      description,
+      assignedTo as string,
+    );
+    // }
 
     return addCorsHeaders(
       new Response(JSON.stringify({ support: newTicket }), {

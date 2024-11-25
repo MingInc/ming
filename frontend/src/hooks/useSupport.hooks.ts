@@ -1,47 +1,22 @@
-import { useState, useEffect, useCallback } from "react";
-import { useAuth } from "./useAuth.hooks";
+import { useToast } from "@/components/ui";
+import { useState } from "react";
+// import { useAuth } from "./useAuth.hooks";
 
-export const useSupport = () => {
-  const [support, setSupport] = useState<Component.Ticket[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+export const useSupport = (support: Component.Ticket[]) => {
+  // const [support, setSupport] = useState<Component.Ticket[]>([]);
+  // const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "all" | "open" | "transferred" | "closed"
   >("all");
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [loading, _] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [creating, setCreating] = useState<boolean>(false);
-  const { authState } = useAuth();
-  // const { closeDialog } = useDialog();
+  const { toast } = useToast();
 
-  // Fetching the support cases from the server
-  useEffect(() => {
-    const fetchSupport = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await fetch(
-          "http://localhost:3000/api/v1/user/support",
-          {
-            method: "GET",
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch support tickets");
-        }
-        const data = await response.json();
-        setSupport(data?.tickets || []);
-      } catch (error) {
-        setError((error as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSupport();
-  }, []);
-
-  const createCase = async (formData: FormData) => {
+  const createCase = async (
+    formData: FormData,
+    onSuccess: (newTicket: Component.Ticket) => void
+  ) => {
     setCreating(true);
     setError(null);
 
@@ -51,26 +26,37 @@ export const useSupport = () => {
         {
           method: "POST",
           body: formData,
-          headers: {
-            Authorization: authState?.user?.stsTokenManager?.accessToken, // Replace with actual token
-          },
         }
       );
 
       if (!response.ok) {
         throw new Error("Failed to create new case");
       }
+
       const data: Component.Ticket = await response.json();
-      setSupport((prevSupport) => [...prevSupport, data]);
+
+      // Optimistic update: immediately add the new case to the state
+      // setSupport((prevSupport) => [...prevSupport, data]);
+      onSuccess(data);
+
+      toast({
+        title: "Ticket Submitted Successfully",
+        description: "Please check your email for further details.",
+      });
     } catch (error) {
       setError((error as Error).message);
+      toast({
+        title: "Error",
+        description: (error as Error).message || "Failed to submit the ticket",
+        variant: "destructive",
+      });
     } finally {
       setCreating(false);
     }
   };
 
   // Function to filter tickets based on search term and status
-  const getFilteredCases = useCallback(() => {
+  const getFilteredCases = () => {
     if (!support) return [];
 
     // Filter by status first
@@ -79,24 +65,24 @@ export const useSupport = () => {
     });
 
     // Filter by search term
-    const filteredBySearch = filteredByStatus.filter((ticket) =>
-      ticket?.ticketInfo?.title
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase())
-    );
+    // const filteredBySearch = filteredByStatus.filter((ticket) =>
+    //   ticket?.ticketInfo?.title
+    //     ?.toLowerCase()
+    //     .includes(searchTerm.toLowerCase())
+    // );
 
-    return filteredBySearch;
-  }, [support, searchTerm, statusFilter]);
+    return filteredByStatus;
+  };
 
   return {
-    cases: support, // Return the array directly
+    // cases: support, // Return the array directly
     filteredCases: getFilteredCases(),
-    searchTerm,
-    setSearchTerm,
+    // searchTerm,
+    // setSearchTerm,
     statusFilter,
     setStatusFilter,
     createCase,
-    loading,
+    // loading,
     error,
     creating,
   };

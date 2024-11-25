@@ -111,13 +111,18 @@ export const redirectToGithubAuth = () => {
   window.location.href = authUrl;
 };
 
-export const saveUserData = async (user: any, accessToken: string) => {
+export const saveUserData = async (
+  user: any,
+  accessToken: string,
+  refreshToken: string
+) => {
   const userData = {
-    userUid: user.uid,
+    userUid: user.id,
     email: user.email,
     provider: ["github"],
-    accessToken: user?.accessToken,
+    githubUrl: user.html_url,
     github_accessToken: accessToken,
+    github_refreshToken: refreshToken,
   };
   const response = await fetch(`http://localhost:3000/api/v1/user`, {
     method: "POST",
@@ -131,15 +136,6 @@ export const saveUserData = async (user: any, accessToken: string) => {
     throw new Error(errorData || "Failed to save user data"); // Use a custom error message
   }
   const data = await response.json();
-  // const userWithPremium = {
-  //   ...data,
-  //   premium: data.premium || false, // Assuming `premium` flag is included in the response
-  // };
-
-  // localStorage.setItem(
-  //   "ming_authenticated_user",
-  //   JSON.stringify(userWithPremium)
-  // );
-
+  console.log("data :", data);
   return data;
 };

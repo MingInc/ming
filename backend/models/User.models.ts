@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   githubUrl: { type: String },
   accessToken: { type: String },
   github_accessToken: { type: String },
+  github_refreshToken: { type: String },
   role: {
     type: String,
     enum: ["user", "admin"],
