@@ -11,7 +11,15 @@ export const useFetchUserData = (token: string) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Clear states when the token changes or is null
+    if (!token) {
+      setUser(null);
+      setLoading(false);
+      setError(null);
+      return;
+    }
     if (token) {
+      console.log("Access token :", token);
       const fetchUserData = async () => {
         setLoading(true);
         setError(null);

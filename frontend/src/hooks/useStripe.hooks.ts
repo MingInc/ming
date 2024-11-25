@@ -11,7 +11,7 @@ export const useStripe = (): StripePromise => {
     const initializeStripe = async () => {
       // Load Stripe asynchronously
       const stripeInstance = await loadStripe(
-        import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
+        import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY as string
       );
 
       // Set Stripe instance to state

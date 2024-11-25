@@ -127,7 +127,10 @@ export const saveUserData = async (
   const response = await fetch(`http://localhost:3000/api/v1/user`, {
     method: "POST",
     body: JSON.stringify(userData),
+    credentials: "include",
   });
+
+  console.log(response.json());
 
   // Check if response is okay
   if (!response.ok) {

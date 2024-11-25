@@ -252,7 +252,7 @@ export default function SettingsPage() {
               </div>
             </CardContent>
             <CardFooter className="flex justify-between">
-              <Button variant="outline">View Invoices</Button>
+              <Button variant="outline" onClick={() => navigate("/dashboard/billing")} >View Invoices</Button>
               {
                 user && user[0]?.premium === false && (
                   <Button onClick={() => navigate("/pricing")}>Upgrade Plan</Button>

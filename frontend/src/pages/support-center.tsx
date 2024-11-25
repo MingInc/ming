@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -49,13 +49,10 @@ export default function SupportCenter() {
   }, [support, searchTerm]); 
 
   // Fetching the support cases from the server
-  const fetchSupport = async () => {
+  const fetchSupport = useCallback(async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/v1/user/support",
-        {
-          method: "GET",
-        }
+        `http://localhost:3000/api/v1/user/support?id=${authState?.user?.id}`,
       );
 
       if (!response.ok) {
@@ -63,14 +60,15 @@ export default function SupportCenter() {
       }
 
       const data = await response.json();
+      console.log("fetched support :",data)
       setSupport(data?.tickets || []);
     } catch (error) {
       console.error("Error fetching support tickets:", error);
     }
-  };
+  },[authState?.user?.id]);
   useEffect(() => {
     fetchSupport();
-  }, []); 
+  }, [fetchSupport]); 
 
   // Function to handle new case creation
   const createNewCase = async () => {

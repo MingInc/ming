@@ -12,6 +12,8 @@ const userSchema = new mongoose.Schema({
   accessToken: { type: String },
   github_accessToken: { type: String },
   github_refreshToken: { type: String },
+  githubUser: { type: Object }, // Store GitHub user data
+  githubUserFetchedAt: { type: Date }, // Timestamp of the last fetch
   role: {
     type: String,
     enum: ["user", "admin"],
@@ -23,6 +25,15 @@ const userSchema = new mongoose.Schema({
     default: false,
     required: false,
   },
+  // sessions: [
+  //   {
+  //     sessionId: { type: String, required: true }, // Unique session ID
+  //     userUid: { type: String, required: true },
+  //     createdAt: { type: Date, default: Date.now }, // Session creation time
+  //     expiresAt: { type: Date }, // Optional: Expiry time for the session
+  //     deviceInfo: { type: String }, // Optional: Store device/browser info for better management
+  //   },
+  // ],
 });
 
 // userSchema.index(

@@ -31,21 +31,25 @@ import {
   loginWithGithub,
   refreshAccessToken,
   updateUserById,
-} from "./controllers/User.controller.ts";
+} from "./controllers";
 import { initializeApp } from "firebase-admin/app";
 import admin from "firebase-admin";
 import serviceAccountKey from "./serviceAccountKey.json";
 import {
   createSupport,
   getAllSupportTickets,
+  getSupportTicketById,
 } from "./controllers/Support.controller.ts";
 import Stripe from "stripe";
 import {
+  getPaymentById,
   handleStripePayment,
   handleWebHook,
 } from "./controllers/Payment.controller.ts";
+import { stripeKey } from "./constants/variable.ts";
+import { handleDownloadInvoice } from "./controllers/invoice.controller.ts";
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+export const stripe = new Stripe(stripeKey!);
 
 initializeApp({
   credential: admin.credential.cert(serviceAccountKey as admin.ServiceAccount),
@@ -55,8 +59,8 @@ type Method = "GET" | "PUT" | "POST" | "DELETE" | "PATCH" | "OPTIONS";
 
 mongoose
   .connect(
-    // "mongodb://localhost:27017/ming"
-    `mongodb+srv://Cluster53271:${process.env.MONGODB_PASSWORD}@cluster53271.l3uzg.mongodb.net/ming?retryWrites=true&w=majority&appName=Cluster53271`
+    "mongodb://localhost:27017/ming"
+    // `mongodb+srv://Cluster53271:${process.env.MONGODB_PASSWORD}@cluster53271.l3uzg.mongodb.net/ming?retryWrites=true&w=majority&appName=Cluster53271`
   )
   .then(() => {
     console.log("Connected to MongoDB!");
@@ -120,7 +124,7 @@ const server = Bun.serve({
         case "GET /github/login":
           return loginWithGithub(req);
 
-        case "GET /github/callback":
+        case "POST /github/callback":
           return handleGithubCallback(req);
 
         case "GET /github/revoke":
@@ -165,12 +169,50 @@ const server = Bun.serve({
           return createSupport(req);
 
         case "GET /api/v1/user/support":
-          return getAllSupportTickets(req);
+          return getSupportTicketById(req);
 
         case "POST /api/v1/user/create-checkout-session":
           return handleStripePayment(req);
 
-        case "POST /webhook":
+        case "GET /api/v1/user/payments":
+          return getPaymentById(req);
+
+        case "POST /download-invoice":
+          return handleDownloadInvoice(req);
+
+        // case "POST /github/webhook":
+        //   return async function () {
+        //     const payload = await req.json();
+        //     const githubId = payload.pusher.id || payload.sender?.id;
+
+        //     if (!githubId) {
+        //       return addCorsHeaders(
+        //         new Response(
+        //           JSON.stringify("GitHub user ID not found in payload"),
+        //           {
+        //             status: 400,
+        //           }
+        //         )
+        //       );
+        //     }
+
+        //     try {
+
+        //     } catch (error) {
+        //       return addCorsHeaders(
+        //         new Response("Internal Server Error", { status: 500 })
+        //       );
+        //     }
+        //     return addCorsHeaders(
+        //       new Response(
+        //         JSON.stringify({
+        //           message: "Response from github webhook",
+        //         })
+        //       )
+        //     );
+        //   };
+
+        case "POST /stripe/webhook":
           return handleWebHook(req);
 
         case "GET /api/v1/status":

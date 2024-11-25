@@ -27,7 +27,9 @@ export const fetchRepositories = async (userId: string) => {
         localStorage.clear();
 
         // Throw a custom error message to indicate that the user has been logged out
-        throw new Error("The refresh token is invalid or expired. Please re-authenticate.");
+        throw new Error(
+          "The refresh token is invalid or expired. Please re-authenticate."
+        );
       }
     }
 
@@ -47,7 +49,6 @@ export const fetchRepositories = async (userId: string) => {
   return jsRepos;
 };
 
-
 export async function getUserData(token: string) {
   const response = await fetch("http://localhost:3000/api/v1/getUserData", {
     method: "POST",
@@ -56,6 +57,7 @@ export async function getUserData(token: string) {
     }),
   });
   const data = await response.json();
+  console.log("github data :", data);
   return data?.user;
 }
 

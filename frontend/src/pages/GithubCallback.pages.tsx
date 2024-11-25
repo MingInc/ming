@@ -1,5 +1,6 @@
 import { useAuth } from "@/hooks";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export function GithubCallback() {
@@ -8,6 +9,8 @@ export function GithubCallback() {
   const { login } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_,setCookie] = useCookies(["ming_sessionId"])
 
   useEffect(() => {
     async function handleGithubCallback() {
@@ -16,13 +19,18 @@ export function GithubCallback() {
 
       if (code) {
         try {
+          const deviceInfo = navigator.userAgent
           // Make a request to your backend to exchange the code for an access token
           const response = await fetch(
-            `http://localhost:3000/github/callback?code=${code}`
+            `http://localhost:3000/github/callback?code=${code}`,
+            {
+              method:"POST",
+              body:JSON.stringify({deviceInfo})
+            }
           );
           const data = await response.json();
 
-          // console.log(" data from github callback api :", data)
+          console.log(" data from github callback api :", data)
 
           if (response.ok) {
             const parsedData = JSON.parse(data.data);
@@ -34,6 +42,9 @@ export function GithubCallback() {
               // Store session and user data in local/session storage
               localStorage.setItem("ming_session_token", parsedData["_data"].sessionToken);
               localStorage.setItem("ming_authenticated_user", JSON.stringify(user));
+              // setCookie("ming_session_token",parsedData["_data"].sessionToken)
+              setCookie("ming_sessionId",parsedData["_data"].sessionId)
+              // document.cookie = `ming_session_token=${parsedData["_data"].sessionToken}; path=/; HttpOnly; max-age=604800`
 
               // Redirect to dashboard
               navigate("/dashboard");
@@ -56,7 +67,7 @@ export function GithubCallback() {
     }
 
     handleGithubCallback();
-  }, [location, login, navigate]);
+  }, [location, login, navigate, setCookie]);
 
   if (loading) {
     return <div>Loading...</div>;
