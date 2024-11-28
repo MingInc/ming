@@ -2,7 +2,6 @@ import React, {
   createContext,
   useReducer,
   ReactNode,
-  useEffect,
 } from "react";
 
 // Create the Context
@@ -60,25 +59,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("ming_authenticated_user");
     dispatch({ type: "LOGOUT" });
   };
 
   const linkAccount = (user: any) => {
-    dispatch({ type: "LOGIN", payload: user }); // Update to reflect the linked account
+    dispatch({ type: "LOGIN", payload: user }); 
   };
-
-  useEffect(() => {
-    const _user: any = JSON.parse(
-      localStorage.getItem("ming_authenticated_user") || "{}"
-    );
-
-    console.log("authenticated user :", _user)
-
-    if (_user) {
-      dispatch({ type: "LOGIN", payload: _user });
-    }
-  }, []);
 
   return (
     <AuthContext.Provider value={{ authState, login, logout, linkAccount }}>

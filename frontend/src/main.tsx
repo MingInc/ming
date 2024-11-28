@@ -33,7 +33,6 @@ import NotFound from "./pages/NotFound.pages";
 import { GithubCallback } from "./pages/GithubCallback.pages";
 import { CookiesProvider } from "react-cookie";
 import ProtectedRoute from "./components/ProtectedRoute";
-// import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {

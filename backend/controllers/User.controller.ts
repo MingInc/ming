@@ -17,7 +17,7 @@ import {
 } from "../constants";
 import { v4 as uuidv4 } from "uuid";
 import { SessionModel } from "../models/sessions.models";
-import { getOrSetCache } from "../utils";
+// import { getOrSetCache } from "../utils";
 
 /**
  * Creates a new user in the system if the provided email or userUid is not already taken.
@@ -96,9 +96,7 @@ export async function getUserById(req: Request): Promise<Response> {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("id");
 
-    console.log("user Id", userId);
-
-    const cacheKey = `user-${userId}`;
+    // const cacheKey = `user-${userId}`;
 
     if (!userId) {
       // Return a 400 Bad Request response if the ID parameter is missing

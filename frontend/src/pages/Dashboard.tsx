@@ -9,6 +9,8 @@ export function Dashboard() {
   const { authState } = useAuth();
   const { projectState, projectDispatch } = useProjectContext();
 
+  console.log(authState.isAuthenticated)
+
   useEffect(() => {
     if (authState.user) {
       fetchProjects(projectDispatch, authState.user.id);
