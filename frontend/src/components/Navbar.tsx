@@ -35,11 +35,13 @@ export default function Navbar() {
   const { authState, logout } = useAuth();
   const { user } = useUser(authState?.user?.id)
 
+  console.log(authState.isAuthenticated)
   const isDashboardRoute =
     location.pathname === "/dashboard" ||
     location.pathname.startsWith("/dashboard");
 
   const handleLogout = () => {
+    localStorage.removeItem("ming_authenticated_user");
     navigate("/");
     logout();
   };
