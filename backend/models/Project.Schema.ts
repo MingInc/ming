@@ -1,5 +1,11 @@
 import * as mongoose from "mongoose";
 
+/**
+ * Mongoose schema for a project.
+ * This schema defines the structure of a project document in the database,
+ * including details such as user and project identifiers, project metadata,
+ * deployment information, and deployment logs.
+ */
 const projectSchema = new mongoose.Schema(
   {
     userUid: { type: String },

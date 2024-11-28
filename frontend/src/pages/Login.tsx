@@ -14,7 +14,7 @@ export function Login() {
   const [_, setAuth] = useState<any>();
   const {  authState , login } = useAuth();
   const navigate = useNavigate();
-  const [__, setAccessToken] = useState<string | null>(null); 
+  // const [__, setAccessToken] = useState<string | null>(null); 
 
   useEffect(() => {
     const _user = JSON.parse(
@@ -35,42 +35,6 @@ export function Login() {
     }
   }, [authState.isAuthenticated, navigate]);
 
-  // const handleGithubSign = async () => {
-  //   if (!auth) return;  
-  //   const sessionToken = localStorage.getItem('ming_session_token'); 
-  
-  //   if(!sessionToken){
-  //     redirectToGithubAuth()
-  //   }
-  //   try {
-  //     // Send a request to the backend to check if the user exists in the database (session-based)
-  //     const response = await fetch(`http://localhost:3000/check-github-session`,{
-  //       // headers:{
-  //       //   'Authorization': `Bearer ${sessionToken}`,
-  //       // },
-  //       credentials:"include"
-  //     });
-  
-  //     const data = await response.json();
-  
-  //     if (response.ok) {
-  //       if (data.userExists) {
-  //         setAccessToken(data?.user?.github_accessToken)
-  //       } else {
-  //         // User does not exist, initiate GitHub authentication
-  //         redirectToGithubAuth();
-  //       }
-  //     } else {
-  //       // If the response isn't ok (e.g., 401 Unauthorized), redirect to GitHub for login
-  //       redirectToGithubAuth();
-  //     }
-  //   } catch (error) {
-  //     console.error('Error checking GitHub session:', error);
-  //     // If there's an error, redirect to GitHub for authentication
-  //     redirectToGithubAuth();
-  //   }
-  // };
-
   const handleGithubSign = async () => {
     const response = await fetch(`http://localhost:3000/check-github-session`, {
       credentials: "include",
@@ -82,7 +46,7 @@ export function Login() {
 
       console.log("github user access token:",user?.github_accessToken)
       console.log("github user :",githubUser)
-      setAccessToken(user?.github_accessToken)
+      // setAccessToken(user?.github_accessToken)
       
       localStorage.setItem("ming_authenticated_user", JSON.stringify(githubUser)); 
       login(githubUser);

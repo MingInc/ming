@@ -1,5 +1,11 @@
 import * as mongoose from "mongoose";
 
+/**
+ * Mongoose schema for a User.
+ * This schema defines the structure of the user document in the database,
+ * including fields related to authentication, profile, GitHub integration,
+ * user roles, and premium status.
+ */
 const userSchema = new mongoose.Schema({
   userUid: { type: String, required: true },
   email: { type: String, required: false, unique: true },
@@ -25,15 +31,6 @@ const userSchema = new mongoose.Schema({
     default: false,
     required: false,
   },
-  // sessions: [
-  //   {
-  //     sessionId: { type: String, required: true }, // Unique session ID
-  //     userUid: { type: String, required: true },
-  //     createdAt: { type: Date, default: Date.now }, // Session creation time
-  //     expiresAt: { type: Date }, // Optional: Expiry time for the session
-  //     deviceInfo: { type: String }, // Optional: Store device/browser info for better management
-  //   },
-  // ],
 });
 
 // userSchema.index(

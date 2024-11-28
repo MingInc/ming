@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+/**
+ * Mongoose schema for a support ticket.
+ * This schema defines the structure of the support ticket document in the database,
+ * including details about the ticket, user information, status, assignment, and any associated image.
+ */
 const supportSchema = new mongoose.Schema(
   {
     ticketInfo: {

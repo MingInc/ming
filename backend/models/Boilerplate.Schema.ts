@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document } from "mongoose";
 
 // Define TypeScript interface for type safety
 interface Boilerplate extends Document {
@@ -12,11 +12,16 @@ interface Boilerplate extends Document {
   image: string;
 }
 
+/**
+ * Mongoose schema for a boilerplate.
+ * This schema defines the structure of a boilerplate document in the database,
+ * which could be used to represent a project template or boilerplate repository.
+ */
 // Create Mongoose schema
 const boilerplateSchema = new Schema<Boilerplate>({
   id: { type: String, required: true },
   title: { type: String, required: true },
-  titleDescription: {type: String, required: true},
+  titleDescription: { type: String, required: true },
   description: { type: String, required: true },
   category: { type: String, required: true },
   githubUrl: { type: String, default: "" },
@@ -24,4 +29,4 @@ const boilerplateSchema = new Schema<Boilerplate>({
   image: { type: String, required: true },
 });
 
-export const Boilerplate = model<Boilerplate>('Boilerplate', boilerplateSchema);
+export const Boilerplate = model<Boilerplate>("Boilerplate", boilerplateSchema);

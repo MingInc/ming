@@ -43,8 +43,6 @@ export default function SettingsPage() {
   const {authState} = useAuth()
   const { user } = useUser(authState?.user?.id)
 
-  console.log("user :",user)
-
   useEffect(() => {
     const storedActiveSection = localStorage.getItem("activeSection");
     if (storedActiveSection) {
@@ -55,10 +53,6 @@ export default function SettingsPage() {
   useEffect(() => {
     localStorage.setItem("activeSection", activeSection);
   }, [activeSection]);
-
-  // useEffect(() => {
-  //   setActiveSection("account")
-  // },[location])
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -83,7 +77,7 @@ export default function SettingsPage() {
         <Button
           key={item.id}
           variant={activeSection === item.id ? "default" : "ghost"}
-          className="w-full justify-start"
+          className="w-full justify-start flex items-center gap-1"
           onClick={() => setActiveSection(item.id)}
         >
           {/* className="mr-2 h-4 w-4" */}
@@ -254,7 +248,7 @@ export default function SettingsPage() {
             <CardFooter className="flex justify-between">
               <Button variant="outline" onClick={() => navigate("/dashboard/billing")} >View Invoices</Button>
               {
-                user && user[0]?.premium === false && (
+                user && user?.premium === false && (
                   <Button onClick={() => navigate("/pricing")}>Upgrade Plan</Button>
                 )
               }

@@ -1,8 +1,7 @@
 import jwt from "jsonwebtoken";
-import { COOKIE_NAME, JWT_SECRET } from "../constants";
-// import { UserModel } from "../models";
-// import { addCorsHeaders } from "../helpers/CorsHeader";
+import { JWT_SECRET } from "../constants";
 import { SessionModel } from "../models/sessions.models";
+import cookie from "cookie";
 
 // Middleware to verify JWT and get userId
 export const verifyToken = (token: string): string | null => {
@@ -23,12 +22,21 @@ export const verifyToken = (token: string): string | null => {
   }
 };
 
-export async function validateSession(req: Request) {
-  console.log("cookie headers :", req.headers);
-  const cookies = req.headers.get("cookie");
-  const sessionId = cookies?.match(new RegExp(`${COOKIE_NAME}=([^;]+)`))?.[1];
+/**
+ * Validates the session based on the session ID stored in the request cookies.
+ *
+ * This function extracts the session ID from the request cookies, checks if it exists, and then verifies the session's
+ * validity by looking it up in the `SessionModel` based on the session ID and the session's expiration date. If a valid
+ * session is found, the function returns the associated user UID. If no session is found or if the session has expired,
+ * it returns `null`.
+ *
+ * @param {Request} req - The HTTP request object containing the session ID in the cookies.
+ * @returns {Promise<string | null>} A Promise that resolves to the user UID if the session is valid, or `null` if the session is invalid or expired.
+ */
+export async function validateSession(req: Request): Promise<string | null> {
+  const cookies = cookie.parse(req.headers.get("cookie") || "");
 
-  console.log("session Id :", sessionId);
+  const sessionId = cookies.ming_sessionId;
 
   if (!sessionId) {
     return null; // No session found
@@ -38,6 +46,9 @@ export async function validateSession(req: Request) {
     sessionId,
     expiresAt: { $gte: new Date() },
   });
+  if (new Date() > new Date(session?.expiresAt as Date)) {
+    return "Session Expired";
+  }
 
   return session ? session.userUid : null;
 }
