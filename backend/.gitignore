@@ -183,3 +183,5 @@ node_modules
 serviceAccountKey.json
 
 .test
+*.crt 
+*.key

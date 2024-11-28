@@ -5,7 +5,19 @@ import { addCorsHeaders } from "../helpers/CorsHeader";
 import { Payment } from "../models/Payment.Schema";
 import { UserModel } from "../models/User.models";
 
-export async function handleStripePayment(req: Request) {
+/**
+ * Handles the creation of a Stripe checkout session for a payment.
+ *
+ * This function processes the payment request, creates a Stripe checkout session, and saves the payment details in the database.
+ * It expects a `userUid` from the request body to associate the payment with a user. The payment amount is set to $20 (2000 cents),
+ * and the user is redirected to a success or cancel URL depending on the outcome of the payment. The session ID and session URL are
+ * returned to the client to initiate the Stripe payment process.
+ *
+ * @param {Request} req - The HTTP request object containing the payment data (userUid and other relevant data).
+ * @returns {Promise<Response>} A Promise that resolves to a Response object with the Stripe session URL and session ID,
+ *                             or an error message if the payment creation fails.
+ */
+export async function handleStripePayment(req: Request): Promise<Response> {
   try {
     const data = await req.json();
     const session = await stripe.checkout.sessions.create({
@@ -77,7 +89,21 @@ export async function handleStripePayment(req: Request) {
   }
 }
 
-export async function handleWebHook(req: Request) {
+/**
+ * Handles incoming Stripe webhook events, processes the `checkout.session.completed` event,
+ * and updates the user’s premium status and payment details in the database.
+ *
+ * This function verifies the webhook signature to ensure the request is from Stripe, then processes
+ * the event. If the event type is `checkout.session.completed`, it updates the user's premium status
+ * to `true` and marks the associated payment as successful. If any other event is received, it returns
+ * an appropriate response indicating the event type is unhandled. If an error occurs, it returns a 500
+ * Internal Server Error response with the error details.
+ *
+ * @param {Request} req - The HTTP request object containing the raw Stripe webhook payload and signature.
+ * @returns {Promise<Response>} A Promise that resolves to a Response object containing the status of
+ *                             the webhook processing, including the user and payment details or an error message.
+ */
+export async function handleWebHook(req: Request): Promise<Response> {
   try {
     const data = await req.text();
 
@@ -207,7 +233,18 @@ export async function handleWebHook(req: Request) {
   }
 }
 
-export async function getPaymentById(req: Request) {
+/**
+ * Retrieves the payment records for a specific user by user ID.
+ *
+ * This function accepts a request that contains a user ID as a query parameter. It queries the `Payment` model to
+ * fetch all payment records associated with that user. If no payments are found, it returns a 404 error with a message
+ * indicating no payments were found for the user. If payments are found, it returns a 200 success response with the
+ * payment details. In case of an error during the query process, a 500 error response is returned with the error message.
+ *
+ * @param {Request} req - The HTTP request object containing the user ID in the query parameters.
+ * @returns {Promise<Response>} A Promise that resolves to a Response object containing the payment data or an error message.
+ */
+export async function getPaymentById(req: Request): Promise<Response> {
   try {
     const id = new URL(req.url).searchParams.get("id");
 

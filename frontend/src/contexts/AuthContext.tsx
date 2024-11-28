@@ -32,19 +32,35 @@ const authReducer = (authState: Auth.AuthState, action: Auth.AuthAction): Auth.A
   }
 };
 
+// Initializer function to read from localStorage and return initial state
+const init = (): Auth.AuthState => {
+  const savedUser = localStorage.getItem('ming_authenticated_user');
+  if (savedUser) {
+    try {
+      const user = JSON.parse(savedUser);
+      return { isAuthenticated: true, user };
+    } catch (error) {
+      console.error('Error parsing user from localStorage', error);
+      return initialState;
+    }
+  }
+  return initialState;
+};
+
 // Create the Context Provider component
 interface AuthProviderProps {
   children: ReactNode;
 }
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [authState, dispatch] = useReducer(authReducer, initialState);
+  const [authState, dispatch] = useReducer(authReducer, initialState,init);
 
   const login = (user: any) => {
     dispatch({ type: "LOGIN", payload: user });
   };
 
   const logout = () => {
+    localStorage.removeItem("ming_authenticated_user");
     dispatch({ type: "LOGOUT" });
   };
 
@@ -57,7 +73,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.getItem("ming_authenticated_user") || "{}"
     );
 
-    if (_user?.email) {
+    console.log("authenticated user :", _user)
+
+    if (_user) {
       dispatch({ type: "LOGIN", payload: _user });
     }
   }, []);

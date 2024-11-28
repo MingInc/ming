@@ -1,13 +1,30 @@
 import nodemailer from "nodemailer";
 import { GmailAppPassword } from "../constants";
 
+/**
+ * Sends support ticket emails to both the user and the admin.
+ *
+ * This function sends two emails:
+ * 1. A confirmation email to the user who raised the support ticket,
+ *    notifying them that their ticket has been received and assigned.
+ * 2. A notification email to the admin about the new support ticket raised.
+ *
+ * @param {string} [userEmail] - The email address of the user who raised the support ticket.
+ * @param {string} [adminEmail] - The email address of the admin to notify about the new support ticket.
+ * @param {string} [title] - The title of the support ticket.
+ * @param {string} [description] - A description of the issue provided by the user.
+ * @param {string} [assignedTo] - The person to whom the ticket has been assigned.
+ *
+ * @returns {Promise<void>} - Resolves if both emails are sent successfully,
+ *                             rejects if an error occurs during email sending.
+ */
 export async function sendSupportEmails(
   userEmail?: string,
   adminEmail?: string,
   title?: string,
   description?: string,
-  assignedTo?: string,
-) {
+  assignedTo?: string
+): Promise<void> {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com", // Use your email provider (e.g., Gmail, SendGrid, etc.)
     port: 465,
@@ -43,7 +60,20 @@ export async function sendSupportEmails(
   }
 }
 
-export async function sendWelcomeEmail(userEmail: string | null) {
+/**
+ * Sends a welcome email to the specified user.
+ *
+ * This function sends a personalized welcome email to a new user, including information about the platform,
+ * how to get started, and support resources.
+ *
+ * @param {string | null} userEmail - The email address of the user to send the welcome email to.
+ * If the email is null or undefined, the function will log an error and exit early.
+ *
+ * @returns {Promise<void>} - Resolves if the email is sent successfully, or logs an error if something goes wrong.
+ */
+export async function sendWelcomeEmail(
+  userEmail: string | null
+): Promise<void> {
   if (!userEmail) {
     console.error("User email is required for sending the welcome email");
     return;

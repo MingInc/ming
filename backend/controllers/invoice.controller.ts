@@ -75,6 +75,21 @@ async function createInvoice(payment: any) {
   return fileName;
 }
 
+/**
+ * Handles the download request for an invoice. It generates a PDF invoice based on the payment data,
+ * checks if the file exists on the server, and returns it as a downloadable PDF file to the user.
+ *
+ * If the invoice file does not exist, a response with the file path is returned, indicating where the
+ * invoice can be found. If an error occurs during the process, a 500 Internal Server Error is returned
+ * with the error message.
+ *
+ * @param {Request} req - The HTTP request object containing the payment information for which the invoice is generated.
+ *
+ * @returns {Promise<Response>} A Promise that resolves to a Response object:
+ *   - If the file exists, a `200 OK` response is returned with the PDF file attached.
+ *   - If the file doesn't exist, a `200 OK` response is returned with a JSON object containing the file path.
+ *   - If an error occurs, a `500 Internal Server Error` response is returned with an error message.
+ */
 export async function handleDownloadInvoice(req: Request): Promise<Response> {
   try {
     const payment: Payment = await req.json();

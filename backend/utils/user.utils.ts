@@ -7,3 +7,4 @@ export async function SaveUserToDB(user) {
   const data = await response.json();
   return data;
 }
+

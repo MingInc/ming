@@ -40,11 +40,8 @@ export function GithubCallback() {
               login(user);
 
               // Store session and user data in local/session storage
-              localStorage.setItem("ming_session_token", parsedData["_data"].sessionToken);
               localStorage.setItem("ming_authenticated_user", JSON.stringify(user));
-              // setCookie("ming_session_token",parsedData["_data"].sessionToken)
               setCookie("ming_sessionId",parsedData["_data"].sessionId)
-              // document.cookie = `ming_session_token=${parsedData["_data"].sessionToken}; path=/; HttpOnly; max-age=604800`
 
               // Redirect to dashboard
               navigate("/dashboard");
@@ -55,6 +52,7 @@ export function GithubCallback() {
           }
         } catch (error) {
           // Log error and show appropriate error message
+          console.log(error)
           console.error("GitHub callback error:", (error as Error).message);
           setError("Error while exchanging the code for an access token.");
         } finally {

@@ -10,6 +10,8 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ redirectPath = '/login', children }) => {
   const { authState } = useAuth();
 
+  console.log('Auth State on ProtectedRoute:', authState);  // Debugging log
+
   if (!authState.isAuthenticated) {
     return <Navigate to={redirectPath} replace={true} />;
   }

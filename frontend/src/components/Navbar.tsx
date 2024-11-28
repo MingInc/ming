@@ -40,7 +40,6 @@ export default function Navbar() {
     location.pathname.startsWith("/dashboard");
 
   const handleLogout = () => {
-    localStorage.removeItem("ming_authenticated_user");
     navigate("/");
     logout();
   };
@@ -64,7 +63,7 @@ export default function Navbar() {
             alt="Ming Logo"
           />
           <p className="text-sm font-semibold">Ming</p>
-          {user && user[0]?.premium && (
+          {user && authState.isAuthenticated && user.premium && (
             <Badge className=" bg-green-500 absolute -top-[16px] left-10 text-xs">
               Pro
             </Badge>

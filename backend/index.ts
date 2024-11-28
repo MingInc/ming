@@ -37,7 +37,6 @@ import admin from "firebase-admin";
 import serviceAccountKey from "./serviceAccountKey.json";
 import {
   createSupport,
-  getAllSupportTickets,
   getSupportTicketById,
 } from "./controllers/Support.controller.ts";
 import Stripe from "stripe";
@@ -69,9 +68,18 @@ mongoose
     return console.log(err);
   });
 
+// const sslCertificates = {
+//   key: Bun.file("./server.key"),
+//   cert: Bun.file("./server.crt"),
+// };
+
 const server = Bun.serve({
   port: 3000,
   development: true,
+  // tls: {
+  //   key: Bun.file("./server.key"),
+  //   cert: Bun.file("./server.crt"),
+  // },
   async fetch(req: Request) {
     try {
       const url = new URL(req.url);

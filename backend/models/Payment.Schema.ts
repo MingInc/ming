@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
-// Define the schema for the Payment model
+/**
+ * Mongoose schema for a payment.
+ * This schema defines the structure of a payment document in the database,
+ * including information such as the user, payment details, and payment status.
+ */
 const paymentSchema = new mongoose.Schema(
   {
     userId: {

@@ -13,7 +13,6 @@ import {
 import { FileText, HelpCircle } from "lucide-react";
 import { useAuth, useUser } from "@/hooks";
 import usePayments from "@/hooks/usePayments.hooks";
-// import { Payment } from "@/types/payment"; // Assuming you've defined this type
 
 export function Billing() {
   const { authState } = useAuth();
@@ -30,7 +29,6 @@ export function Billing() {
       const contentDisposition = response.headers.get("Content-Disposition");
       const fileName =
         contentDisposition?.split("filename=")[1] || "ming_invoice.pdf";
-      console.log("content disposition", contentDisposition);
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
 
@@ -68,7 +66,7 @@ export function Billing() {
           {/* Subscription Card */}
           <Card className="p-4">
             <div className="flex items-center justify-between">
-              {user && user[0]?.premium ? (
+              {user && user?.premium ? (
                 <div className="font-medium">Premium</div>
               ) : (
                 <div>
@@ -130,13 +128,13 @@ export function Billing() {
               <div>
                 <div className="font-medium text-sm">Account Admins</div>
                 <div className="text-sm text-muted-foreground">
-                  {user[0].email}
+                  {user?.email}
                 </div>
               </div>
               <div>
                 <div className="font-medium text-sm">Additional Recipients</div>
                 <div className="text-sm text-muted-foreground">
-                  {user[0].email}
+                  {user?.email}
                 </div>
               </div>
             </div>

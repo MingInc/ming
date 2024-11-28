@@ -1,7 +1,11 @@
 import admin from "firebase-admin";
 import { addCorsHeaders } from "../helpers/CorsHeader";
-import { getNewTokensFromGithub, sendWelcomeEmail } from "../utils";
-import { SupportModel, UserModel } from "../models";
+import {
+  getNewTokensFromGithub,
+  getUser,
+  sendWelcomeEmail,
+} from "../utils";
+import { SupportModel, UserModel, type User } from "../models";
 import jwt from "jsonwebtoken";
 import { validateSession } from "../middleware";
 import {
@@ -13,9 +17,19 @@ import {
 } from "../constants";
 import { v4 as uuidv4 } from "uuid";
 import { SessionModel } from "../models/sessions.models";
+import { getOrSetCache } from "../utils";
 
-// create a new user
-export async function createUser(req: Request) {
+/**
+ * Creates a new user in the system if the provided email or userUid is not already taken.
+ *
+ * The function validates if a user already exists with the provided email or userUid. If the user exists,
+ * it returns an error response. Otherwise, a new user is created, saved to the database, and a welcome email is sent.
+ * A session token is then generated and returned as a cookie for the newly created user.
+ *
+ * @param {Request} req - The HTTP request object containing the user data in the body.
+ * @returns {Promise<Response>} A Response object indicating the result of the user creation process.
+ */
+export async function createUser(req: Request): Promise<Response> {
   try {
     const data = await req.json();
 
@@ -67,11 +81,24 @@ export async function createUser(req: Request) {
   }
 }
 
-// Function to get a user by ID
-export async function getUserById(req: Request) {
+/**
+ * Retrieves a user by their ID from the database.
+ *
+ * The function extracts the user ID from the query parameters of the request URL. It then queries the database
+ * to find the user associated with that ID. If the user ID is not provided or the user is not found,
+ * an appropriate error message is returned. If the user is found, their data is returned in the response.
+ *
+ * @param {Request} req - The HTTP request object containing the query parameter with the user ID.
+ * @returns {Promise<Response>} A Response object containing the user data if found, or an error message if not.
+ */
+export async function getUserById(req: Request): Promise<Response> {
   try {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("id");
+
+    console.log("user Id", userId);
+
+    const cacheKey = `user-${userId}`;
 
     if (!userId) {
       // Return a 400 Bad Request response if the ID parameter is missing
@@ -82,10 +109,13 @@ export async function getUserById(req: Request) {
       );
     }
 
-    // Fetch the user from the database by ID
-    const user = await UserModel.find({
-      userUid: userId,
-    });
+    // const fetchUser = async () => {
+    //   const user = await UserModel.findOne({ userUid: userId });
+    //   return user;
+    // };
+    const user = await UserModel.findOne({ userUid: userId });
+
+    // const user = await getOrSetCache(cacheKey, fetchUser, 3600); // TTL is 1 hour
 
     if (!user) {
       // Return a 404 Not Found response if the user does not exist
@@ -114,8 +144,18 @@ export async function getUserById(req: Request) {
   }
 }
 
-// update user by id
-export async function updateUserById(req: Request) {
+/**
+ * Updates the user information by their ID.
+ *
+ * This function accepts a request containing the user ID, provider, and GitHub access token. It checks if the user
+ * with the provided ID exists in the database. If the user exists, it updates their provider list and GitHub access
+ * token. If the user does not exist, an error message is returned. The updated user data is returned if the update
+ * is successful.
+ *
+ * @param {Request} req - The HTTP request object containing the user data (id, provider, github_accessToken) in the body.
+ * @returns {Promise<Response>} A Response object containing the updated user data if successful, or an error message if not.
+ */
+export async function updateUserById(req: Request): Promise<Response> {
   try {
     const data = await req.json();
     console.log(data);
@@ -170,9 +210,20 @@ export async function updateUserById(req: Request) {
   }
 }
 
-export async function deleteUser(req: Request) {
+/**
+ * Deletes a user and their associated support tickets from the database.
+ *
+ * The function accepts a request containing the user UID as a query parameter. It first checks if the user exists
+ * in the database. If the user is found, it proceeds to delete any associated support tickets and then deletes the
+ * user from the `UserModel`. If any error occurs during the process, an appropriate error message is returned.
+ * If successful, a confirmation message is returned indicating that both the user and their support tickets have been deleted.
+ *
+ * @param {Request} req - The HTTP request object containing the user UID in the query parameters.
+ * @returns {Promise<Response>} A Response object containing a success or error message.
+ */
+export async function deleteUser(req: Request): Promise<Response> {
   try {
-    const { userUid } = await req.json();
+    const userUid = new URL(req.url).searchParams.get("id");
 
     if (!userUid) {
       return addCorsHeaders(
@@ -258,7 +309,17 @@ export async function loginWithGithub(req: Request) {
   }
 }
 
-export async function handleGithubCallback(req: Request) {
+/**
+ * Handles the callback from GitHub OAuth after a user authorizes the app.
+ *
+ * The function processes the authorization code, exchanges it for an access token,
+ * fetches the user's GitHub details, and saves or updates the user information in the database.
+ * Additionally, it handles the creation of a session and sets a session cookie for the authenticated user.
+ *
+ * @param {Request} req - The HTTP request object containing the callback information.
+ * @returns {Promise<Response>} A Response object indicating the success or failure of the login process.
+ */
+export async function handleGithubCallback(req: Request): Promise<Response> {
   try {
     const url = new URL(req.url);
     const code = url.searchParams.get("code");
@@ -299,8 +360,6 @@ export async function handleGithubCallback(req: Request) {
 
     const data = await response.json();
 
-    console.log("data :", data);
-
     const { access_token, refresh_token } = data;
 
     //  Fetch user details from GitHub using the access token
@@ -327,6 +386,31 @@ export async function handleGithubCallback(req: Request) {
           github_accessToken: access_token,
           github_refreshToken: refresh_token,
         }
+      );
+      const sessionId = uuidv4();
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      await SessionModel.create({
+        sessionId,
+        userUid,
+        expiresAt,
+        deviceInfo,
+      });
+
+      return addCorsHeaders(
+        new Response(
+          JSON.stringify({
+            message: "User found and session created for that user",
+            data: JSON.stringify({
+              access_token,
+              refresh_token,
+              user: userData,
+              _data: {
+                newUser: user,
+                sessionId,
+              },
+            }),
+          })
+        )
       );
     } else {
       const sessionId = uuidv4();
@@ -359,7 +443,7 @@ export async function handleGithubCallback(req: Request) {
       return addCorsHeaders(
         new Response(
           JSON.stringify({
-            message: "Login with github and user saved to db",
+            message: "Login!!!",
             data: JSON.stringify({
               access_token,
               refresh_token,
@@ -384,6 +468,7 @@ export async function handleGithubCallback(req: Request) {
       new Response(
         JSON.stringify({
           message: "Login with github and user saved to db",
+          user,
         })
       )
     );
@@ -887,25 +972,40 @@ export async function getRepositories(req: Request) {
 //   }
 // }
 
-export async function checkGithubSession(req: Request) {
-  const userUid = await validateSession(req);
+/**
+ * Checks the current session and returns user and GitHub user data.
+ *
+ * This function validates the session using the provided request and checks if the user exists in the database. If the user
+ * is found, it checks if their GitHub user data needs to be refreshed (based on a 24-hour threshold). If required, it fetches
+ * the latest GitHub user data using the stored GitHub access token and updates the user record in the database.
+ *
+ * @param {Request} req - The HTTP request object containing the session information (usually from a cookie or header).
+ * @returns {Promise<Response>} A Response object containing the user data and GitHub user data (either cached or refreshed),
+ *                             or an error message if the session is invalid or the user is not found.
+ */
+export async function checkGithubSession(req: Request): Promise<Response> {
+  const sessionValidation = await validateSession(req);
 
-  if (!userUid) {
+  if (sessionValidation === "EXPIRED") {
+    return addCorsHeaders(new Response("Session expired", { status: 401 }));
+  }
+
+  if (!sessionValidation) {
     return addCorsHeaders(new Response("Unauthorized", { status: 401 }));
   }
 
-  const user = await UserModel.findOne({ userUid });
+  const userUid = sessionValidation;
+  const user: User | null = await getUser(userUid);
+  // const response = await gerUserHandler(userUid, getUser);
+  // const data = await response.text();
+  // console.log("data :", data);
 
-  if (!user) {
-    return addCorsHeaders(new Response("User not found", { status: 404 }));
-  }
-
-  const githubAccessToken = user.github_accessToken;
-  let githubUser = user.githubUser;
+  const githubAccessToken = user?.github_accessToken;
+  let githubUser = user?.githubUser;
 
   // Determine if GitHub user data needs to be refreshed
   const shouldRefresh =
-    !user.githubUserFetchedAt ||
+    !user?.githubUserFetchedAt ||
     new Date().getTime() - new Date(user.githubUserFetchedAt).getTime() >
       24 * 60 * 60 * 1000; // 24 hours threshold
 
