@@ -72,7 +72,7 @@ export function Login() {
   // };
 
   const handleGithubSign = async () => {
-    const response = await fetch(`http://localhost:3000/check-github-session`, {
+    const response = await fetch(`${import.meta.env.VITE_SERVER_URI}/check-github-session`, {
       credentials: "include",
     });
   
