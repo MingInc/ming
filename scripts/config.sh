@@ -1,1 +1,0 @@
-// Custom Requirement: base.txt is read and all the project configurations will be done here.
