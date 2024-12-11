@@ -61,7 +61,7 @@ const IndexPage = () => {
           />
           <button
             type="submit"
-            className="absolute top-1 right-1 bottom-1 px-4 lg:px-5 text-lg font-semibold bg-gray-900 text-white rounded-xl transition ease-in-out duration-500 hover:bg-red-500"
+            className="absolute top-1 right-1 bottom-1 px-4 lg:px-5 text-lg font-semibold bg-gray-900 text-white rounded-xl transition ease-in-out duration-500"
           >
             Notify me
           </button>
@@ -81,16 +81,18 @@ const IndexPage = () => {
         <ul className="flex space-x-3">
           <li>
             <Link
-              href="/"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 transition ease-in-out duration-500 hover:bg-red-500 hover:text-white hover:shadow-lg"
+              href="https://t.me/minghq"
+              target="_blank"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 transition ease-in-out duration-500 hover:bg-gray-900 hover:text-white hover:shadow-lg"
             >
               <i className="ri-telegram-2-line text-2xl"></i>
             </Link>
           </li>
           <li>
             <Link
-              href="/"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 transition ease-in-out duration-500 hover:bg-red-500 hover:text-white hover:shadow-lg"
+              href="https://x.com/MingHQs"
+              target="_blank"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 transition ease-in-out duration-500 hover:bg-gray-900 hover:text-white hover:shadow-lg"
             >
               <svg
                 className="w-6 h-6"
@@ -104,16 +106,18 @@ const IndexPage = () => {
           </li>
           <li>
             <Link
-              href="/"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 transition ease-in-out duration-500 hover:bg-red-500 hover:text-white hover:shadow-lg"
+              href="https://github.com/MingInc"
+              target="_blank"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 transition ease-in-out duration-500 hover:bg-gray-900 hover:text-white hover:shadow-lg"
             >
               <i className="text-2xl ri-github-fill"></i>
             </Link>
           </li>
           <li>
             <Link
-              href="/"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 transition ease-in-out duration-500 hover:bg-red-500 hover:text-white hover:shadow-lg"
+              href="https://www.linkedin.com/company/80254299"
+              target="_blank"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 transition ease-in-out duration-500 hover:bg-gray-900 hover:text-white hover:shadow-lg"
             >
               <i className="text-2xl ri-linkedin-box-fill"></i>
             </Link>
