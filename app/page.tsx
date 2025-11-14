@@ -1,15 +1,12 @@
-import { Compare } from "@/components/ui/compare";
 import { DirectionAwareHover } from "@/components/ui/direction-aware-hover";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { Tooltip } from "@/components/ui/tooltip-card";
 import WorldMap from "@/components/ui/world-map";
-import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
+import { AnimatedStat } from "@/components/ui/animated-stat";
 import Link from "next/link";
+import { FocusCards } from "@/components/ui/focus-cards";
 
 export default function Home() {
-  const cards = data.map((card, index) => (
-    <Card key={card.src} card={card} index={index} />
-  ));
   return (
     <div className="min-h-screen bg-zinc-50 font-sans text-zinc-900">
       {/* Container switches from column on mobile/tablet to row on desktop */}
@@ -102,7 +99,7 @@ export default function Home() {
                     proximity={64}
                     inactiveZone={0.01}
                   />
-                  <div className="text-7xl text-center font-medium text-[#364314]">$300B</div>
+                  <AnimatedStat value={300000000000} prefix="$" suffix="B" />
                   <div className="mt-4 text-center text-[#364314]">Total Stablecoins Market Cap as of 2025.</div>
                 </div>
                 <div className="relative rounded-2xl bg-[#D2FD9C] p-8">
@@ -115,50 +112,19 @@ export default function Home() {
                     proximity={64}
                     inactiveZone={0.01}
                   />
-                  <div className="text-7xl text-center font-medium text-[#364314]">800M</div>
+                  <AnimatedStat value={800000000} suffix="M" />
                   <div className="mt-4 text-center text-[#364314]">Weekly Active Users on AI Tools.</div>
                 </div>
               </div>
             </section>
 
-            <hr className="border-dashed my-10" />
-
-            <h2 className="max-w-7xl mb-10 pl-4 mx-auto text-xl md:text-5xl font-bold text-neutral-800 dark:text-neutral-200 font-sans">
+            <h2 className="text-center max-w-7xl mt-6 sm:mt-8 md:mt-10 mb-6 sm:mb-8 pl-2 sm:pl-4 md:pl-6 mx-auto text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-neutral-800 dark:text-neutral-200 font-sans">
               Our Products.
             </h2>
-            <Carousel items={cards} />
+            <FocusCards />
           </div>
         </main>
       </div>
     </div>
   );
 }
-
-const DummyContent = () => {
-  return (
-    <>
-          
-    </>
-  );
-};
-
-const data = [
-  {
-    category: "Security",
-    title: "Sunya. AI powered Smart Contract Vulnerability Detector.",
-    src: "https://images.unsplash.com/photo-1650172452637-8a1c183f2524?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    content: <DummyContent />,
-  },
-  {
-    category: "Business",
-    title: "Lypto. Payment processor, or simply a wallet for you and business.",
-    src: "https://images.unsplash.com/photo-1654263937085-48fb17a63d66?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    content: <DummyContent />,
-  },
-  {
-    category: "People & Finance",
-    title: "iSendMoney. Peer-to-peer remittance powered by DeFi. No Bank, No Fees. Just People.",
-    src: "https://images.unsplash.com/photo-1580067319115-42124a255c57?q=80&w=2075&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    content: <DummyContent />,
-  },
-];
