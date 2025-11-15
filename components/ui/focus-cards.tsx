@@ -36,11 +36,11 @@ export function FocusCards() {
             className="h-70 object-cover w-full"
             src={card.src}
           />
-          <p className="text-lg font-medium mt-1">{card.title}</p>
-          <p>
+          <p className="text-lg font-medium mt-2">{card.title}</p>
+          <p className="mt-1 mb-2">
             {card.description}
           </p>
-          <Link href="">Learn More</Link>
+          <Link className="text-[#27ca60] underline" href="">Learn More</Link>
         </div>
       ))}
     </div>

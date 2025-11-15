@@ -5,6 +5,7 @@ import WorldMap from "@/components/ui/world-map";
 import { AnimatedStat } from "@/components/ui/animated-stat";
 import Link from "next/link";
 import { FocusCards } from "@/components/ui/focus-cards";
+import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 
 export default function Home() {
   return (
@@ -118,10 +119,17 @@ export default function Home() {
               </div>
             </section>
 
-            <h2 className="text-center max-w-7xl mt-6 sm:mt-8 md:mt-10 mb-6 sm:mb-8 pl-2 sm:pl-4 md:pl-6 mx-auto text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-neutral-800 dark:text-neutral-200 font-sans">
+            <h2 className="text-center max-w-7xl mt-6 sm:mt-8 md:mt-10 mb-6 sm:mb-8 pl-2 sm:pl-4 md:pl-6 mx-auto text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-4xl font-bold text-neutral-800 dark:text-neutral-200 font-sans">
               Our Products.
             </h2>
             <FocusCards />
+
+            <div className="mt-10 rounded-md flex flex-col antialiased dark:bg-black dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
+              <InfiniteMovingCards
+                direction="right"
+                speed="slow"
+              />
+            </div>
           </div>
         </main>
       </div>
