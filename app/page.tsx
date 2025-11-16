@@ -146,7 +146,7 @@ export default function Home() {
           </div>
           <div className="flex flex-wrap justify-between bg-[#EDEDED] p-6 md:p-8 py-12">
             <div>
-              <Image src="https://avatars.githubusercontent.com/u/179059125?s=200&v=4" width={70} height={70} className="mb-8" />
+              <Image src="https://avatars.githubusercontent.com/u/179059125?s=200&v=4" width={70} height={70} className="mb-8" alt="Ming Open Web Headquarters logo" />
               <p>Ming Open Web Headquarters</p>
             </div>
             <div>
