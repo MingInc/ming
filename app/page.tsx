@@ -6,6 +6,7 @@ import { AnimatedStat } from "@/components/ui/animated-stat";
 import Link from "next/link";
 import { FocusCards } from "@/components/ui/focus-cards";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
+import Divider from "@/components/ui/divider";
 
 export default function Home() {
   return (
@@ -87,8 +88,7 @@ export default function Home() {
               <p className="font-normal text-sm">Experience instant cross-border transactions with fees under $0.01, built on secure, stablecoin-optimized blockchains like Arc, Ethereum, and Solana. Enjoy sub-second finality, EVM compatibility, and the stability of pegged digital assets — all designed to make your payments faster, safer, and radically more affordable.</p>
             </DirectionAwareHover>
             {/* Productivity section */}
-            <section className="mt-6">
-
+            <section className="mt-6 mb-15">
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="relative rounded-2xl bg-[#D2FD9C] p-8">
                   <GlowingEffect
@@ -119,18 +119,26 @@ export default function Home() {
               </div>
             </section>
 
+            <Divider />
+
             <h2 className="text-center max-w-7xl mt-6 sm:mt-8 md:mt-10 mb-3 pl-2 sm:pl-4 md:pl-6 mx-auto text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-4xl font-bold text-[#394508] font-sans">
               Our Products.
             </h2>
             <p className="text-center mb-10 text-[#5D5D5D]">
-              Our suite of custom build contribution to more open web with Blockchain and AI.
+              Our suite of custom build contributions to more open web with Blockchain and AI.
             </p>
             <FocusCards />
 
-            <div className="mt-10 rounded-md flex flex-col antialiased dark:bg-black dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
+            <div className="mt-10 bg-[#D2FD9C] rounded-md flex flex-col antialiased items-center justify-center relative my-10 overflow-hidden">
+              <h2 className="text-center max-w-7xl mt-6 sm:mt-8 md:mt-10 mb-3 pl-2 sm:pl-4 md:pl-6 mx-auto text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-4xl font-bold text-[#394508] font-sans">
+                Supported By Leaders.
+              </h2>
+              <p className="text-center text-[#5D5D5D]">
+                From hackathon project to founding a business, we are supported by the industry experts and foundation for our growth and contributions.
+              </p>
               <InfiniteMovingCards
                 direction="right"
-                speed="slow"
+                speed="fast"
               />
             </div>
           </div>
