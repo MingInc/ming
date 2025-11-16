@@ -101,7 +101,7 @@ export default function Home() {
                     inactiveZone={0.01}
                   />
                   <AnimatedStat value={300000000000} prefix="$" suffix="B" />
-                  <div className="mt-4 text-center text-[#364314]">Total Stablecoins Market Cap as of 2025.</div>
+                  <div className="mt-2 text-center text-[#364314]">Total Stablecoins Market Cap as of 2025.</div>
                 </div>
                 <div className="relative rounded-2xl bg-[#D2FD9C] p-8">
                   <GlowingEffect
@@ -114,14 +114,17 @@ export default function Home() {
                     inactiveZone={0.01}
                   />
                   <AnimatedStat value={800000000} suffix="M" />
-                  <div className="mt-4 text-center text-[#364314]">Weekly Active Users on AI Tools.</div>
+                  <div className="mt-2 text-center text-[#364314]">Weekly Active Users on AI Tools.</div>
                 </div>
               </div>
             </section>
 
-            <h2 className="text-center max-w-7xl mt-6 sm:mt-8 md:mt-10 mb-6 sm:mb-8 pl-2 sm:pl-4 md:pl-6 mx-auto text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-4xl font-bold text-neutral-800 dark:text-neutral-200 font-sans">
+            <h2 className="text-center max-w-7xl mt-6 sm:mt-8 md:mt-10 mb-3 pl-2 sm:pl-4 md:pl-6 mx-auto text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-4xl font-bold text-[#394508] font-sans">
               Our Products.
             </h2>
+            <p className="text-center mb-10 text-[#5D5D5D]">
+              Our suite of custom build contribution to more open web with Blockchain and AI.
+            </p>
             <FocusCards />
 
             <div className="mt-10 rounded-md flex flex-col antialiased dark:bg-black dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
