@@ -7,6 +7,7 @@ import Link from "next/link";
 import { FocusCards } from "@/components/ui/focus-cards";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import Divider from "@/components/ui/divider";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -71,18 +72,18 @@ export default function Home() {
 
             <ul className="mt-4 sm:mt-5 md:mt-6 text-sm sm:text-base md:text-lg flex items-center gap-3 sm:gap-4 text-[#27ca60]">
               <li>
-                <Link href="/web3-sovereignty" >Contact</Link>
+                <Link href="mailto:ming.env@gmail.com" target="_blank" >Contact</Link>
               </li>
               <li>
-                <Link href="/ecosystem-integrations">Social</Link>
+                <Link target="_blank" href="https://www.linkedin.com/company/minghq">Social</Link>
               </li>
             </ul>
           </div>
         </aside>
 
         {/* Main content: scrollable on desktop, normal flow on mobile/tablet */}
-        <main className="lg:basis-[57.143%] lg:h-screen lg:overflow-y-auto p-6 md:p-8">
-          <div className="prose prose-zinc max-w-none dark:prose-invert">
+        <main className="lg:basis-[57.143%] lg:h-screen lg:overflow-y-auto ">
+          <div className="p-6 md:p-8 prose prose-zinc max-w-none dark:prose-invert">
             <DirectionAwareHover imageUrl="https://images.unsplash.com/photo-1559445368-b8a993676d7a?q=80&w=3131&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
               <p className="font-bold text-xl">Fast, Secure, Low-Cost Global Payments — Powered by Blockchain & Stablecoins</p>
               <p className="font-normal text-sm">Experience instant cross-border transactions with fees under $0.01, built on secure, stablecoin-optimized blockchains like Arc, Ethereum, and Solana. Enjoy sub-second finality, EVM compatibility, and the stability of pegged digital assets — all designed to make your payments faster, safer, and radically more affordable.</p>
@@ -129,17 +130,42 @@ export default function Home() {
             </p>
             <FocusCards />
 
-            <div className="mt-10 bg-[#D2FD9C] rounded-md flex flex-col antialiased items-center justify-center relative my-10 overflow-hidden">
-              <h2 className="text-center max-w-7xl mt-6 sm:mt-8 md:mt-10 mb-3 pl-2 sm:pl-4 md:pl-6 mx-auto text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-4xl font-bold text-[#394508] font-sans">
+            <div className="mt-10  bg-[#D2FD9C] rounded-md flex flex-col antialiased items-center justify-center relative my-10 overflow-hidden">
+              <h2 className="text-center max-w-7xl mt-6 sm:mt-8 md:mt-10 mb-3 pl-2 sm:pl-4 md:pl-6 mx-auto text-3xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-4xl font-bold text-[#394508] font-sans">
                 Supported By Leaders.
               </h2>
-              <p className="text-center text-[#5D5D5D]">
+              <p className="text-center text-[#5D5D5D] max-w-xl">
                 From hackathon project to founding a business, we are supported by the industry experts and foundation for our growth and contributions.
               </p>
               <InfiniteMovingCards
                 direction="right"
                 speed="fast"
               />
+            </div>
+
+          </div>
+          <div className="flex flex-wrap justify-between bg-[#EDEDED] p-6 md:p-8 py-12">
+            <div>
+              <Image src="https://avatars.githubusercontent.com/u/179059125?s=200&v=4" width={70} height={70} className="mb-8" />
+              <p>Ming Open Web Headquarters</p>
+            </div>
+            <div>
+              <p className="text-[#5D5D5D]">Contact</p>
+              <ul>
+                <li><Link target="_blank" href="mailto:ming.env@gmail.com">ming.env@gmail.com</Link></li>
+                <li><Link target="_blank" href="https://www.instagram.com/ming.openweb.hq/">
+                  Instagram
+                </Link>
+                </li>
+                <li><Link target="_blank" href="https://x.com/MingHQs">
+                  X
+                </Link>
+                </li>
+                <li><Link target="_blank" href="https://www.linkedin.com/company/minghq">
+                  LinkedIn
+                </Link>
+                </li>
+              </ul>
             </div>
           </div>
         </main>

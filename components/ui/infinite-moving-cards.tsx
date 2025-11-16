@@ -113,7 +113,7 @@ export const InfiniteMovingCards = ({
               width={400} 
               height={60} 
               alt="Starknet logo"
-              className="h-[50px] w-full object-contain"
+              className="h-[60px] w-full object-contain"
             />
           </li>
         ))}
