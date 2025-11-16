@@ -28,7 +28,7 @@ export function FocusCards() {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mx-auto w-full mb-10">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mx-auto w-full mb-15">
       {cards.map((card, index) => (
         <div key={index}>
           <img

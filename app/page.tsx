@@ -130,19 +130,19 @@ export default function Home() {
             </p>
             <FocusCards />
 
-            <div className="mt-10  bg-[#D2FD9C] rounded-md flex flex-col antialiased items-center justify-center relative my-10 overflow-hidden">
-              <h2 className="text-center max-w-7xl mt-6 sm:mt-8 md:mt-10 mb-3 pl-2 sm:pl-4 md:pl-6 mx-auto text-3xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-4xl font-bold text-[#394508] font-sans">
-                Supported By Leaders.
-              </h2>
-              <p className="text-center text-[#5D5D5D] max-w-xl">
-                From hackathon project to founding a business, we are supported by the industry experts and foundation for our growth and contributions.
-              </p>
-              <InfiniteMovingCards
-                direction="right"
-                speed="fast"
-              />
-            </div>
-
+            <Divider />
+          </div>
+          <div className=" rounded-md flex flex-col antialiased items-center justify-center relative  overflow-hidden mb-10">
+            <h2 className="text-center max-w-7xl mt-6 sm:mt-8 md:mt-10 mb-3 pl-2 sm:pl-4 md:pl-6 mx-auto text-3xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-4xl font-bold text-[#394508] font-sans">
+              Supported By Leaders.
+            </h2>
+            <p className="text-center text-[#5D5D5D] max-w-xl">
+              From hackathon project to founding a business, we are supported by the industry experts and foundation for our growth and contributions.
+            </p>
+            <InfiniteMovingCards
+              direction="right"
+              speed="fast"
+            />
           </div>
           <div className="flex flex-wrap justify-between bg-[#EDEDED] p-6 md:p-8 py-12">
             <div>
