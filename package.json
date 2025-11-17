@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@next/third-parties": "^16.0.3",
     "@tabler/icons-react": "^3.35.0",
     "@tailwindcss/cli": "^4.1.17",
     "@tsparticles/engine": "^3.9.1",

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
+import { GoogleAnalytics } from '@next/third-parties/google'
 import "./globals.css";
 
 const geistSans = Geist({
@@ -35,15 +36,7 @@ export default function RootLayout({
         <Analytics />
       </body>
 
-      <!-- Google tag (gtag.js) -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-76J0DNMDT5"></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-76J0DNMDT5');
-      </script>
+      <GoogleAnalytics gaId="G-76J0DNMDT5" />
     </html>
   );
 }
