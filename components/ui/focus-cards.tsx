@@ -8,22 +8,26 @@ export function FocusCards() {
     {
       title: "Sunya - Scan. Detect. Secure.",
       src: "https://images.unsplash.com/photo-1698423846501-cc5c25d07e85?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      description: "Smart Contracts analysis using AI and large datasets of vulnerabilities, so your business can focus on other things."
+      description: "Smart Contracts analysis using AI and large datasets of vulnerabilities, so your business can focus on other things.",
+      link: "https://sunya.minginc.xyz"
     },
     {
       title: "Lypto - Unified Wallet & Payments.",
       src: "https://images.unsplash.com/photo-1726137569807-c0ce211ccbec?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      description: "For personal, a non-custodial wallet. For business, we offer payment processor, POS (Stablecoins as Digital Assets). "
+      description: "For personal, a non-custodial wallet. For business, we offer payment processor, POS (Stablecoins as Digital Assets). ",
+      link: "https://lypto.minginc.xyz"
     },
     {
       title: "iSendMoney - Borderless, No Hidden Fees.",
       src: "https://images.unsplash.com/photo-1580048915913-4f8f5cb481c4?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      description: "Borderless P2P remittance platform built on top of Blockchain and AI agents on customer support, dispute handling, etc."
+      description: "Borderless P2P remittance platform built on top of Blockchain and AI agents on customer support, dispute handling, etc.",
+      link: "https://isendmoney.minginc.xyz"
     },
     {
       title: "Rose - Global Device Storage.",
       src: "https://images.unsplash.com/photo-1480843669328-3f7e37d196ae?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      description: "Store your data over blockchain with privacy. We make sure of secure, accessible storage for your data as strong as NFTs."
+      description: "Store your data over blockchain with privacy. We make sure of secure, accessible storage for your data as strong as NFTs.",
+      link: "https://rose.minginc.xyz"
     }
   ];
 
@@ -40,7 +44,7 @@ export function FocusCards() {
           <p className="mt-1 mb-2">
             {card.description}
           </p>
-          <Link className="text-[#27ca60] underline" href="">Learn More</Link>
+          <Link className="text-[#27ca60] underline" href={card.link && card.link} target="_blank">Learn More</Link>
         </div>
       ))}
     </div>
